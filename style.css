@@ -50,4 +50,5 @@ pre {
     font-size: 22px;
     white-space: pre-wrap;
     text-align: center;
+    font-family: 'Cairo', sans-serif !important;
 }
