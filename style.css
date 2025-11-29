@@ -1,58 +1,42 @@
 body {
-    font-family: "Amiri", serif;
-    background: #f3e8d8;
-    margin: 0;
-    padding: 20px;
-    line-height: 2;
-    color: #4a3625;
+    font-family: "Cairo", sans-serif;
+    background: #faf7f2;
+    margin: 20px;
 }
 
 .title {
     text-align: center;
-    font-size: 32px;
-    color: #6b4c2a;
+    font-size: 30px;
+    margin-bottom: 20px;
+    color: #333;
 }
 
-.subtitle {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 24px;
-}
-
-.bio {
-    max-width: 600px;
-    margin: 20px auto;
-    text-align: center;
-}
-
-.list {
-    max-width: 500px;
-    margin: 30px auto;
+#poems-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 .poem-link {
-    background: #dfc9a3;
-    padding: 12px;
-    border-radius: 10px;
-    text-align: center;
     font-size: 20px;
+    padding: 10px;
+    background: white;
+    border-radius: 10px;
     text-decoration: none;
-    color: #4a3625;
+    color: #444;
+    border: 1px solid #ddd;
 }
 
-.poem-container {
-    max-width: 650px;
-    margin: 40px auto;
-    background: #fff3e0;
-    padding: 20px;
-    border-radius: 15px;
+.poem-link:hover {
+    background: #f0ebe4;
 }
 
 .poem {
     white-space: pre-wrap;
     font-size: 22px;
-    text-align: center;
+    line-height: 1.8;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #ddd;
 }
