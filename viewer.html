@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>عرض القصيدة</title>
+    <style>
+        body {
+            font-family: "Amiri", serif;
+            background: #fafafa;
+            margin: 0;
+            padding: 25px;
+            line-height: 2;
+            font-size: 22px;
+            white-space: pre-wrap;
+        }
+        a {
+            display: block;
+            margin-bottom: 25px;
+            font-size: 18px;
+            color: #333;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<a href="index.html">← العودة للفهرس</a>
+<div id="poem"></div>
+
+<script>
+async function loadPoem() {
+    const params = new URLSearchParams(window.location.search);
+    const file = params.get("file");
+
+    const response = await fetch("poems/" + file);
+    const text = await response.text();
+
+    document.getElementById("poem").textContent = text;
+}
+
+loadPoem();
+</script>
+
+</body>
+</html>
