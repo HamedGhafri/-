@@ -1,54 +1,58 @@
 body {
-    background-color: #f3e7d3;
     font-family: "Amiri", serif;
+    background: #f3e8d8;
     margin: 0;
-    padding: 0;
-    line-height: 1.9;
-    color: #4a3b2a;
+    padding: 20px;
+    line-height: 2;
+    color: #4a3625;
 }
 
-header {
+.title {
     text-align: center;
-    padding: 40px 20px;
+    font-size: 32px;
+    color: #6b4c2a;
 }
 
-h1 {
-    font-size: 36px;
-    color: #6b4f2e;
-    margin-bottom: 5px;
-}
-
-h2 {
-    text-align: center;
-    color: #6b4f2e;
-    margin-top: 40px;
-}
-
-p {
-    max-width: 700px;
-    margin: 0 auto;
-    font-size: 20px;
-    text-align: center;
-}
-
-.nav {
+.subtitle {
     text-align: center;
     margin-top: 40px;
+    font-size: 24px;
 }
 
-.nav a {
-    display: block;
-    margin: 10px auto;
-    padding: 12px 20px;
-    width: 200px;
-    background: #e8d5b7;
-    color: #4a3b2a;
-    text-decoration: none;
+.bio {
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.list {
+    max-width: 500px;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.poem-link {
+    background: #dfc9a3;
+    padding: 12px;
     border-radius: 10px;
+    text-align: center;
     font-size: 20px;
-    transition: 0.3s;
+    text-decoration: none;
+    color: #4a3625;
 }
 
-.nav a:hover {
-    background: #d8c3a5;
+.poem-container {
+    max-width: 650px;
+    margin: 40px auto;
+    background: #fff3e0;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.poem {
+    white-space: pre-wrap;
+    font-size: 22px;
+    text-align: center;
 }
