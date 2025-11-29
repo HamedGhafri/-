@@ -8,48 +8,52 @@
 </head>
 <body>
 
-    <h1 class="title">موقع قصائد حمد الغافري</h1>
+<h1 class="title">موقع قصائد حمد الغافري</h1>
 
-    <p class="bio">
-        حمد الغافري، شاعر ينسج من اللغة ثيابها الأولى، ويستخرج من بحور الشعر لآلئه الخالدة. 
-        يحمل في قصائده ملامح الأرض، وعبق الجبال، وصدق الإنسان العماني في بيانه. 
-        يكتب ليترك أثرًا، ولتكون كلمته نافذة إلى القلب قبل أن تكون بيتًا موزونًا.
-    </p>
+<h2 class="subtitle">القصائد</h2>
 
-    <h2 class="subtitle">فهرس القصائد</h2>
+<div id="poems" class="list">جاري التحميل...</div>
 
-    <div id="poems" class="list">جاري التحميل...</div>
+<script>
+    function cleanArabicFilename(name) {
+        return decodeURIComponent(name)
+            .replace('.txt', '')
+            .replace(/[؟،:;'".!]/g, '')  // إزالة الرموز
+            .replace(/\s+/g, ' ')        // مسافات طبيعية
+            .trim();
+    }
 
-    <script>
-        async function loadPoems() {
-            try {
-                const res = await fetch('poems/');
-                const text = await res.text();
+    async function loadPoems() {
+        try {
+            // قراءة قائمة الملفات من المجلد
+            const res = await fetch('poems/');
+            const html = await res.text();
 
-                const files = [...text.matchAll(/href="([^"]+\.txt)"/g)]
-                    .map(m => m[1])
-                    .filter(name => !name.includes("placeholder"));
+            // استخراج أسماء الملفات
+            const files = [...html.matchAll(/href="([^"]+\.txt)"/g)]
+                .map(m => m[1]);
 
-                const container = document.getElementById("poems");
-                container.innerHTML = "";
+            const container = document.getElementById("poems");
+            container.innerHTML = "";
 
-                files.forEach((file, index) => {
-                    const title = decodeURIComponent(file.replace('.txt', '').replace(/-/g, ' '));
+            files.forEach(file => {
+                const title = cleanArabicFilename(file).replace(/-/g, ' ');
 
-                    const a = document.createElement("a");
-                    a.href = `viewer.html?file=${file}`;
-                    a.className = "poem-link";
-                    a.textContent = title;
-                    container.appendChild(a);
-                });
+                const link = document.createElement("a");
+                link.href = `viewer.html?file=${file}`;
+                link.className = "poem-link";
+                link.textContent = title;
 
-            } catch (e) {
-                document.getElementById("poems").textContent = "⚠️ لا يمكن تحميل القصائد";
-            }
+                container.appendChild(link);
+            });
+
+        } catch (err) {
+            document.getElementById("poems").textContent = "خطأ في تحميل القصائد.";
         }
+    }
 
-        loadPoems();
-    </script>
+    loadPoems();
+</script>
 
 </body>
 </html>
