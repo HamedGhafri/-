@@ -48,8 +48,9 @@ pre {
     background: #fff5e6;
     padding: 20px;
     border-radius: 12px;
-    font-size: 22px;
+    font-size: 24px;
     white-space: pre-wrap;
     text-align: center;
-    font-family: 'Cairo', sans-serif !important;
+    font-family: 'Amiri', serif !important;
 }
+
