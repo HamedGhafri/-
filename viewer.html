@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <title>عرض القصيدة</title>
     <link rel="stylesheet" href="style.css">
@@ -11,7 +10,7 @@
 <div class="container">
 
     <h1 id="title"></h1>
-    <pre id="content"></pre>
+    <div id="content" class="poem-text"></div>
 
 </div>
 
@@ -27,7 +26,7 @@ async function loadPoem() {
 
     document.getElementById("title").textContent = poem[0].replace("#", "").trim();
 
-    document.getElementById("content").textContent = poem.slice(1).join("\n");
+    document.getElementById("content").innerHTML = poem.slice(1).join("<br>");
 }
 
 loadPoem();
