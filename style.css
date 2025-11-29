@@ -1,76 +1,53 @@
-/* ===== إعداد الخطوط ===== */
-@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
 
 body {
-    font-family: "Amiri", serif;
-    background: #f4efe7;
+    font-family: 'Cairo', sans-serif;
+    background: #f5ecd9;
     margin: 0;
-    padding: 20px;
-    line-height: 1.9;
-    color: #3d2e1f;
-}
-
-/* ===== العنوان الرئيسي ===== */
-.title {
+    padding: 0;
+    color: #4e3b2f;
+    line-height: 1.8;
     text-align: center;
-    font-size: 36px;
-    margin-top: 10px;
-    color: #5c432c;
-    font-weight: 700;
-    letter-spacing: 1px;
 }
 
-/* ===== صندوق القصائد ===== */
-#poems-list {
-    max-width: 650px;
-    margin: 40px auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
 }
 
-/* ===== رابط القصيدة ===== */
-.poem-link {
-    background: #fff;
-    padding: 15px 20px;
+h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    margin-top: 40px;
+    font-size: 26px;
+}
+
+.poem-card {
+    background: #f1dcb1;
+    padding: 18px;
+    margin: 15px 0;
+    border-radius: 14px;
+    font-size: 20px;
+    text-decoration: none;
+    color: #4e3b2f;
+    display: block;
+    transition: 0.25s;
+}
+
+.poem-card:hover {
+    background: #e5c894;
+}
+
+pre {
+    background: #fff5e6;
+    padding: 20px;
     border-radius: 12px;
     font-size: 22px;
-    text-decoration: none;
-    color: #5a422e;
-    border: 1px solid #e0d6c7;
-    transition: 0.25s;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-.poem-link:hover {
-    background: #f1e8dc;
-    transform: translateY(-3px);
-}
-
-/* ===== صفحة عرض القصيدة ===== */
-.poem-container {
-    max-width: 800px;
-    margin: 40px auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-    border: 1px solid #e8dccb;
-}
-
-.poem {
     white-space: pre-wrap;
-    font-size: 24px;
-    line-height: 2.3;
     text-align: center;
-    margin-top: 25px;
-    color: #3f2f22;
-}
-
-.back-btn {
-    display: inline-block;
-    margin-bottom: 20px;
-    font-size: 18px;
-    text-decoration: none;
-    color: #6b4a2d;
 }
