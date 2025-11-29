@@ -2,40 +2,49 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قصائد حمد الغافري</title>
+    <title>موقع قصائد حمد الغافري</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1 class="title">قصائد حمد الغافري</h1>
+<div class="container">
 
-<div id="poems-list">جاري تحميل القصائد...</div>
+    <h1>موقع قصائد حمد الغافري</h1>
+
+    <p>
+        هنا يجتمع الجمال واللغة، وتلتقي القصيدة بروح قارئها.  
+        هذا الموقع يعرض جميع قصائد الشاعر <strong>حمد الغافري</strong> بشكل جميل وسهل.
+    </p>
+
+    <h2>فهرس القصائد</h2>
+
+    <div id="list"></div>
+
+</div>
 
 <script>
-    async function loadPoems() {
-        const res = await fetch("poems.txt");
-        const text = await res.text();
+async function loadPoems() {
+    const res = await fetch("poems.txt");
+    const text = await res.text();
+    
+    const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
 
-        const blocks = text.split("===\n").map(b => b.trim()).filter(b => b.length > 0);
+    const list = document.getElementById("list");
+    list.innerHTML = "";
 
-        const list = document.getElementById("poems-list");
-        list.innerHTML = "";
+    poems.forEach((poem, i) => {
+        const firstLine = poem.split("\n")[0];
+        const title = firstLine.replace("#", "").trim();
 
-        blocks.forEach((block, index) => {
-            const lines = block.split("\n");
-            const title = lines[0].trim();
+        list.innerHTML += `
+            <a class="poem-card" href="viewer.html?id=${i}">
+                ${title}
+            </a>
+        `;
+    });
+}
 
-            const a = document.createElement("a");
-            a.href = `viewer.html?id=${index}`;
-            a.className = "poem-link";
-            a.textContent = title;
-
-            list.appendChild(a);
-        });
-    }
-
-    loadPoems();
+loadPoems();
 </script>
 
 </body>
