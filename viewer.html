@@ -8,27 +8,35 @@
 </head>
 <body>
 
-<div id="content" class="poem-container">جاري التحميل...</div>
+<div id="poem-container">جاري تحميل القصيدة...</div>
 
 <script>
-    const params = new URLSearchParams(location.search);
-    const file = params.get("file");
+    async function loadPoem() {
+        const params = new URLSearchParams(location.search);
+        const id = parseInt(params.get("id"));
 
-    if (!file) {
-        document.getElementById("content").innerText = "لم يتم اختيار قصيدة.";
-    } else {
-        fetch("poems/" + file)
-            .then(r => r.text())
-            .then(text => {
-                const cleanTitle = decodeURIComponent(file.replace(".txt", "").replace(/-/g, " "));
-                document.getElementById("content").innerHTML =
-                    `<h2 class="title">${cleanTitle}</h2>
-                     <pre class="poem">${text}</pre>`;
-            })
-            .catch(() => {
-                document.getElementById("content").innerText = "تعذّر تحميل القصيدة.";
-            });
+        const res = await fetch("poems.txt");
+        const text = await res.text();
+
+        const blocks = text.split("===\n").map(b => b.trim()).filter(b => b.length > 0);
+
+        if (isNaN(id) || id < 0 || id >= blocks.length) {
+            document.getElementById("poem-container").textContent = "القصيدة غير موجودة.";
+            return;
+        }
+
+        const block = blocks[id];
+        const lines = block.split("\n");
+        const title = lines.shift().trim();
+        const poem = lines.join("\n");
+
+        document.getElementById("poem-container").innerHTML = `
+            <h1 class="title">${title}</h1>
+            <pre class="poem">${poem}</pre>
+        `;
     }
+
+    loadPoem();
 </script>
 
 </body>
