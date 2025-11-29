@@ -49,6 +49,19 @@ h1 {
     background: #c9a873;
 }
 
+/* special button (Poem of the Day) */
+.btn-today {
+    background: #b8915a;
+    color: white !important;
+    font-weight: bold;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+}
+
+.btn-today:hover {
+    background: #a57f4a;
+    transform: scale(1.03);
+}
+
 /* search box */
 #search {
     width: 80%;
@@ -85,6 +98,25 @@ h1 {
     transform: translateY(-3px);
 }
 
+/* Poem of the Day box */
+.today-box {
+    background: #fff4d9;
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid #e2cfa8;
+    font-size: 24px;
+    line-height: 2.3;
+    margin-top: 30px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.today-title {
+    font-size: 30px;
+    margin-bottom: 12px;
+    font-weight: bold;
+    color: #5c432b;
+}
+
 /* viewer page */
 .poem-text {
     background: #fff5e6;
@@ -101,12 +133,20 @@ h1 {
     margin-bottom: 15px;
 }
 
+/* About page */
 .about-box {
     background: #fff5e6;
-    padding: 20px;
-    border-radius: 12px;
-    font-size: 22px;
-    text-align: center;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #e0cbb0;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    font-size: 23px;
+    line-height: 2.3;
     margin-top: 20px;
-    line-height: 2;
+}
+
+.about-title {
+    font-size: 34px;
+    margin-bottom: 15px;
+    color: #4e3b2f;
 }
