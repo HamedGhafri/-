@@ -18,21 +18,37 @@
 
     <h2 class="subtitle">فهرس القصائد</h2>
 
-    <div id="poemList" class="list"></div>
+    <div id="poems" class="list">جاري التحميل...</div>
 
     <script>
-        fetch("poems.json")
-            .then(res => res.json())
-            .then(data => {
-                const container = document.getElementById("poemList");
-                data.forEach(poem => {
+        async function loadPoems() {
+            try {
+                const res = await fetch('poems/');
+                const text = await res.text();
+
+                const files = [...text.matchAll(/href="([^"]+\.txt)"/g)]
+                    .map(m => m[1])
+                    .filter(name => !name.includes("placeholder"));
+
+                const container = document.getElementById("poems");
+                container.innerHTML = "";
+
+                files.forEach((file, index) => {
+                    const title = decodeURIComponent(file.replace('.txt', '').replace(/-/g, ' '));
+
                     const a = document.createElement("a");
+                    a.href = `viewer.html?file=${file}`;
                     a.className = "poem-link";
-                    a.href = `viewer.html?id=${poem.id}`;
-                    a.textContent = poem.title;
+                    a.textContent = title;
                     container.appendChild(a);
                 });
-            });
+
+            } catch (e) {
+                document.getElementById("poems").textContent = "⚠️ لا يمكن تحميل القصائد";
+            }
+        }
+
+        loadPoems();
     </script>
 
 </body>
