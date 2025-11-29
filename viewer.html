@@ -12,23 +12,23 @@
 
     <script>
         const params = new URLSearchParams(location.search);
-        const id = params.get("id");
+        const file = params.get("file");
 
-        fetch("poems.json")
-            .then(res => res.json())
-            .then(data => {
-                const poem = data.find(p => p.id == id);
-                if (!poem) {
-                    document.getElementById("content").textContent = "لم يتم العثور على القصيدة.";
-                    return;
-                }
-                fetch("poems/" + poem.file)
-                    .then(r => r.text())
-                    .then(text => {
-                        document.getElementById("content").innerHTML =
-                            `<h2 class="title">${poem.title}</h2><pre class="poem">${text}</pre>`;
-                    });
-            });
+        if (!file) {
+            document.getElementById("content").innerText = "لم يتم اختيار قصيدة.";
+        } else {
+            fetch("poems/" + file)
+                .then(r => r.text())
+                .then(text => {
+                    document.getElementById("content").innerHTML = `
+                        <h2 class='title'>${decodeURIComponent(file.replace('.txt', '').replace(/-/g, ' '))}</h2>
+                        <pre class='poem'>${text}</pre>
+                    `;
+                })
+                .catch(() => {
+                    document.getElementById("content").innerText = "حدث خطأ أثناء تحميل القصيدة.";
+                });
+        }
     </script>
 
 </body>
