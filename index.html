@@ -2,23 +2,22 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>موقع قصائد حمد الغافري</title>
+    <title>قصائد حمد الغافري</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
 
-    <h1>موقع قصائد حمد الغافري</h1>
+    <h1>ديوان حمد الغافري</h1>
 
-    <p>
-        هنا يجتمع الجمال واللغة، وتلتقي القصيدة بروح قارئها.  
-        هذا الموقع يعرض جميع قصائد الشاعر <strong>حمد الغافري</strong> بشكل جميل وسهل.
+    <p class="description">
+        هنا تجتمع القصائد بروحها الأولى،  
+        وتتناثر الحروف كأريج من الذاكرة والنبض.  
+        تصفّح ديوان الشاعر حمد الغافري وانعم بجمال الكلمة.
     </p>
 
-    <h2>فهرس القصائد</h2>
-
-    <div id="list"></div>
+    <div id="list">جاري تحميل القصائد...</div>
 
 </div>
 
@@ -26,20 +25,15 @@
 async function loadPoems() {
     const res = await fetch("poems.txt");
     const text = await res.text();
-    
     const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
 
     const list = document.getElementById("list");
     list.innerHTML = "";
 
     poems.forEach((poem, i) => {
-        const firstLine = poem.split("\n")[0];
-        const title = firstLine.replace("#", "").trim();
-
+        const title = poem.split("\n")[0].replace("#","").trim();
         list.innerHTML += `
-            <a class="poem-card" href="viewer.html?id=${i}">
-                ${title}
-            </a>
+            <a class="poem-card" href="viewer.html?id=${i}">${title}</a>
         `;
     });
 }
