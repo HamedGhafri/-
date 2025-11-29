@@ -2,41 +2,34 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>عرض القصيدة</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="poem-container">جاري تحميل القصيدة...</div>
+<div class="container">
+
+    <h1 id="title"></h1>
+    <pre id="content"></pre>
+
+</div>
 
 <script>
-    async function loadPoem() {
-        const params = new URLSearchParams(location.search);
-        const id = parseInt(params.get("id"));
+async function loadPoem() {
+    const res = await fetch("poems.txt");
+    const text = await res.text();
+    
+    const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
 
-        const res = await fetch("poems.txt");
-        const text = await res.text();
+    const id = new URLSearchParams(window.location.search).get("id");
+    const poem = poems[id].split("\n");
 
-        const blocks = text.split("===\n").map(b => b.trim()).filter(b => b.length > 0);
+    document.getElementById("title").textContent = poem[0].replace("#", "").trim();
 
-        if (isNaN(id) || id < 0 || id >= blocks.length) {
-            document.getElementById("poem-container").textContent = "القصيدة غير موجودة.";
-            return;
-        }
+    document.getElementById("content").textContent = poem.slice(1).join("\n");
+}
 
-        const block = blocks[id];
-        const lines = block.split("\n");
-        const title = lines.shift().trim();
-        const poem = lines.join("\n");
-
-        document.getElementById("poem-container").innerHTML = `
-            <h1 class="title">${title}</h1>
-            <pre class="poem">${poem}</pre>
-        `;
-    }
-
-    loadPoem();
+loadPoem();
 </script>
 
 </body>
