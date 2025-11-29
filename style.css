@@ -1,42 +1,76 @@
+/* ===== إعداد الخطوط ===== */
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
 body {
-    font-family: "Cairo", sans-serif;
-    background: #faf7f2;
-    margin: 20px;
+    font-family: "Amiri", serif;
+    background: #f4efe7;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.9;
+    color: #3d2e1f;
 }
 
+/* ===== العنوان الرئيسي ===== */
 .title {
     text-align: center;
-    font-size: 30px;
-    margin-bottom: 20px;
-    color: #333;
+    font-size: 36px;
+    margin-top: 10px;
+    color: #5c432c;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
+/* ===== صندوق القصائد ===== */
 #poems-list {
+    max-width: 650px;
+    margin: 40px auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
 }
 
+/* ===== رابط القصيدة ===== */
 .poem-link {
-    font-size: 20px;
-    padding: 10px;
-    background: white;
-    border-radius: 10px;
+    background: #fff;
+    padding: 15px 20px;
+    border-radius: 12px;
+    font-size: 22px;
     text-decoration: none;
-    color: #444;
-    border: 1px solid #ddd;
+    color: #5a422e;
+    border: 1px solid #e0d6c7;
+    transition: 0.25s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
 .poem-link:hover {
-    background: #f0ebe4;
+    background: #f1e8dc;
+    transform: translateY(-3px);
+}
+
+/* ===== صفحة عرض القصيدة ===== */
+.poem-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    border: 1px solid #e8dccb;
 }
 
 .poem {
     white-space: pre-wrap;
-    font-size: 22px;
-    line-height: 1.8;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    border: 1px solid #ddd;
+    font-size: 24px;
+    line-height: 2.3;
+    text-align: center;
+    margin-top: 25px;
+    color: #3f2f22;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 18px;
+    text-decoration: none;
+    color: #6b4a2d;
 }
