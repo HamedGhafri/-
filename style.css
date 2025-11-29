@@ -1,82 +1,54 @@
-/* ===== الخطوط العربية الفاخرة ===== */
-@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
 
-/* ===== الخلفية العامة ===== */
 body {
+    font-family: 'Cairo', sans-serif;
+    background: #f5ecd9;
     margin: 0;
     padding: 0;
-    background: #f3e8d3;
-    font-family: 'Amiri', serif;
-    color: #4b3a2f;
-}
-
-/* ===== الحاوية ===== */
-.container {
-    width: 92%;
-    max-width: 850px;
-    margin: auto;
-    padding: 25px 10px;
-}
-
-/* ===== عنوان الموقع ===== */
-h1 {
-    font-family: 'Aref Ruqaa', serif;
-    font-size: 42px;
-    text-align: center;
-    margin-top: 25px;
-    margin-bottom: 10px;
-    color: #5b432d;
-}
-
-/* ===== الوصف تحت العنوان ===== */
-.description {
-    font-size: 20px;
-    text-align: center;
+    color: #4e3b2f;
     line-height: 1.8;
-    margin-bottom: 30px;
-    color: #6e5847;
+    text-align: center;
 }
 
-/* ===== رابط القصيدة ===== */
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    margin-top: 40px;
+    font-size: 26px;
+}
+
 .poem-card {
-    display: block;
-    background: #fbf4e6;
-    border: 1px solid #e1d2b8;
+    background: #f1dcb1;
     padding: 18px;
+    margin: 15px 0;
     border-radius: 14px;
-    margin: 12px 0;
+    font-size: 20px;
     text-decoration: none;
-    font-size: 22px;
-    color: #4b3a2f;
-    font-family: 'Aref Ruqaa', serif;
+    color: #4e3b2f;
+    display: block;
     transition: 0.25s;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.08);
 }
 
 .poem-card:hover {
-    background: #f1e6d1;
-    transform: translateY(-3px);
+    background: #e5c894;
 }
 
-/* ===== صفحة القصيدة ===== */
 .poem-text {
-    font-family: 'Amiri', serif;
-    background: #fff9ee;
-    padding: 25px;
-    border-radius: 14px;
-    border: 1px solid #e4d5bd;
-    font-size: 26px;
+    background: #fff5e6;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 22px;
     white-space: pre-wrap;
-    line-height: 2.4;
     text-align: center;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-}
-
-/* ===== عنوان القصيدة ===== */
-#title {
-    font-family: 'Aref Ruqaa', serif;
-    font-size: 36px;
-    text-align: center;
-    color: #5b432d;
-    margin-bottom: 15px;
+    line-height: 2.1;
 }
