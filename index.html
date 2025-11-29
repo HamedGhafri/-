@@ -3,53 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقع قصائد حمد الغافري</title>
+    <title>قصائد حمد الغافري</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1 class="title">موقع قصائد حمد الغافري</h1>
+<h1 class="title">قصائد حمد الغافري</h1>
 
-<h2 class="subtitle">القصائد</h2>
-
-<div id="poems" class="list">جاري التحميل...</div>
+<div id="poems-list">جاري تحميل القصائد...</div>
 
 <script>
-    function cleanArabicFilename(name) {
-        return decodeURIComponent(name)
-            .replace('.txt', '')
-            .replace(/[؟،:;'".!]/g, '')  // إزالة الرموز
-            .replace(/\s+/g, ' ')        // مسافات طبيعية
-            .trim();
-    }
-
     async function loadPoems() {
-        try {
-            // قراءة قائمة الملفات من المجلد
-            const res = await fetch('poems/');
-            const html = await res.text();
+        const res = await fetch("poems.txt");
+        const text = await res.text();
 
-            // استخراج أسماء الملفات
-            const files = [...html.matchAll(/href="([^"]+\.txt)"/g)]
-                .map(m => m[1]);
+        const blocks = text.split("===\n").map(b => b.trim()).filter(b => b.length > 0);
 
-            const container = document.getElementById("poems");
-            container.innerHTML = "";
+        const list = document.getElementById("poems-list");
+        list.innerHTML = "";
 
-            files.forEach(file => {
-                const title = cleanArabicFilename(file).replace(/-/g, ' ');
+        blocks.forEach((block, index) => {
+            const lines = block.split("\n");
+            const title = lines[0].trim();
 
-                const link = document.createElement("a");
-                link.href = `viewer.html?file=${file}`;
-                link.className = "poem-link";
-                link.textContent = title;
+            const a = document.createElement("a");
+            a.href = `viewer.html?id=${index}`;
+            a.className = "poem-link";
+            a.textContent = title;
 
-                container.appendChild(link);
-            });
-
-        } catch (err) {
-            document.getElementById("poems").textContent = "خطأ في تحميل القصائد.";
-        }
+            list.appendChild(a);
+        });
     }
 
     loadPoems();
