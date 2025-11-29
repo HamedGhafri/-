@@ -2,55 +2,34 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>عرض القصيدة</title>
-    <style>
-        body {
-            font-family: "Amiri", serif;
-            background: #f7f3e9;
-            padding: 40px;
-            line-height: 2.3;
-            font-size: 22px;
-            white-space: pre-line;
-        }
-        a.back {
-            display: inline-block;
-            margin-bottom: 25px;
-            font-size: 20px;
-            text-decoration: none;
-            color: #5a422a;
-            background: #e9ddc7;
-            padding: 8px 15px;
-            border-radius: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<a class="back" href="index.html">← العودة إلى القائمة</a>
+    <div id="content" class="poem-container">جاري التحميل...</div>
 
-<div id="content">جاري تحميل القصيدة...</div>
+    <script>
+        const params = new URLSearchParams(location.search);
+        const id = params.get("id");
 
-<script>
-const params = new URLSearchParams(window.location.search);
-const file = params.get("file");
-
-fetch(file)
-  .then(response => response.text())
-  .then(text => {
-      document.getElementById("content").textContent = text;
-  })
-  .catch(err => {
-      document.getElementById("content").textContent = "تعذّر تحميل القصيدة.";
-  });
-</script>
-
-</body>
-</html>
-    document.getElementById("poem").textContent = text;
-}
-
-loadPoem();
-</script>
+        fetch("poems.json")
+            .then(res => res.json())
+            .then(data => {
+                const poem = data.find(p => p.id == id);
+                if (!poem) {
+                    document.getElementById("content").textContent = "لم يتم العثور على القصيدة.";
+                    return;
+                }
+                fetch("poems/" + poem.file)
+                    .then(r => r.text())
+                    .then(text => {
+                        document.getElementById("content").innerHTML =
+                            `<h2 class="title">${poem.title}</h2><pre class="poem">${text}</pre>`;
+                    });
+            });
+    </script>
 
 </body>
 </html>
