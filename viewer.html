@@ -6,35 +6,46 @@
     <style>
         body {
             font-family: "Amiri", serif;
-            background: #fafafa;
-            margin: 0;
-            padding: 25px;
-            line-height: 2;
+            background: #f7f3e9;
+            padding: 40px;
+            line-height: 2.3;
             font-size: 22px;
-            white-space: pre-wrap;
+            white-space: pre-line;
         }
-        a {
-            display: block;
+        a.back {
+            display: inline-block;
             margin-bottom: 25px;
-            font-size: 18px;
-            color: #333;
+            font-size: 20px;
             text-decoration: none;
+            color: #5a422a;
+            background: #e9ddc7;
+            padding: 8px 15px;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
 
-<a href="index.html">← العودة للفهرس</a>
-<div id="poem"></div>
+<a class="back" href="index.html">← العودة إلى القائمة</a>
+
+<div id="content">جاري تحميل القصيدة...</div>
 
 <script>
-async function loadPoem() {
-    const params = new URLSearchParams(window.location.search);
-    const file = params.get("file");
+const params = new URLSearchParams(window.location.search);
+const file = params.get("file");
 
-    const response = await fetch(file);
-    const text = await response.text();
+fetch(file)
+  .then(response => response.text())
+  .then(text => {
+      document.getElementById("content").textContent = text;
+  })
+  .catch(err => {
+      document.getElementById("content").textContent = "تعذّر تحميل القصيدة.";
+  });
+</script>
 
+</body>
+</html>
     document.getElementById("poem").textContent = text;
 }
 
