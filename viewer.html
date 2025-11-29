@@ -8,28 +8,28 @@
 </head>
 <body>
 
-    <div id="content" class="poem-container">جاري التحميل...</div>
+<div id="content" class="poem-container">جاري التحميل...</div>
 
-    <script>
-        const params = new URLSearchParams(location.search);
-        const file = params.get("file");
+<script>
+    const params = new URLSearchParams(location.search);
+    const file = params.get("file");
 
-        if (!file) {
-            document.getElementById("content").innerText = "لم يتم اختيار قصيدة.";
-        } else {
-            fetch("poems/" + file)
-                .then(r => r.text())
-                .then(text => {
-                    document.getElementById("content").innerHTML = `
-                        <h2 class='title'>${decodeURIComponent(file.replace('.txt', '').replace(/-/g, ' '))}</h2>
-                        <pre class='poem'>${text}</pre>
-                    `;
-                })
-                .catch(() => {
-                    document.getElementById("content").innerText = "حدث خطأ أثناء تحميل القصيدة.";
-                });
-        }
-    </script>
+    if (!file) {
+        document.getElementById("content").innerText = "لم يتم اختيار قصيدة.";
+    } else {
+        fetch("poems/" + file)
+            .then(r => r.text())
+            .then(text => {
+                const cleanTitle = decodeURIComponent(file.replace(".txt", "").replace(/-/g, " "));
+                document.getElementById("content").innerHTML =
+                    `<h2 class="title">${cleanTitle}</h2>
+                     <pre class="poem">${text}</pre>`;
+            })
+            .catch(() => {
+                document.getElementById("content").innerText = "تعذّر تحميل القصيدة.";
+            });
+    }
+</script>
 
 </body>
 </html>
