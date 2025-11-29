@@ -6,23 +6,34 @@
     <title>موقع قصائد حمد الغافري</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<header>
-    <h1>موقع قصائد حمد الغافري</h1>
-    <p>
-        حمد الغافري، شاعرٌ ينسج من اللغة ثيابها الأولى، ويستخرج من بحور الشعر لآلِئه الخالدة. 
+    <h1 class="title">موقع قصائد حمد الغافري</h1>
+
+    <p class="bio">
+        حمد الغافري، شاعر ينسج من اللغة ثيابها الأولى، ويستخرج من بحور الشعر لآلئه الخالدة. 
         يحمل في قصائده ملامح الأرض، وعبق الجبال، وصدق الإنسان العماني في بيانه. 
-        يكتب ليترك أثراً، ولتكون كلمته نافذةً إلى القلب قبل أن تكون بيتاً موزوناً.
+        يكتب ليترك أثرًا، ولتكون كلمته نافذة إلى القلب قبل أن تكون بيتًا موزونًا.
     </p>
-</header>
 
-<h2>فهرس القصائد</h2>
+    <h2 class="subtitle">فهرس القصائد</h2>
 
-<div class="nav">
-    <a href="poem1.html">قصيدة 1</a>
-</div>
+    <div id="poemList" class="list"></div>
+
+    <script>
+        fetch("poems.json")
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById("poemList");
+                data.forEach(poem => {
+                    const a = document.createElement("a");
+                    a.className = "poem-link";
+                    a.href = `viewer.html?id=${poem.id}`;
+                    a.textContent = poem.title;
+                    container.appendChild(a);
+                });
+            });
+    </script>
 
 </body>
 </html>
