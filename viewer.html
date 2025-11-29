@@ -24,10 +24,9 @@ async function loadPoem() {
     const id = new URLSearchParams(window.location.search).get("id");
     const poem = poems[id].split("\n");
 
-    document.getElementById("title").textContent = poem[0].trim();
+    document.getElementById("title").textContent = poem[0].replace("#", "").trim();
 
-    document.getElementById("content").innerHTML =
-        poem.slice(1).join("<br>");
+    document.getElementById("content").innerHTML = poem.slice(1).join("<br>");
 }
 
 loadPoem();
