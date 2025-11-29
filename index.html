@@ -13,7 +13,6 @@
 
     <!-- buttons -->
     <div class="actions">
-        <a class="btn btn-today" href="#" onclick="poemOfTheDay()">قصيدة اليوم</a>
         <a class="btn" href="#" onclick="randomPoem()">قصيدة عشوائية</a>
         <a class="btn" href="about.html">عن الشاعر</a>
     </div>
@@ -21,9 +20,9 @@
     <!-- search -->
     <input type="text" id="search" placeholder="ابحث عن قصيدة..." oninput="filterPoems()">
 
-    <!-- Poem of the Day box -->
-    <div id="todayBox" style="display:none;" class="today-box">
-        <div id="todayTitle" class="today-title"></div>
+    <!-- بيت اليوم -->
+    <div id="todayBox" class="today-box">
+        <div class="today-title">بيت اليوم</div>
         <div id="todayContent"></div>
     </div>
 
@@ -34,11 +33,15 @@
 
 <script>
 let poemList = [];
+let allLines = [];
 
 async function loadPoems() {
     const res = await fetch("poems.txt");
     const text = await res.text();
-    const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
+
+    const poems = text.split("===\n")
+        .map(p => p.trim())
+        .filter(p => p);
 
     poemList = poems.map((poem, index) => {
         return {
@@ -48,6 +51,14 @@ async function loadPoems() {
     });
 
     display(poemList);
+
+    // استخراج كل الأبيات
+    poems.forEach(poem => {
+        const lines = poem.split("\n").slice(1).filter(l => l.trim());
+        allLines.push(...lines);
+    });
+
+    showBaytOfDay();
 }
 
 function display(arr) {
@@ -74,25 +85,17 @@ function randomPoem() {
     window.location.href = `viewer.html?id=${id}`;
 }
 
-function poemOfTheDay() {
-    const today = new Date().getDate(); 
-    const id = today % poemList.length;
+/* بيت اليوم */
+function showBaytOfDay() {
+    const today = new Date().getDate();
+    const index = today % allLines.length;
 
-    fetch("poems.txt")
-        .then(res => res.text())
-        .then(text => {
-            const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
-            const full = poems[id].split("\n");
+    const bayt1 = allLines[index];
+    const bayt2 = allLines[index + 1] || "";
 
-            const title = full[0];
-            const content = full.slice(1).join("<br>");
-
-            document.getElementById("todayTitle").innerHTML = title;
-            document.getElementById("todayContent").innerHTML = content;
-
-            document.getElementById("todayBox").style.display = "block";
-            window.scrollTo({ top: 300, behavior: "smooth" });
-        });
+    document.getElementById("todayContent").innerHTML = `
+        ${bayt1}<br>${bayt2}
+    `;
 }
 
 loadPoems();
