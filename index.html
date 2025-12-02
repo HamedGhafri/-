@@ -21,20 +21,26 @@
         <a class="btn" href="about.html">عن الشاعر</a>
     </div>
 
-    <input type="text" id="search" placeholder="ابحث عن قصيدة..." oninput="filterPoems()">
+    <input type="text" id="search" placeholder="ابحث عن قصيدة أو كلمة..." oninput="filterPoems()">
+
+    <div id="categoriesBox" class="categories"></div>
 
     <div id="todayBox" class="today-box fade">
         <div class="today-title">بيت اليوم</div>
         <div id="todayContent"></div>
     </div>
 
-    <div id="list" class="fade">جاري التحميل...</div>
+    <div id="results"></div>
+
+    <div id="list" class="fade"></div>
 
 </div>
 
 <script>
 let poemList = [];
 let allLines = [];
+let allPoems = [];
+let categories = new Set();
 
 /* الوضع الليلي */
 function toggleMode() {
@@ -52,39 +58,119 @@ async function loadPoems() {
 
     const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
 
-    poemList = poems.map((poem, index) => ({
-        id: index,
-        title: poem.split("\n")[0].trim() // العنوان = السطر الأول
-    }));
+    poemList = poems.map((poem, index) => {
+        const lines = poem.split("\n").map(l => l.trim()).filter(l => l);
 
-    display(poemList);
+        const title = lines[0];
+        const category = lines[1].startsWith("@") ? lines[1].replace("@", "") : "غير مصنّف";
+        const body = lines.slice(2).join("\n");
 
-    poems.forEach(poem => {
-        const lines = poem.split("\n").slice(1).filter(l => l.trim());
-        allLines.push(...lines);
+        categories.add(category);
+        allPoems.push(poem);
+
+        const poemBodyLines = lines.slice(2);
+        allLines.push(...poemBodyLines);
+
+        return {
+            id: index,
+            title,
+            category,
+            body
+        };
     });
 
+    createCategoryButtons();
+    display(poemList);
     showBaytOfDay();
+}
+
+/* إنشاء أزرار التصنيفات تلقائيًا */
+function createCategoryButtons() {
+    const box = document.getElementById("categoriesBox");
+    box.innerHTML = "";
+
+    box.innerHTML += `<button class="cat-btn" onclick="filterByCategory('الكل')">الكل</button>`;
+
+    Array.from(categories)
+        .sort()
+        .forEach(cat => {
+            box.innerHTML += `
+                <button class="cat-btn" onclick="filterByCategory('${cat}')">${cat}</button>
+            `;
+        });
+}
+
+/* فلترة حسب التصنيف */
+function filterByCategory(cat) {
+    if (cat === "الكل") {
+        display(poemList);
+        return;
+    }
+
+    const filtered = poemList.filter(p => p.category === cat);
+    display(filtered);
 }
 
 /* عرض الفهرس */
 function display(arr) {
     const list = document.getElementById("list");
+    const results = document.getElementById("results");
+
+    results.innerHTML = "";
     list.innerHTML = "";
 
     arr.forEach(poem => {
         list.innerHTML += `
             <a class="poem-card fade" href="viewer.html?id=${poem.id}">
-                ${poem.title}
+                <div class="title">${poem.title}</div>
+                <div class="category">${poem.category}</div>
             </a>
         `;
     });
 }
 
-/* البحث */
+/* البحث المتقدم */
 function filterPoems() {
     const text = document.getElementById("search").value.trim();
-    display(poemList.filter(p => p.title.includes(text)));
+    const resultsDiv = document.getElementById("results");
+
+    if (text === "") {
+        resultsDiv.innerHTML = "";
+        display(poemList);
+        return;
+    }
+
+    let resultsHTML = "";
+    const query = text;
+
+    poemList.forEach((p, i) => {
+        const poemText = allPoems[i];
+
+        if (poemText.includes(query) || p.title.includes(query)) {
+
+            let snippet = "";
+            const lines = poemText.split("\n");
+
+            for (let line of lines) {
+                if (line.includes(query)) {
+                    snippet = line.replace(
+                        new RegExp(query, "g"),
+                        `<mark>${query}</mark>`
+                    );
+                    break;
+                }
+            }
+
+            resultsHTML += `
+                <a class="poem-search-card" href="viewer.html?id=${p.id}">
+                    <div class="search-title">${p.title}</div>
+                    <div class="search-snippet">${snippet || "…"}</div>
+                </a>
+            `;
+        }
+    });
+
+    resultsDiv.innerHTML = resultsHTML || "<p>لا توجد نتائج.</p>";
 }
 
 /* قصيدة عشوائية */
