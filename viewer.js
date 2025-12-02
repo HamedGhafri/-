@@ -1,8 +1,8 @@
 function toggleMode() {
     document.body.classList.toggle("dark");
-    localStorage.setItem("darkMode", document.body.classList.contains("dark"));
+    localStorage.setItem("darkMode", document.body.classList.contains("dark") ? "on" : "off");
 }
-if (localStorage.getItem("darkMode") === "true") {
+if (localStorage.getItem("darkMode") === "on") {
     document.body.classList.add("dark");
 }
 
