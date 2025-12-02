@@ -36,7 +36,7 @@
 let poemList = [];
 let allLines = [];
 
-/* === الوضع الليلي === */
+/* الوضع الليلي */
 function toggleMode() {
     document.body.classList.toggle("dark");
     localStorage.setItem("darkMode", document.body.classList.contains("dark"));
@@ -45,7 +45,7 @@ if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark");
 }
 
-/* === تحميل القصائد === */
+/* تحميل القصائد */
 async function loadPoems() {
     const res = await fetch("poems.txt");
     const text = await res.text();
@@ -54,7 +54,7 @@ async function loadPoems() {
 
     poemList = poems.map((poem, index) => ({
         id: index,
-        title: poem.split("\n")[0].trim()
+        title: poem.split("\n")[0].trim() // العنوان = السطر الأول
     }));
 
     display(poemList);
@@ -67,7 +67,7 @@ async function loadPoems() {
     showBaytOfDay();
 }
 
-/* === عرض الفهرس === */
+/* عرض الفهرس */
 function display(arr) {
     const list = document.getElementById("list");
     list.innerHTML = "";
@@ -81,19 +81,19 @@ function display(arr) {
     });
 }
 
-/* === البحث === */
+/* البحث */
 function filterPoems() {
     const text = document.getElementById("search").value.trim();
     display(poemList.filter(p => p.title.includes(text)));
 }
 
-/* === قصيدة عشوائية === */
+/* قصيدة عشوائية */
 function randomPoem() {
     const id = Math.floor(Math.random() * poemList.length);
     window.location.href = `viewer.html?id=${id}`;
 }
 
-/* === بيت اليوم === */
+/* بيت اليوم */
 function showBaytOfDay() {
     const today = new Date().getDate();
     const index = today % allLines.length;
