@@ -3,29 +3,25 @@
 <head>
     <meta charset="UTF-8">
 
-    <!-- منع الكاش -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
     <title>ديوان حمد الغافري</title>
-
-    <link rel="stylesheet" href="style.css?v=1.5">
+    <link rel="stylesheet" href="style.css?v=2.0">
 </head>
 
 <body>
 
 <button id="modeToggle" onclick="toggleMode()">🌓</button>
 
-<div class="top-bar">
-    <h2>📚 ديوان حمد الغافري</h2>
-</div>
-
 <div class="container fade">
 
+    <h1 class="main-title">ديوان حمد الغافري</h1>
+
     <div class="actions">
-        <a class="btn" onclick="randomPoem()">قصيدة عشوائية</a>
-        <a class="btn" href="about.html">عن الشاعر</a>
+        <a class="btn big" onclick="randomPoem()">🎲 قصيدة عشوائية</a>
+        <a class="btn big" href="about.html">👤 عن الشاعر</a>
     </div>
 
     <input type="text" id="search" placeholder="ابحث عن قصيدة أو تصنيف..." oninput="filterPoems()">
@@ -36,12 +32,11 @@
     </div>
 
     <div id="list" class="grid fade">جاري التحميل...</div>
+
 </div>
 
-<!-- سكربت الموقع -->
-<script src="script.js?v=1.5"></script>
+<script src="script.js?v=2.0"></script>
 
-<!-- نظام التحديث الفوري -->
 <script>
 setInterval(() => {
     fetch("version.txt?x=" + Date.now())
