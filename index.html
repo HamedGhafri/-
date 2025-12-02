@@ -3,222 +3,35 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ديوان حمد الغافري</title>
+  <title>عن الشاعر</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="fade">
 
-  <div class="top-bar">📜 ديوان حمد الغافري</div>
-
+  <div class="top-bar">👤 عن الشاعر</div>
   <button id="modeToggle" onclick="toggleMode()">🌓</button>
 
   <div class="container">
+    <a class="btn" href="index.html">← العودة</a>
 
-    <h1>ديوان حمد الغافري</h1>
+    <h1>عن الشاعر</h1>
 
-    <div class="actions">
-      <a class="btn" href="#" onclick="randomPoem()">قصيدة عشوائية</a>
-      <a class="btn" href="favorites.html">المفضّلات ⭐</a>
-      <a class="btn" href="about.html">عن الشاعر</a>
+    <div class="poem-box fade" style="font-size:1.15rem; line-height:1.9">
+      حمد الغافري  
+      شاعر يمزج بين جمال اللفظ وصدق المعنى،  
+      يكتب بروح عربية أصيلة،  
+      وتجمع قصائده بين الحسّ والذائقة والعمق.  
+      <br><br>
+      هذا الموقع يعرض مختارات من ديوانه للقراءة والمشاركة.
     </div>
-
-    <input id="search" type="text" placeholder="ابحث عن قصيدة أو كلمة..." oninput="filterPoems()" />
-
-    <div id="categoriesBox" class="categories"></div>
-
-    <div id="todayBox" class="today-box fade">
-      <div class="today-title">بيت اليوم</div>
-      <div id="todayContent"></div>
-    </div>
-
-    <div id="results"></div>
-
-    <div id="list" class="fade"></div>
-
   </div>
 
 <script>
-/* ===== متغيرات عامة ===== */
-let poemList = [];
-let allLines = [];
-let allPoems = [];
-let categories = new Set();
-
-/* ===== الوضع الليلي ===== */
 function toggleMode() {
   document.body.classList.toggle('dark');
   localStorage.setItem('darkMode', document.body.classList.contains('dark'));
 }
 if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
-
-/* ===== تحميل القصائد =====
-   صيغة كل قصيدة في poems.txt يجب أن تكون:
-   سطر 1: العنوان
-   سطر 2: @التصنيف
-   باقي السطور: الأبيات
-   ثم === للفاصل
-*/
-async function loadPoems() {
-  const res = await fetch('poems.txt');
-  const text = await res.text();
-
-  const poems = text.split('===\n').map(p => p.trim()).filter(p => p);
-  poemList = [];
-  allLines = [];
-  allPoems = [];
-  categories = new Set();
-
-  poems.forEach((poem, index) => {
-    const lines = poem.split('\n').map(l => l.trim()).filter(l => l);
-    const title = lines[0] || `قصيدة ${index+1}`;
-    const category = (lines[1] && lines[1].startsWith('@')) ? lines[1].replace('@','') : 'غير مصنّف';
-    const body = lines.slice(2).join('\n');
-
-    poemList.push({ id: index, title, category, body });
-    allPoems.push(poem); // النص الكامل (بأسطره الأصلية) للاستخدام في البحث
-    const poemBodyLines = lines.slice(2);
-    allLines.push(...poemBodyLines);
-    categories.add(category);
-  });
-
-  createCategoryButtons();
-  display(poemList);
-  showBaytOfDay();
-  runScrollObserver();
-}
-
-/* ===== إنشاء أزرار التصنيفات تلقائياً ===== */
-function createCategoryButtons() {
-  const box = document.getElementById('categoriesBox');
-  box.innerHTML = '';
-  box.innerHTML += `<button class="cat-btn" onclick="filterByCategory('الكل')">الكل</button>`;
-  Array.from(categories).sort().forEach(cat => {
-    box.innerHTML += `<button class="cat-btn" onclick="filterByCategory('${cat}')">${cat}</button>`;
-  });
-}
-
-/* ===== فلترة التصنيف ===== */
-function filterByCategory(cat) {
-  if (cat === 'الكل') {
-    display(poemList);
-    return;
-  }
-  const filtered = poemList.filter(p => p.category === cat);
-  display(filtered);
-}
-
-/* ===== عرض الفهرس ===== */
-function display(arr) {
-  const list = document.getElementById('list');
-  const results = document.getElementById('results');
-  results.innerHTML = '';
-  list.innerHTML = '';
-  if (!arr.length) {
-    list.innerHTML = '<p style="opacity:.8">لا توجد قصائد.</p>';
-    return;
-  }
-  arr.forEach(poem => {
-    list.innerHTML += `
-      <a class="poem-card scroll-animate" href="viewer.html?id=${poem.id}">
-        <div class="title">${poem.title}</div>
-        <div class="category">${poem.category}</div>
-      </a>
-    `;
-  });
-  runScrollObserver();
-}
-
-/* ===== البحث المتقدّم (عنوان + أبيات) مع إبراز النتائج ===== */
-function filterPoems() {
-  const text = document.getElementById('search').value.trim();
-  const resultsDiv = document.getElementById('results');
-  if (text === '') {
-    resultsDiv.innerHTML = '';
-    display(poemList);
-    return;
-  }
-
-  const query = text;
-  let resultsHTML = '';
-
-  poemList.forEach((p, i) => {
-    const poemText = allPoems[i]; // السلسلة الكاملة للقصيدة
-    if (poemText.includes(query) || p.title.includes(query)) {
-      let snippet = '';
-      const lines = poemText.split('\n');
-      for (let line of lines) {
-        if (line.includes(query)) {
-          snippet = line.replace(new RegExp(escapeRegExp(query), 'gi'), match => `<mark>${match}</mark>`);
-          break;
-        }
-      }
-      resultsHTML += `
-        <a class="poem-search-card scroll-animate" href="viewer.html?id=${p.id}">
-          <div class="search-title">${p.title} <small style="opacity:.7">— ${p.category}</small></div>
-          <div class="search-snippet">${snippet || '...'}</div>
-        </a>
-      `;
-    }
-  });
-
-  resultsDiv.innerHTML = resultsHTML || '<p>لا توجد نتائج.</p>';
-  runScrollObserver();
-}
-
-/* ===== مساعدة لإسكات أحرف التعبير النمطية في RegExp ===== */
-function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-/* ===== قصيدة عشوائية ===== */
-function randomPoem() {
-  if (!poemList.length) return;
-  const id = Math.floor(Math.random() * poemList.length);
-  window.location.href = `viewer.html?id=${id}`;
-}
-
-/* ===== بيت اليوم ===== */
-function showBaytOfDay() {
-  if (!allLines.length) {
-    document.getElementById('todayContent').innerHTML = '';
-    return;
-  }
-  const today = new Date().getDate();
-  const index = today % allLines.length;
-  const line1 = allLines[index] || '';
-  const line2 = allLines[index+1] || '';
-  document.getElementById('todayContent').innerHTML = `${escapeHtml(line1)}<br>${escapeHtml(line2)}`;
-}
-
-/* ===== هروب HTML بسيط ===== */
-function escapeHtml(s) {
-  if (!s) return '';
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-/* ===== تأثيرات التمرير: IntersectionObserver ===== */
-let io = null;
-function runScrollObserver() {
-  const els = document.querySelectorAll('.scroll-animate');
-  if ('IntersectionObserver' in window) {
-    if (io) io.disconnect();
-    io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('fade');
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    els.forEach(el => io.observe(el));
-  } else {
-    // متصفحات قديمة: أضف fade فوراً
-    els.forEach(el => el.classList.add('fade'));
-  }
-}
-
-/* ===== تحميل البداية ===== */
-loadPoems();
 </script>
 
 </body>
