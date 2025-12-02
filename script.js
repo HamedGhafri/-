@@ -1,8 +1,8 @@
+/* الوضع الليلي */
 function toggleMode() {
     document.body.classList.toggle("dark");
     localStorage.setItem("darkMode", document.body.classList.contains("dark"));
 }
-
 if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark");
 }
@@ -10,29 +10,28 @@ if (localStorage.getItem("darkMode") === "true") {
 let poemList = [];
 let allLines = [];
 
+/* تحميل القصائد */
 async function loadPoems() {
-    // fetch بدون كاش
     const res = await fetch("poems.txt?update=" + Date.now());
     const text = await res.text();
 
     const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
 
-    poemList = poems.map((p, i) => ({
-        id: i,
-        title: p.split("\n")[0].trim(),
-        category: p.split("\n")[1].replace("@", "").trim()
-    }));
-
-    display(poemList);
-
-    poems.forEach(poem => {
-        const lines = poem.split("\n").slice(2).filter(l => l.trim());
-        allLines.push(...lines);
+    poemList = poems.map((poem, index) => {
+        const lines = poem.split("\n");
+        return {
+            id: index,
+            title: lines[0].trim(),
+            category: lines[1].replace("@", "").trim(),
+            lines: lines.slice(2)
+        };
     });
 
-    showBaytOfDay();
+    display(poemList);
+    extractBayt(poems);
 }
 
+/* عرض الفهرس */
 function display(arr) {
     const list = document.getElementById("list");
     list.innerHTML = "";
@@ -40,28 +39,46 @@ function display(arr) {
     arr.forEach(p => {
         list.innerHTML += `
             <a class="poem-card fade" href="viewer.html?id=${p.id}">
-                <div class="title">${p.title}</div>
-                <div class="cat">📌 ${p.category}</div>
+                ${p.title}
             </a>
         `;
     });
 }
 
-function filterPoems() {
-    const q = document.getElementById("search").value.trim();
-    display(poemList.filter(p => p.title.includes(q) || p.category.includes(q)));
+/* البحث المتقدم */
+function runSearch() {
+    const text = document.getElementById("search").value.trim();
+    if (!text) return display(poemList);
+
+    const filtered = poemList.filter(p =>
+        p.title.includes(text) ||
+        p.category.includes(text) ||
+        p.lines.some(line => line.includes(text))
+    );
+
+    display(filtered);
 }
 
+/* قصيدة عشوائية */
 function randomPoem() {
     const id = Math.floor(Math.random() * poemList.length);
     window.location.href = `viewer.html?id=${id}`;
 }
 
-function showBaytOfDay() {
+/* بيت اليوم */
+function extractBayt(poems) {
+    poems.forEach(poem => {
+        const lines = poem.split("\n").slice(2).filter(l => l.trim());
+        allLines.push(...lines);
+    });
+
     const today = new Date().getDate();
     const index = today % allLines.length;
-    document.getElementById("todayContent").innerHTML =
-        `${allLines[index]}<br>${allLines[index+1] || ""}`;
+
+    let l1 = allLines[index];
+    let l2 = allLines[index + 1] || "";
+
+    document.getElementById("todayContent").innerHTML = `${l1}<br>${l2}`;
 }
 
 loadPoems();
