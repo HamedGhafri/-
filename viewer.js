@@ -11,6 +11,7 @@ async function loadPoem() {
     const text = await res.text();
 
     const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
+
     const id = new URLSearchParams(window.location.search).get("id");
     const poem = poems[id].split("\n");
 
