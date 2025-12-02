@@ -2,15 +2,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 
 /* ============================
-   خلفية متدرجة متحركة (فاتح)
+   خلفية الوضع الفاتح
    ============================ */
 body {
     font-family: 'Amiri', serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(145deg, #f4f4f4, #ececec);
-    background-size: 200% 200%;
-    animation: bgMove 12s ease-in-out infinite;
+    background: #f3f3f3;
     color: #222;
     text-align: center;
     line-height: 2.2;
@@ -18,20 +16,12 @@ body {
     overflow-x: hidden;
 }
 
-/* حركة الخلفية */
-@keyframes bgMove {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
 /* ============================
-   الوضع الليلي — إصلاح شامل
+   الوضع الليلي — ثابت وآمن
    ============================ */
 body.dark {
-    background: linear-gradient(145deg, #0f0f0f, #1a1a1a) !important;
+    background: #0f0f0f !important;
     color: #f2f2f2 !important;
-    animation: none !important;
 }
 
 /* ============================
@@ -53,7 +43,7 @@ body.dark {
 }
 body.dark #modeToggle {
     background: #2b2b2b !important;
-    color: #fff !important;
+    color: #ffffff !important;
 }
 
 /* ============================
@@ -80,7 +70,7 @@ body.dark .main-title {
     padding: 14px 30px;
     margin: 10px 6px;
     border-radius: 12px;
-    background: #ffffffdd;
+    background: #fff;
     color: #222;
     text-decoration: none;
     font-size: 19px;
@@ -91,12 +81,12 @@ body.dark .main-title {
     transform: translateY(-4px);
 }
 body.dark .btn.big {
-    background: #262626dd !important;
+    background: #2b2b2b !important;
     color: #eee !important;
 }
 
 /* ============================
-   البحث — تلقائي
+   البحث
    ============================ */
 .search-row {
     display: flex;
@@ -118,16 +108,16 @@ body.dark .btn.big {
     box-shadow: 0 0 6px rgba(150,150,150,0.3);
 }
 body.dark #search {
-    background: #121212 !important;
-    border-color: #444 !important;
+    background: #181818 !important;
+    border-color: #555 !important;
     color: #fff !important;
 }
 
 /* ============================
-   بيت اليوم (قصاصة شعرية)
+   بيت اليوم
    ============================ */
 .today-box {
-    background: #ffffffdd;
+    background: #fff;
     padding: 25px;
     max-width: 600px;
     margin: 32px auto;
@@ -141,12 +131,12 @@ body.dark #search {
     font-weight: bold;
 }
 body.dark .today-box {
-    background: #1c1c1cdd !important;
-    border-color: #444 !important;
+    background: #1e1e1e !important;
+    border-color: #555 !important;
 }
 
 /* ============================
-   شبكة الفهرس
+   الفهرس
    ============================ */
 .grid {
     display: grid;
@@ -157,7 +147,7 @@ body.dark .today-box {
 
 /* بطاقة القصيدة */
 .poem-card {
-    background: #ffffffdd;
+    background: #fff;
     padding: 18px;
     border-radius: 16px;
     color: #222;
@@ -170,15 +160,15 @@ body.dark .today-box {
     transform: translateY(-6px) rotate(-1deg);
 }
 body.dark .poem-card {
-    background: #1b1b1bdd !important;
-    color: #eee !important;
+    background: #1c1c1c !important;
+    color: #f1f1f1 !important;
 }
 
 /* ============================
    صفحة القصيدة
    ============================ */
 .poem-container {
-    background: #ffffffdd;
+    background: #fff;
     padding: 45px;
     max-width: 850px;
     margin: 40px auto;
@@ -186,14 +176,13 @@ body.dark .poem-card {
     box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 body.dark .poem-container {
-    background: #1a1a1add !important;
+    background: #1a1a1a !important;
 }
 
 /* عنوان القصيدة */
 .poem-title {
     font-size: 30px;
     font-weight: 700;
-    margin-bottom: 5px;
 }
 
 /* التصنيف */
@@ -202,16 +191,17 @@ body.dark .poem-container {
     opacity: 0.75;
 }
 
-/* النص الشعري */
+/* الأبيات */
 .poem-text {
     margin-top: 30px;
     font-size: 24px;
     line-height: 2.6;
     white-space: pre-line;
     text-align: center;
+    color: inherit !important;
 }
 
-/* ختم القصيدة */
+/* ختم النهاية */
 .poem-seal {
     margin-top: 45px;
     font-size: 18px;
@@ -219,12 +209,12 @@ body.dark .poem-container {
     letter-spacing: 2px;
 }
 
-/* زر الرجوع أسفل الصفحة */
+/* زر الرجوع */
 .bottom-back {
     display: inline-block;
     margin: 40px auto 10px;
     padding: 12px 30px;
-    background: #ffffffdd;
+    background: #fff;
     border-radius: 12px;
     text-decoration: none;
     color: #222;
@@ -236,7 +226,7 @@ body.dark .poem-container {
     transform: translateY(-4px);
 }
 body.dark .bottom-back {
-    background: #2e2e2edd !important;
+    background: #262626 !important;
     color: #eee !important;
 }
 
@@ -244,7 +234,7 @@ body.dark .bottom-back {
    صفحة عن الشاعر
    ============================ */
 .about-box {
-    background: #ffffffdd;
+    background: #fff;
     padding: 35px;
     max-width: 850px;
     margin: 40px auto;
@@ -254,11 +244,11 @@ body.dark .bottom-back {
     box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 body.dark .about-box {
-    background: #181818dd !important;
+    background: #181818 !important;
 }
 
 /* ============================
-   تأثير الظهور (Fade)
+   تأثير الظهور
    ============================ */
 .fade {
     opacity: 0;
@@ -273,7 +263,7 @@ body.dark .about-box {
 }
 
 /* ============================
-   تحسينات الهاتف
+   الهاتف
    ============================ */
 @media (max-width: 480px) {
     .poem-container, .about-box {
