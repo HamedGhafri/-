@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ديوان حمد الغافري</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -34,55 +35,86 @@ let poemList = [];
 let allLines = [];
 
 async function loadPoems() {
-    const res = await fetch("poems.txt");
-    const text = await res.text();
+    try {
+        const res = await fetch("poems.txt");
+        if (!res.ok) {
+            document.getElementById('list').innerHTML = '<p>خطأ في تحميل ملف القصائد (راجع اسم الملف ومسار التحميل).</p>';
+            return;
+        }
+        const text = await res.text();
 
-    const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
+        const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
 
-    poemList = poems.map((poem, i) => ({
-        id: i,
-        title: poem.split("\n")[0].trim()
-    }));
+        poemList = poems.map((poem, i) => ({
+            id: i,
+            title: poem.split("\n")[0].trim()
+        }));
 
-    display(poelist);
+        // **تم تصحيح الخطأ هنا**: استدعاء الدالة بالمتغير الصحيح
+        display(poemList);
 
-    poems.forEach(poem => {
-        const lines = poem.split("\n").slice(2).filter(l => l.trim());
-        allLines.push(...lines);
-    });
+        poems.forEach(poem => {
+            // إذا كانت الصيغة تحتوي سطر تصنيف (line 2) فإننا نأخذ الأبيات بعد السطرين
+            // هذا يتماشى مع تنسيق: عنوان / @تصنيف / أبيات...
+            const lines = poem.split("\n").slice(2).filter(l => l.trim());
+            allLines.push(...lines);
+        });
 
-    showBaytOfDay();
+        showBaytOfDay();
+    } catch (err) {
+        console.error(err);
+        document.getElementById('list').innerHTML = '<p>حدث خطأ أثناء معالجة القصائد. افتح وحدة التحكم (Console) للمزيد.</p>';
+    }
 }
 
 function display(arr) {
     const list = document.getElementById("list");
     list.innerHTML = "";
 
+    if (!arr || arr.length === 0) {
+        list.innerHTML = '<p style="opacity:.8">لا توجد قصائد.</p>';
+        return;
+    }
+
     arr.forEach(p => {
         list.innerHTML += `
             <a class="poem-card" href="viewer.html?id=${p.id}">
-                ${p.title}
+                ${escapeHtml(p.title)}
             </a>
         `;
     });
 }
 
 function filterPoems() {
-    const text = document.getElementById("search").value;
-    display(poemList.filter(p => p.title.includes(text)));
+    const text = document.getElementById("search").value.trim().toLowerCase();
+    if (!text) {
+        display(poemList);
+        return;
+    }
+    display(poemList.filter(p => (p.title || '').toLowerCase().includes(text)));
 }
 
 function randomPoem() {
+    if (!poemList.length) return;
     const id = Math.floor(Math.random() * poemList.length);
     window.location.href = `viewer.html?id=${id}`;
 }
 
 function showBaytOfDay() {
+    if (!allLines.length) {
+        document.getElementById("todayContent").innerHTML = '';
+        return;
+    }
     const today = new Date().getDate();
     const i = today % allLines.length;
     document.getElementById("todayContent").innerHTML = `
-        ${allLines[i]}<br>${allLines[i+1] || ""}
+        ${escapeHtml(allLines[i])}<br>${escapeHtml(allLines[i+1] || "")}
     `;
+}
+
+function escapeHtml(s) {
+    if (!s) return '';
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 loadPoems();
