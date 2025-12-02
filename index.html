@@ -3,122 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>ديوان حمد الغافري</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div class="top-bar">
-    <h2>ديوان حمد الغافري</h2>
+    <h2>📚 ديوان حمد الغافري</h2>
 </div>
 
-<div class="container">
+<button id="modeToggle" onclick="toggleMode()">🌓</button>
+
+<div class="container fade">
 
     <div class="actions">
-        <button onclick="randomPoem()" class="btn">قصيدة عشوائية 🎲</button>
-        <a href="about.html" class="btn">عن الشاعر 👤</a>
+        <a class="btn" onclick="randomPoem()">قصيدة عشوائية</a>
+        <a class="btn" href="about.html">عن الشاعر</a>
     </div>
 
-    <input id="search" class="search" placeholder="ابحث عن قصيدة..." oninput="filterPoems()">
+    <input type="text" id="search" placeholder="ابحث عن قصيدة..." oninput="filterPoems()">
 
-    <h3 class="section-title">📌 بيت اليوم</h3>
-    <div id="todayBox" class="today-box">
+    <div id="todayBox" class="today-box fade">
+        <div class="today-title">📌 بيت اليوم</div>
         <div id="todayContent"></div>
     </div>
 
-    <h3 class="section-title">📚 فهرس القصائد</h3>
-    <div id="list" class="poem-list">جاري التحميل...</div>
+    <div id="list" class="grid fade">جاري التحميل...</div>
+
 </div>
 
-<script>
-let poemList = [];
-let allLines = [];
-
-async function loadPoems() {
-    try {
-        const res = await fetch("poems.txt");
-        if (!res.ok) {
-            document.getElementById('list').innerHTML = '<p>خطأ في تحميل ملف القصائد (راجع اسم الملف ومسار التحميل).</p>';
-            return;
-        }
-        const text = await res.text();
-
-        const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
-
-        poemList = poems.map((poem, i) => ({
-            id: i,
-            title: poem.split("\n")[0].trim()
-        }));
-
-        // **تم تصحيح الخطأ هنا**: استدعاء الدالة بالمتغير الصحيح
-        display(poemList);
-
-        poems.forEach(poem => {
-            // إذا كانت الصيغة تحتوي سطر تصنيف (line 2) فإننا نأخذ الأبيات بعد السطرين
-            // هذا يتماشى مع تنسيق: عنوان / @تصنيف / أبيات...
-            const lines = poem.split("\n").slice(2).filter(l => l.trim());
-            allLines.push(...lines);
-        });
-
-        showBaytOfDay();
-    } catch (err) {
-        console.error(err);
-        document.getElementById('list').innerHTML = '<p>حدث خطأ أثناء معالجة القصائد. افتح وحدة التحكم (Console) للمزيد.</p>';
-    }
-}
-
-function display(arr) {
-    const list = document.getElementById("list");
-    list.innerHTML = "";
-
-    if (!arr || arr.length === 0) {
-        list.innerHTML = '<p style="opacity:.8">لا توجد قصائد.</p>';
-        return;
-    }
-
-    arr.forEach(p => {
-        list.innerHTML += `
-            <a class="poem-card" href="viewer.html?id=${p.id}">
-                ${escapeHtml(p.title)}
-            </a>
-        `;
-    });
-}
-
-function filterPoems() {
-    const text = document.getElementById("search").value.trim().toLowerCase();
-    if (!text) {
-        display(poemList);
-        return;
-    }
-    display(poemList.filter(p => (p.title || '').toLowerCase().includes(text)));
-}
-
-function randomPoem() {
-    if (!poemList.length) return;
-    const id = Math.floor(Math.random() * poemList.length);
-    window.location.href = `viewer.html?id=${id}`;
-}
-
-function showBaytOfDay() {
-    if (!allLines.length) {
-        document.getElementById("todayContent").innerHTML = '';
-        return;
-    }
-    const today = new Date().getDate();
-    const i = today % allLines.length;
-    document.getElementById("todayContent").innerHTML = `
-        ${escapeHtml(allLines[i])}<br>${escapeHtml(allLines[i+1] || "")}
-    `;
-}
-
-function escapeHtml(s) {
-    if (!s) return '';
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-loadPoems();
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
