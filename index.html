@@ -2,32 +2,30 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>مقتطفات ابن حمدان</title>
+    <title>ديوان حمد الغافري</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="fade">
+
+<button id="modeToggle" onclick="toggleMode()">🌓</button>
 
 <div class="container">
 
-    <h1>مقتطفات ابن حمدان</h1>
+    <h1>ديوان حمد الغافري</h1>
 
-    <!-- buttons -->
     <div class="actions">
         <a class="btn" href="#" onclick="randomPoem()">قصيدة عشوائية</a>
         <a class="btn" href="about.html">عن الشاعر</a>
     </div>
 
-    <!-- search -->
     <input type="text" id="search" placeholder="ابحث عن قصيدة..." oninput="filterPoems()">
 
-    <!-- بيت اليوم -->
-    <div id="todayBox" class="today-box">
+    <div id="todayBox" class="today-box fade">
         <div class="today-title">بيت اليوم</div>
         <div id="todayContent"></div>
     </div>
 
-    <!-- poems list -->
-    <div id="list">جاري التحميل...</div>
+    <div id="list" class="fade">جاري التحميل...</div>
 
 </div>
 
@@ -35,6 +33,78 @@
 let poemList = [];
 let allLines = [];
 
+/* === الوضع الليلي === */
+function toggleMode() {
+    document.body.classList.toggle("dark");
+    localStorage.setItem("darkMode", document.body.classList.contains("dark"));
+}
+
+if (localStorage.getItem("darkMode") === "true") {
+    document.body.classList.add("dark");
+}
+
+/* === تحميل القصائد === */
+async function loadPoems() {
+    const res = await fetch("poems.txt");
+    const text = await res.text();
+
+    const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
+
+    poemList = poems.map((poem, index) => ({
+        id: index,
+        title: poem.split("\n")[0].trim()
+    }));
+
+    display(poemList);
+
+    poems.forEach(poem => {
+        const lines = poem.split("\n").slice(1).filter(l => l.trim());
+        allLines.push(...lines);
+    });
+
+    showBaytOfDay();
+}
+
+/* === عرض الفهرس === */
+function display(arr) {
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    arr.forEach(poem => {
+        list.innerHTML += `
+            <a class="poem-card fade" href="viewer.html?id=${poem.id}">
+                ${poem.title}
+            </a>
+        `;
+    });
+}
+
+/* === البحث === */
+function filterPoems() {
+    const text = document.getElementById("search").value.trim();
+    display(poemList.filter(p => p.title.includes(text)));
+}
+
+/* === قصيدة عشوائية === */
+function randomPoem() {
+    const id = Math.floor(Math.random() * poemList.length);
+    window.location.href = `viewer.html?id=${id}`;
+}
+
+/* === بيت اليوم === */
+function showBaytOfDay() {
+    const today = new Date().getDate();
+    const index = today % allLines.length;
+    const line1 = allLines[index];
+    const line2 = allLines[index + 1] || "";
+    document.getElementById("todayContent").innerHTML = `${line1}<br>${line2}`;
+}
+
+loadPoems();
+</script>
+
+</body>
+</html>
 async function loadPoems() {
     const res = await fetch("poems.txt");
     const text = await res.text();
