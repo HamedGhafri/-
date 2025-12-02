@@ -2,53 +2,36 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-
     <title>ديوان حمد الغافري</title>
-    <link rel="stylesheet" href="style.css?v=2.0">
+    <link rel="stylesheet" href="style.css">
 </head>
-
-<body>
+<body class="fade">
 
 <button id="modeToggle" onclick="toggleMode()">🌓</button>
 
-<div class="container fade">
+<h1 class="main-title fade">ديوان حمد الغافري</h1>
 
-    <h1 class="main-title">ديوان حمد الغافري</h1>
-
-    <div class="actions">
-        <a class="btn big" onclick="randomPoem()">🎲 قصيدة عشوائية</a>
-        <a class="btn big" href="about.html">👤 عن الشاعر</a>
-    </div>
-
-    <input type="text" id="search" placeholder="ابحث عن قصيدة أو تصنيف..." oninput="filterPoems()">
-
-    <div id="todayBox" class="today-box fade">
-        <div class="today-title">📌 بيت اليوم</div>
-        <div id="todayContent"></div>
-    </div>
-
-    <div id="list" class="grid fade">جاري التحميل...</div>
-
+<div class="actions fade">
+    <a class="btn big" href="#" onclick="randomPoem()">قصيدة عشوائية</a>
+    <a class="btn big" href="about.html">عن الشاعر</a>
 </div>
 
-<script src="script.js?v=2.0"></script>
+<!-- خانة البحث + زر البحث -->
+<div class="search-row fade">
+    <input type="text" id="search" placeholder="ابحث في العناوين أو داخل الأبيات…">
+    <button class="search-btn" onclick="runSearch()">بحث</button>
+</div>
 
-<script>
-setInterval(() => {
-    fetch("version.txt?x=" + Date.now())
-    .then(r => r.text())
-    .then(v => {
-        if (localStorage.getItem("siteVersion") !== v) {
-            localStorage.setItem("siteVersion", v);
-            location.reload();
-        }
-    });
-}, 2000);
-</script>
+<!-- بيت اليوم -->
+<div id="todayBox" class="today-box fade">
+    <div class="today-title">بيت اليوم</div>
+    <div id="todayContent"></div>
+</div>
+
+<!-- الفهرس -->
+<div id="list" class="grid fade">جاري التحميل...</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>
