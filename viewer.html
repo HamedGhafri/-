@@ -27,7 +27,7 @@
 </div>
 
 <script>
-/* === الوضع الليلي === */
+/* الوضع الليلي */
 function toggleMode() {
     document.body.classList.toggle("dark");
     localStorage.setItem("darkMode", document.body.classList.contains("dark"));
@@ -36,7 +36,8 @@ if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark");
 }
 
-/* === تحميل القصيدة === */
+
+/* تحميل القصيدة */
 async function loadPoem() {
     const res = await fetch("poems.txt");
     const text = await res.text();
@@ -45,11 +46,11 @@ async function loadPoem() {
     const id = new URLSearchParams(window.location.search).get("id");
 
     const poem = poems[id].split("\n");
-    const title = poem[0].trim().replace("#", "");
-    document.getElementById("title").textContent = title;
 
-    const verses = poem.slice(1).join("\n");
-    document.getElementById("content").textContent = verses;
+    const title = poem[0].trim(); // ← ← هنا التعديل
+
+    document.getElementById("title").textContent = title;
+    document.getElementById("content").textContent = poem.slice(1).join("\n");
 }
 
 loadPoem();
