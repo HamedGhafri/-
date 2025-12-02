@@ -1,43 +1,36 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>عن الشاعر</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>عن الشاعر</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="fade">
+<body>
 
-<div class="top-bar">👤 عن الشاعر</div>
+<div class="top-bar">
+    <a href="index.html" class="back-btn">← رجوع</a>
+    <h2>👤 عن الشاعر</h2>
+</div>
 
 <button id="modeToggle" onclick="toggleMode()">🌓</button>
 
-<div class="container">
-    <a href="index.html" class="btn">← العودة</a>
+<div class="about-box fade">
+    <h1>حمد الغافري</h1>
 
-    <h1>عن الشاعر</h1>
+    <p>
+    شاعر ينسج من اللغة نورًا، ويستلهم من الروح قصائدَ تنبض بالحياة.
+    يرى في الشعر نافذةً على القلب، ورسالةً تحمل أثرًا لا يُنسى.
+    في قصائده دفء الأرض، وصوت الإنسان العماني في صفائه وعذوبته.
+    </p>
 
-    <div class="poem-box fade" style="font-size:1.3rem; line-height:2;">
-        حمد الغافري  
-        شاعر يمزج بين جمال اللفظ وصدق المعنى،  
-        يكتب بروح عربية أصيلة  
-        ويجمع في قصائده بين الإحساس والعذوبة والحكمة.
-        <br><br>
-        هذا الديوان يحتوي على مختارات 
-        من قصائده التي تعبّر عن رؤيته الشعرية الخاصة.
-    </div>
-
+    <p>
+    يكتب ليترك بصمة، ولتكون كلمته جسراً يصل بين الشعور والمعنى،
+    وبين القارئ والبيت الشعري الذي يولد في لحظة صدق.
+    </p>
 </div>
 
-<script>
-function toggleMode() {
-    document.body.classList.toggle("dark");
-    localStorage.setItem("darkMode", document.body.classList.contains("dark"));
-}
-if (localStorage.getItem("darkMode") === "true") {
-    document.body.classList.add("dark");
-}
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
