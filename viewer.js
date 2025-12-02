@@ -17,9 +17,13 @@ async function loadPoem() {
     const poem = poems[id].split("\n");
 
     document.getElementById("title").textContent = poem[0];
-    document.getElementById("category").textContent = "📌 " + poem[1].replace("@", "");
+    document.getElementById("category").textContent =
+        "📌 " + poem[1].replace("@", "").trim();
 
-    document.getElementById("content").textContent = poem.slice(2).join("\n");
+    // تنسيق أبيات القصيدة بطريقة جميلة
+    const lines = poem.slice(2).map(l => l.trim());
+    document.getElementById("content").innerHTML =
+        lines.join("<br>");
 }
 
 loadPoem();
