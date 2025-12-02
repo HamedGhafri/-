@@ -2,7 +2,6 @@ function toggleMode() {
     document.body.classList.toggle("dark");
     localStorage.setItem("darkMode", document.body.classList.contains("dark"));
 }
-
 if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark");
 }
@@ -13,17 +12,13 @@ async function loadPoem() {
 
     const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
     const id = new URLSearchParams(window.location.search).get("id");
-
     const poem = poems[id].split("\n");
 
     document.getElementById("title").textContent = poem[0];
-    document.getElementById("category").textContent =
-        "📌 " + poem[1].replace("@", "").trim();
+    document.getElementById("category").textContent = "📌 " + poem[1].replace("@", "");
 
-    // تنسيق أبيات القصيدة بطريقة جميلة
     const lines = poem.slice(2).map(l => l.trim());
-    document.getElementById("content").innerHTML =
-        lines.join("<br>");
+    document.getElementById("content").innerHTML = lines.join("<br>");
 }
 
 loadPoem();
