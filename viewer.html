@@ -14,9 +14,7 @@
 
 <div class="container">
 
-    <a href="index.html" class="btn" style="display:inline-block; margin-bottom: 20px;">
-        ← العودة
-    </a>
+    <a href="index.html" class="btn" style="margin-bottom:15px;">← العودة</a>
 
     <h1 id="title"></h1>
 
@@ -36,7 +34,6 @@ if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark");
 }
 
-
 /* تحميل القصيدة */
 async function loadPoem() {
     const res = await fetch("poems.txt");
@@ -47,10 +44,11 @@ async function loadPoem() {
 
     const poem = poems[id].split("\n");
 
-    const title = poem[0].trim(); // ← ← هنا التعديل
-
+    const title = poem[0].trim(); 
     document.getElementById("title").textContent = title;
-    document.getElementById("content").textContent = poem.slice(1).join("\n");
+
+    const verses = poem.slice(2).join("\n");
+    document.getElementById("content").textContent = verses;
 }
 
 loadPoem();
