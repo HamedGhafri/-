@@ -8,7 +8,7 @@ if (localStorage.getItem("darkMode") === "true") {
 }
 
 async function loadPoem() {
-    const res = await fetch("poems.txt");
+    const res = await fetch("poems.txt?update=" + Date.now());
     const text = await res.text();
 
     const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
@@ -16,8 +16,9 @@ async function loadPoem() {
 
     const poem = poems[id].split("\n");
 
-    document.getElementById("title").textContent = poem[0].trim();
+    document.getElementById("title").textContent = poem[0];
     document.getElementById("category").textContent = "📌 " + poem[1].replace("@", "");
+
     document.getElementById("content").textContent = poem.slice(2).join("\n");
 }
 
