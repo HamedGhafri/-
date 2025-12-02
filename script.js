@@ -1,9 +1,9 @@
 /* الوضع الليلي */
 function toggleMode() {
     document.body.classList.toggle("dark");
-    localStorage.setItem("darkMode", document.body.classList.contains("dark"));
+    localStorage.setItem("darkMode", document.body.classList.contains("dark") ? "on" : "off");
 }
-if (localStorage.getItem("darkMode") === "true") {
+if (localStorage.getItem("darkMode") === "on") {
     document.body.classList.add("dark");
 }
 
@@ -45,7 +45,7 @@ function display(arr) {
     });
 }
 
-/* البحث المتقدم */
+/* البحث التلقائي */
 function runSearch() {
     const text = document.getElementById("search").value.trim();
     if (!text) return display(poemList);
