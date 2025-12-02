@@ -1,243 +1,255 @@
+/*===============================
+    الخطوط
+===============================*/
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 
+/*===============================
+    إعدادات عامة
+===============================*/
 body {
-font-family: 'Amiri', serif;
-margin: 0;
-background: #f6f1eb;
-color: #2a1f14;
-transition: 0.4s ease;
-direction: rtl;
+    font-family: "Amiri", serif;
+    background: #f5efe4;
+    margin: 0;
+    padding: 0;
+    line-height: 1.9;
+    color: #3b2f2f;
+    transition: background 0.3s, color 0.3s;
 }
 
-/* الوضع الليلي */
-.dark {
-background: #121212;
-color: #ddd;
+body.dark {
+    background: #1d1b19;
+    color: #e9e5df;
 }
 
-/* الشريط العلوي */
-.top-bar {
-background: linear-gradient(90deg, #8b5e3c, #6a4528);
-color: white;
-padding: 14px;
-text-align: center;
-font-size: 1.3rem;
-font-weight: bold;
-position: sticky;
-top: 0;
-z-index: 50;
-box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-}
-
-/* زر الليل والنهار */
-#modeToggle {
-position: fixed;
-bottom: 22px;
-left: 22px;
-padding: 12px 16px;
-font-size: 1.3rem;
-border: none;
-background: #8b5e3c;
-color: white;
-border-radius: 50%;
-cursor: pointer;
-transition: 0.3s;
-box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-z-index: 200;
-}
-#modeToggle:hover { transform: scale(1.12); }
-
-/* الحاوية */
-.container {
-max-width: 900px;
-margin: auto;
-padding: 20px;
-}
-
-/* الأزرار */
-.btn {
-background: #8b5e3c;
-color: white;
-padding: 10px 18px;
-border-radius: 10px;
-text-decoration: none;
-font-size: 1.05rem;
-transition: 0.3s;
-display: inline-block;
-}
-.btn:hover {
-background: #6f492e;
-transform: translateY(-2px);
-}
-
-/* البحث */
-#search {
-width: 100%;
-padding: 13px;
-border-radius: 10px;
-border: 2px solid #c7b299;
-margin-bottom: 18px;
-font-size: 1.1rem;
-outline: none;
-transition: 0.3s ease;
-}
-#search:focus {
-border-color: #8b5e3c;
-}
-.dark #search {
-background: #1c1c1c;
-border-color: #555;
-color: white;
-}
-
-/* أزرار التصنيفات */
-.categories {
-margin: 15px 0;
-display: flex;
-flex-wrap: wrap;
-gap: 10px;
-}
-.cat-btn {
-background: #e8dfd6;
-border: none;
-padding: 8px 16px;
-border-radius: 8px;
-cursor: pointer;
-transition: 0.3s;
-font-size: 1rem;
-}
-.cat-btn:hover {
-background: #d1c6b9;
-transform: translateY(-2px);
-}
-
-/* البطاقات */
-.poem-card {
-display: block;
-background: #fff;
-padding: 18px;
-border-radius: 12px;
-margin-bottom: 12px;
-text-decoration: none;
-color: #2a1f14;
-box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-transition: 0.35s;
-border-right: 6px solid #8b5e3c;
-background-image: url('https://i.imgur.com/OZa7t6D.png');
-background-size: cover;
-background-blend-mode: lighten;
-}
-.poem-card:hover {
-transform: translateY(-4px);
-box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-}
-.dark .poem-card {
-background: #1e1e1e;
-color: #eee;
-border-right: 6px solid #b48b64;
-}
-
-/* نص البطاقة */
-.poem-card .title {
-font-size: 1.35rem;
-font-weight: bold;
-}
-.poem-card .category {
-font-size: 0.95rem;
-color: #8b5e3c;
-margin-top: 4px;
-}
-
-/* صندوق عرض القصيدة */
-.poem-box {
-background: #ffffffef;
-padding: 25px;
-border-radius: 14px;
-line-height: 2.3;
-box-shadow: 0 3px 9px rgba(0,0,0,0.12);
-font-size: 1.35rem;
-white-space: pre-wrap;
-text-align: center;
-background-image: url('https://i.imgur.com/LxV0VbG.png');
-background-size: contain;
-}
-.dark .poem-box {
-background: #1e1e1e;
-}
-
-/* بيت اليوم */
-.today-box {
-background: #fff7ea;
-border-right: 6px solid #8b5e3c;
-padding: 18px;
-margin: 25px 0;
-border-radius: 12px;
-box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-}
-.today-title {
-font-weight: bold;
-margin-bottom: 8px;
-font-size: 1.15rem;
-}
-
-/* نتائج البحث */
-.poem-search-card {
-display: block;
-padding: 14px;
-background: #f2ece5;
-border-radius: 10px;
-margin-bottom: 12px;
-text-decoration: none;
-color: #222;
-border-right: 4px solid #8b5e3c;
-box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
-.search-title {
-font-weight: bold;
-}
-.search-snippet {
-font-size: 0.95rem;
-margin-top: 4px;
-opacity: 0.8;
-}
-
-/* تمييز النص */
-mark {
-background: #ffe3a6;
-padding: 2px 4px;
-border-radius: 4px;
-}
-
-/* تأثيرات الظهور */
+/* تأثير التدرج الناعم عند الظهور */
 .fade {
-animation: fadeIn 0.7s ease;
+    animation: fadeIn 0.6s ease-in-out;
 }
+
 @keyframes fadeIn {
-from { opacity: 0; transform: translateY(12px); }
-to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-/* تأثيرات التمرير */
-@keyframes slideUp {
-from { opacity: 0; transform: translateY(30px); }
-to { opacity: 1; transform: translateY(0); }
-}
-.scroll-animate {
-opacity: 0;
-animation: slideUp 0.9s forwards;
+/*===============================
+    شريط أعلى الصفحة
+===============================*/
+.top-bar {
+    background: #7a4c32;
+    padding: 12px 20px;
+    color: white;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
 }
 
-/* الهاتف */
-@media (max-width: 600px) {
-.poem-box {
-font-size: 1.2rem;
-padding: 18px;
+body.dark .top-bar {
+    background: #4e372d;
 }
+
+.top-bar .back-btn {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    text-decoration: none;
+    padding: 6px 12px;
+    background: #e8d3c5;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #3b2f2f;
+}
+
+body.dark .back-btn {
+    background: #2a2320;
+    color: #eee;
+}
+
+.page-title {
+    margin: 0;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+/*===============================
+    زر وضع الليل
+===============================*/
 #modeToggle {
-bottom: 18px;
-left: 18px;
+    position: fixed;
+    left: 15px;
+    bottom: 15px;
+    padding: 13px;
+    background: #7a4c32;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    z-index: 100;
 }
-.poem-card .title {
-font-size: 1.2rem;
+
+body.dark #modeToggle {
+    background: #3b2f2f;
 }
+
+/*===============================
+    صندوق القصيدة
+===============================*/
+.poem-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 25px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+body.dark .poem-container {
+    background: #2a2724;
+}
+
+/* عنوان القصيدة */
+.poem-container h1 {
+    margin-top: 0;
+    font-size: 32px;
+    color: #5a3828;
+}
+
+body.dark .poem-container h1 {
+    color: #e7c7a7;
+}
+
+/* التصنيف */
+#category {
+    margin-bottom: 20px;
+    font-size: 17px;
+    color: #7a4c32;
+}
+
+body.dark #category {
+    color: #d6b08c;
+}
+
+/* نص القصيدة */
+.poem-text {
+    white-space: pre-wrap;
+    text-align: center;
+    font-size: 22px;
+    line-height: 2.2;
+    color: #3a2b24;
+}
+
+body.dark .poem-text {
+    color: #e6dfd7;
+}
+
+/*===============================
+    فهرس القصائد (index)
+===============================*/
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 32px;
+    color: #5a3828;
+}
+
+body.dark h1 {
+    color: #e7c7a7;
+}
+
+/* أزرار الفهرس */
+.poem-card {
+    display: block;
+    padding: 15px;
+    margin: 10px;
+    background: #e8d3c5;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 20px;
+    text-decoration: none;
+    color: #3d2c27;
+    transition: 0.3s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+}
+
+.poem-card:hover {
+    transform: scale(1.03);
+    background: #f0e5db;
+}
+
+body.dark .poem-card {
+    background: #2e2623;
+    color: #f2e8df;
+}
+
+body.dark .poem-card:hover {
+    background: #3a312d;
+}
+
+/* شبكة الفهرس */
+#list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 12px;
+}
+
+/*===============================
+    البحث
+===============================*/
+#search {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 2px solid #c1a996;
+    margin-bottom: 20px;
+    font-size: 18px;
+    background: #fdfaf6;
+}
+
+body.dark #search {
+    background: #211d1b;
+    border-color: #5f4b42;
+    color: #eee;
+}
+
+/*===============================
+    بيت اليوم
+===============================*/
+.today-box {
+    padding: 20px;
+    background: #fff4e8;
+    border-radius: 14px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+body.dark .today-box {
+    background: #2a2521;
+}
+
+.today-title {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #7a4c32;
+}
+
+body.dark .today-title {
+    color: #e3c4a6;
+}
+
+#todayContent {
+    font-size: 20px;
+    color: #3b2f2f;
+}
+
+body.dark #todayContent {
+    color: #e2dcd6;
 }
