@@ -1,54 +1,97 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>عرض القصيدة</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>عرض القصيدة</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body class="fade">
 
-<div class="top-bar">📖 عرض القصيدة</div>
+  <div class="top-bar">📖 عرض القصيدة</div>
+  <button id="modeToggle" onclick="toggleMode()">🌓</button>
 
-<button id="modeToggle" onclick="toggleMode()">🌓</button>
-
-<div class="container">
-
-    <a href="index.html" class="btn" style="margin-bottom:15px;">← العودة</a>
+  <div class="container">
+    <a class="btn" href="index.html" style="margin-bottom:14px">← العودة</a>
+    <a id="favBtn" class="btn" href="#" style="margin-bottom:14px; margin-left:8px" onclick="toggleFavorite(event)">☆ أضف للمفضلات</a>
 
     <h1 id="title"></h1>
 
     <div id="poemBox" class="poem-box fade">
-        <pre id="content"></pre>
+      <div id="content"></div>
     </div>
-
-</div>
+  </div>
 
 <script>
-/* الوضع الليلي */
+/* وضع ليلي */
 function toggleMode() {
-    document.body.classList.toggle("dark");
-    localStorage.setItem("darkMode", document.body.classList.contains("dark"));
+  document.body.classList.toggle('dark');
+  localStorage.setItem('darkMode', document.body.classList.contains('dark'));
 }
-if (localStorage.getItem("darkMode") === "true") {
-    document.body.classList.add("dark");
+if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
+
+/* إدارة المفضلات (localStorage) */
+function getFavorites() {
+  try {
+    const v = JSON.parse(localStorage.getItem('favoritePoems')||'[]');
+    return Array.isArray(v)?v:[];
+  } catch { return []; }
+}
+function saveFavorites(arr) {
+  localStorage.setItem('favoritePoems', JSON.stringify(arr));
+}
+function isFavorited(id) {
+  return getFavorites().includes(Number(id));
+}
+function setFavButton(id) {
+  const btn = document.getElementById('favBtn');
+  if (isFavorited(id)) btn.innerHTML = '★ حذف من المفضلات';
+  else btn.innerHTML = '☆ أضف للمفضلات';
 }
 
-/* تحميل القصيدة */
+/* تبديل المفضلة */
+function toggleFavorite(evt) {
+  evt.preventDefault();
+  const id = new URLSearchParams(window.location.search).get('id');
+  if (id === null) return;
+  const fav = getFavorites();
+  const nid = Number(id);
+  const idx = fav.indexOf(nid);
+  if (idx === -1) fav.push(nid);
+  else fav.splice(idx,1);
+  saveFavorites(fav);
+  setFavButton(nid);
+}
+
+/* تحميل القصيدة وعرضها بتنسيق أبيات */
 async function loadPoem() {
-    const res = await fetch("poems.txt");
-    const text = await res.text();
+  const res = await fetch('poems.txt');
+  const text = await res.text();
+  const poems = text.split('===\n').map(p => p.trim()).filter(p => p);
+  const id = new URLSearchParams(window.location.search).get('id');
+  if (!id || isNaN(id) || id < 0 || id >= poems.length) {
+    document.getElementById('title').textContent = 'القصيدة غير موجودة';
+    document.getElementById('content').innerHTML = '';
+    return;
+  }
+  const poem = poems[id].split('\n').map(l=>l.trim()).filter(l=>l);
+  const title = poem[0] || '';
+  const categoryLine = poem[1] && poem[1].startsWith('@') ? poem[1].replace('@','') : '';
+  const verses = poem.slice(2);
 
-    const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
-    const id = new URLSearchParams(window.location.search).get("id");
+  document.getElementById('title').textContent = title;
+  // بناء أبيات: كل سطر داخل <p class="verse"> مع فصل بين الأبيات الفارغة
+  const html = verses.map(line => {
+    if (!line) return '<p class="verse empty"></p>';
+    return `<p class="verse">${escapeHtml(line)}</p>`;
+  }).join('');
+  document.getElementById('content').innerHTML = html;
+  setFavButton(Number(id));
+}
 
-    const poem = poems[id].split("\n");
-
-    const title = poem[0].trim(); 
-    document.getElementById("title").textContent = title;
-
-    const verses = poem.slice(2).join("\n");
-    document.getElementById("content").textContent = verses;
+function escapeHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 loadPoem();
