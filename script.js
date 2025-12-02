@@ -11,15 +11,16 @@ let poemList = [];
 let allLines = [];
 
 async function loadPoems() {
-    const res = await fetch("poems.txt");
+    // fetch بدون كاش
+    const res = await fetch("poems.txt?update=" + Date.now());
     const text = await res.text();
 
     const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
 
-    poemList = poems.map((poem, index) => ({
-        id: index,
-        title: poem.split("\n")[0].trim(),
-        category: poem.split("\n")[1].replace("@","").trim()
+    poemList = poems.map((p, i) => ({
+        id: i,
+        title: p.split("\n")[0].trim(),
+        category: p.split("\n")[1].replace("@", "").trim()
     }));
 
     display(poemList);
@@ -36,11 +37,11 @@ function display(arr) {
     const list = document.getElementById("list");
     list.innerHTML = "";
 
-    arr.forEach(poem => {
+    arr.forEach(p => {
         list.innerHTML += `
-            <a class="poem-card fade" href="viewer.html?id=${poem.id}">
-                <div class="title">${poem.title}</div>
-                <div class="cat">📌 ${poem.category}</div>
+            <a class="poem-card fade" href="viewer.html?id=${p.id}">
+                <div class="title">${p.title}</div>
+                <div class="cat">📌 ${p.category}</div>
             </a>
         `;
     });
