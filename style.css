@@ -32,9 +32,9 @@ h1, h2, h3 {
 .poem-card {
     display: block;
     text-decoration: none;
-    padding: 18px;
-    margin: 10px;
-    background: #d8c2a6;
+    padding: 15px 18px;
+    margin: 12px;
+    background: #dfcbb3;
     color: #4b3a2f;
     border-radius: 12px;
     text-align: center;
@@ -43,8 +43,8 @@ h1, h2, h3 {
 }
 
 body.dark .poem-card {
-    background: #352b21;
-    color: #f1e7d8;
+    background: #3a2f24;
+    color: #f2e7d8;
 }
 
 .poem-card:hover {
@@ -54,17 +54,9 @@ body.dark .poem-card {
 /* شبكة الفهرس */
 #list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
     margin-top: 20px;
-}
-
-/* مناسب للهاتف جداً */
-@media (max-width: 500px) {
-    #list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-    }
 }
 
 /* مربع بيت اليوم */
@@ -89,6 +81,7 @@ body.dark .today-box {
     color: white;
     font-size: 18px;
     text-decoration: none;
+    text-align: center;
 }
 
 body.dark .btn {
@@ -106,39 +99,18 @@ body.dark .btn {
     border: none;
     background: #b8926a;
     color: white;
+    cursor: pointer;
 }
 
 body.dark #modeToggle {
     background: #604a33;
 }
 
-/* أدوات التحكم بالخط */
-.font-box {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 15px 0 25px 0;
-}
-
-.font-btn {
-    padding: 10px 15px;
-    font-size: 20px;
-    border: none;
-    border-radius: 10px;
-    background: #b8926a;
-    color: white;
-    cursor: pointer;
-}
-
-body.dark .font-btn {
-    background: #604a33;
-}
-
 /* تنسيق الأبيات */
 pre {
     white-space: pre-wrap;
-    font-size: 21px;
-    line-height: 2.2;
     text-align: center;
-    padding: 10px;
+    font-size: 22px;
+    line-height: 2.3;
+    padding: 15px;
 }
