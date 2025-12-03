@@ -14,14 +14,16 @@
 
     <h1 id="title"></h1>
 
-    <a class="btn" href="index.html">عودة</a>
+    <div style="text-align:center; margin-bottom:20px;">
+        <a class="btn" href="index.html">رجوع</a>
+    </div>
 
     <pre id="content"></pre>
 
 </div>
 
 <script>
-/* وضع ليلي */
+/* الوضع الليلي */
 function toggleMode() {
     document.body.classList.toggle("dark");
     localStorage.setItem("darkMode", document.body.classList.contains("dark"));
