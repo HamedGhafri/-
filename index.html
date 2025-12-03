@@ -14,15 +14,23 @@
 
     <h1>ديوان حمد الغافري</h1>
 
-    <div class="actions">
+    <div class="actions" style="text-align:center;">
         <a class="btn" href="#" onclick="randomPoem()">قصيدة عشوائية</a>
         <a class="btn" href="about.html">عن الشاعر</a>
     </div>
 
-    <input type="text" id="search" placeholder="ابحث عن قصيدة..." oninput="filterPoems()">
+    <input 
+        type="text" 
+        id="search" 
+        placeholder="ابحث عن قصيدة..." 
+        oninput="filterPoems()" 
+        style="width:100%; padding:12px; margin-top:15px; font-size:18px;"
+    >
 
     <div id="todayBox" class="today-box fade">
-        <div class="today-title">بيت اليوم</div>
+        <div class="today-title" style="font-size:20px; font-weight:bold; margin-bottom:10px;">
+            بيت اليوم
+        </div>
         <div id="todayContent"></div>
     </div>
 
@@ -94,9 +102,9 @@ function randomPoem() {
 /* بيت اليوم */
 function showBaytOfDay() {
     const today = new Date().getDate();
-    const index = today % allLines.length;
-    const l1 = allLines[index];
-    const l2 = allLines[index + 1] || "";
+    const i = today % allLines.length;
+    const l1 = allLines[i];
+    const l2 = allLines[i + 1] || "";
     document.getElementById("todayContent").innerHTML = `${l1}<br>${l2}`;
 }
 
