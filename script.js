@@ -18,18 +18,31 @@ async function loadPoems() {
   try {
     const txt = await fetch("poems.txt?update=" + Date.now()).then(r => r.text());
     const poems = txt.split("===\n").map(p => p.trim()).filter(p => p);
+
     poemList = poems.map((p, idx) => {
-      const lines = p.split("\n").filter(l => l.trim() !== "");
-      const title = lines[0] || "";
-      const category = lines[1] && lines[1].startsWith("@") ? lines[1].substring(1).trim() : "";
-      const contentLines = lines.slice(2);
+      const linesAll = p.split("\n");
+      const title = linesAll[0].trim();
+      const category = linesAll[1] && linesAll[1].startsWith("@")
+        ? linesAll[1].substring(1).trim()
+        : "";
+      const contentLines = linesAll.slice(2).filter(l => l.trim() !== "");
       return { id: idx, title, category, lines: contentLines };
     });
+
     displayPoemList(poemList);
-    extractBayt(poems);
+    extractBayt(allLinesFromPoems(poems));
   } catch (e) {
     console.error("خطأ في تحميل القصائد:", e);
   }
+}
+
+function allLinesFromPoems(poems) {
+  const arr = [];
+  poems.forEach(p => {
+    const linesAll = p.split("\n").slice(2).filter(l => l.trim() !== "");
+    arr.push(...linesAll);
+  });
+  return arr;
 }
 
 function displayPoemList(arr) {
@@ -64,12 +77,8 @@ function randomPoem() {
   window.location.href = `viewer.html?id=${id}`;
 }
 
-function extractBayt(poems) {
-  allLines = [];
-  poems.forEach(poem => {
-    const lines = poem.split("\n").slice(2).filter(l => l.trim() !== "");
-    allLines.push(...lines);
-  });
+function extractBayt(allLinesArr) {
+  allLines = allLinesArr;
   if (allLines.length === 0) return;
   const today = new Date().getDate();
   const idx = today % allLines.length;
