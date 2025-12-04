@@ -10,6 +10,7 @@
 <body>
 
 <div class="container fade-up">
+
     <h1 id="title"></h1>
 
     <div id="poem" class="poem-box"></div>
@@ -17,26 +18,37 @@
     <div class="stamp">— ديوان حمد الغافري —</div>
 
     <a href="index.html" class="back-btn">عودة للفهرس</a>
+
 </div>
 
 <script>
-document.addEventListener("contextmenu", e => e.preventDefault()); // منع اليمين
+document.addEventListener("contextmenu", e => e.preventDefault());
 
-async function loadPoem() {
-    const res = await fetch("poems.txt");
-    const text = await res.text();
-    const poems = text.split("===\n").map(p=>p.trim()).filter(p=>p);
+async function loadPoem(){
+    const txt = await (await fetch("poems.txt")).text();
+    const poems = txt.split("===\n").map(p=>p.trim()).filter(p=>p);
 
     const id = new URLSearchParams(location.search).get("id");
     const lines = poems[id].split("\n");
 
     document.getElementById("title").textContent = lines[0];
 
-    const content = lines.slice(2).map((l,i)=>`
-        <div class="fade-up" style="animation-delay:${i*0.12}s">${l}</div>
-    `).join("");
+    const poetic = lines.slice(2).filter(l=>l.trim()!="");
 
-    document.getElementById("poem").innerHTML = content;
+    let html = "";
+    for (let i=0; i<poetic.length; i+=2){
+        let l1 = poetic[i] || "";
+        let l2 = poetic[i+1] || "";
+
+        html += `
+            <div class="bayt fade-up" style="animation-delay:${i*0.1}s">
+                <div>${l1}</div>
+                <div>${l2}</div>
+            </div>
+        `;
+    }
+
+    document.getElementById("poem").innerHTML = html;
 }
 
 loadPoem();
