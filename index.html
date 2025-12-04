@@ -1,16 +1,40 @@
-.category {
-  font-size: 20px;
-  margin-bottom: 15px;
-  color: var(--accent);
-}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ديوان حمد الغافري</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // تفعيل الوضع الليلي إذا كان مخزن
+    if (localStorage.getItem("darkMode") === "on") {
+      document.documentElement.classList.add("dark");
+    }
+  </script>
+</head>
+<body>
+  <div class="container fade-up">
+    <button id="toggle-dark-mode" class="btn toggle-btn">تبديل الوضع الليلي</button>
 
-.dark .category {
-  color: var(--accent-light);
-}
+    <div class="decor">ـــ༻❁༺ـــ</div>
+    <h1 id="main-title">ديوان حمد الغافري</h1>
+    <div class="decor">ـــ༻❁༺ـــ</div>
 
-.toggle-btn {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-}
+    <div class="btn-group">
+      <a class="btn" onclick="randomPoem()">قصيدة عشوائية</a>
+      <a class="btn" href="about.html">عن الشاعر</a>
+    </div>
+
+    <input id="search" type="text" placeholder="ابحث عن قصيدة..." oninput="runSearch()">
+
+    <div class="today-box fade-up">
+      <div class="today-title">بيت اليوم</div>
+      <div id="todayContent"></div>
+    </div>
+
+    <div id="list"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
