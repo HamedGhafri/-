@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <title>ديوان حمد الغافري</title>
@@ -10,102 +11,80 @@
 
 <button id="modeToggle" onclick="toggleMode()">🌓</button>
 
-<div class="container">
+<div class="container fade">
 
     <h1>ديوان حمد الغافري</h1>
 
-    <div class="actions" style="text-align:center;">
-        <a class="btn" href="#" onclick="randomPoem()">قصيدة عشوائية</a>
+    <div style="text-align:center;">
+        <a class="btn" onclick="randomPoem()">قصيدة عشوائية</a>
         <a class="btn" href="about.html">عن الشاعر</a>
     </div>
 
     <input 
+        id="search"
         type="text" 
-        id="search" 
-        placeholder="ابحث عن قصيدة..." 
-        oninput="filterPoems()" 
-        style="width:100%; padding:12px; margin-top:15px; font-size:18px;"
-    >
-
-    <div id="todayBox" class="today-box fade">
-        <div class="today-title" style="font-size:20px; font-weight:bold; margin-bottom:10px;">
-            بيت اليوم
-        </div>
+        placeholder="ابحث عن قصيدة..."
+        oninput="filterPoems()"
+        style="width:100%; padding:12px; font-size:18px; border-radius:12px; border:1px solid #ccc; margin-top:20px;">
+    
+    <div class="today-box fade">
+        <div class="today-title">بيت اليوم</div>
         <div id="todayContent"></div>
     </div>
 
-    <div id="list" class="fade">جاري التحميل...</div>
+    <div id="list"></div>
 
 </div>
 
 <script>
-let poemList = [];
-let allLines = [];
+let poemList = [], allLines = [];
 
-/* الوضع الليلي */
 function toggleMode() {
     document.body.classList.toggle("dark");
     localStorage.setItem("darkMode", document.body.classList.contains("dark"));
 }
-if (localStorage.getItem("darkMode") === "true") {
-    document.body.classList.add("dark");
-}
+if (localStorage.getItem("darkMode") === "true") document.body.classList.add("dark");
 
-/* تحميل القصائد */
 async function loadPoems() {
-    const res = await fetch("poems.txt");
-    const text = await res.text();
+    const t = await (await fetch("poems.txt")).text();
+    const poems = t.split("===\n").map(p=>p.trim()).filter(p=>p);
 
-    const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
-
-    poemList = poems.map((poem, index) => ({
-        id: index,
-        title: poem.split("\n")[0].trim()
+    poemList = poems.map((p,i)=>({
+        id:i,
+        title:p.split("\n")[0].trim()
     }));
 
     display(poemList);
 
-    poems.forEach(poem => {
-        const lines = poem.split("\n").slice(2).filter(l => l.trim());
-        allLines.push(...lines);
+    poems.forEach(p=>{
+        allLines.push(...p.split("\n").slice(2).filter(x=>x.trim()));
     });
 
-    showBaytOfDay();
+    showBayt();
 }
 
-/* عرض الفهرس */
 function display(arr) {
-    const list = document.getElementById("list");
     list.innerHTML = "";
-
-    arr.forEach(poem => {
+    arr.forEach(p=>{
         list.innerHTML += `
-            <a class="poem-card fade" href="viewer.html?id=${poem.id}">
-                ${poem.title}
-            </a>
-        `;
+            <a class="poem-card" href="viewer.html?id=${p.id}">
+                ${p.title}
+            </a>`;
     });
 }
 
-/* البحث */
 function filterPoems() {
-    const t = document.getElementById("search").value.trim();
-    display(poemList.filter(p => p.title.includes(t)));
+    const t = search.value.trim();
+    display(poemList.filter(p=>p.title.includes(t)));
 }
 
-/* قصيدة عشوائية */
 function randomPoem() {
-    const id = Math.floor(Math.random() * poemList.length);
-    window.location.href = `viewer.html?id=${id}`;
+    location.href = "viewer.html?id=" + Math.floor(Math.random()*poemList.length);
 }
 
-/* بيت اليوم */
-function showBaytOfDay() {
-    const today = new Date().getDate();
-    const i = today % allLines.length;
-    const l1 = allLines[i];
-    const l2 = allLines[i + 1] || "";
-    document.getElementById("todayContent").innerHTML = `${l1}<br>${l2}`;
+function showBayt() {
+    const i = new Date().getDate() % allLines.length;
+    todayContent.innerHTML = allLines[i] + "<br>" + (allLines[i+1] || "");
 }
 
 loadPoems();
