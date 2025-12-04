@@ -1,116 +1,16 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ديوان حمد الغافري</title>
-    <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-<div class="container fade-up">
-
-    <button onclick="toggleMode()" style="float:left; margin:10px; padding:8px 12px; border:none; border-radius:8px; background:#8b6e53; color:#fff; cursor:pointer;">تبديل الوضع الليلي</button>
-
-    <div class="decor">ـــ༻❁༺ـــ</div>
-    <h1 id="title"></h1>
-    <div class="decor">ـــ༻❁༺ـــ</div>
-
-    <div style="text-align:center;">
-        <a class="btn" onclick="randomPoem()">قصيدة عشوائية</a>
-        <a class="btn" href="about.html">عن الشاعر</a>
-        <a class="btn" href="favorites.html" style="display:none;">مفضلاتي</a> <!-- مخفية -->
-        <a class="btn" href="wordcloud.html" style="display:none;">سحابة الكلمات</a> <!-- مخفية -->
-    </div>
-
-    <!-- حقل البحث -->
-    <input id="search" type="text" placeholder="ابحث عن قصيدة..." oninput="runSearch()" />
-
-    <div class="today-box fade-up">
-        <div class="today-title">بيت اليوم</div>
-        <div id="todayContent"></div>
-    </div>
-
-    <div id="list"></div>
-
-</div>
-<script>
-let poemList = [], allLines = [];
-
-// تفعيل وضع الليل/النهار استنادًا إلى الحالة السابقة في التخزين المحلي
-(function() {
-    if (localStorage.getItem("darkMode") === "on") {
-        document.body.classList.add("dark");
-    }
-})();
-
-/* وظيفة لتبديل الوضع الليلي */
-function toggleMode() {
-    document.body.classList.toggle("dark");
-    localStorage.setItem("darkMode", document.body.classList.contains("dark") ? "on" : "off");
+.category {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: var(--accent);
 }
 
-/* تحميل القصائد */
-async function loadPoems() {
-    const txt = await fetch("poems.txt?update=" + Date.now()).then(res => res.text());
-    const poems = txt.split("===\n").map(p => p.trim()).filter(p => p);
-    poemList = poems.map((p, i) => {
-        const lines = p.split("\n");
-        return {
-            id: i,
-            title: lines[0],
-            category: lines[1] ? lines[1].replace("@", "").trim() : "",
-            lines: lines.slice(2)
-        };
-    });
-    displayPoemList(poemList);
-    extractBayt(poems);
+.dark .category {
+  color: var(--accent-light);
 }
 
-/* عرض قائمة القصائد */
-function displayPoemList(arr) {
-    const list = document.getElementById("list");
-    list.innerHTML = "";
-    arr.forEach(p => {
-        list.innerHTML += `<a class="poem-card fade" href="viewer.html?id=${p.id}">${p.title}</a>`;
-    });
+.toggle-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
 }
-
-/* البحث الشامل داخل كل النص */
-function runSearch() {
-    const t = document.getElementById("search").value.trim().toLowerCase();
-    if (!t) return displayPoemList(poemList);
-    const filtered = poemList.filter(p => {
-        const titleMatch = p.title.toLowerCase().includes(t);
-        const categoryMatch = p.category.toLowerCase().includes(t);
-        const linesMatch = p.lines.some(line => line.toLowerCase().includes(t));
-        return titleMatch || categoryMatch || linesMatch;
-    });
-    displayPoemList(filtered);
-}
-
-/* قصيدة عشوائية */
-function randomPoem() {
-    if (poemList.length === 0) return;
-    const id = Math.floor(Math.random() * poemList.length);
-    window.location.href = `viewer.html?id=${id}`;
-}
-
-/* استخراج أبيات اليوم */
-function extractBayt(poems) {
-    allLines = [];
-    poems.forEach(poem => {
-        const lines = poem.split("\n").slice(2).filter(l => l.trim() !== "");
-        allLines.push(...lines);
-    });
-    if (allLines.length === 0) return;
-    const today = new Date().getDate();
-    const index = today % allLines.length;
-    const l1 = allLines[index] || "";
-    const l2 = allLines[(index + 1) % allLines.length] || "";
-    document.getElementById("todayContent").innerHTML = `${l1}<br>${l2}`;
-}
-
-loadPoems();
-</script>
-</body>
-</html>
