@@ -5,6 +5,45 @@
     <meta charset="UTF-8">
     <title>عرض القصيدة</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .poem-box {
+            background: #faf5ef;
+            border: 1px solid #e0d4c8;
+            padding: 25px;
+            border-radius: 18px;
+            margin-top: 25px;
+            animation: fadeIn 0.9s forwards;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        body.dark .poem-box {
+            background: #251f1f;
+            border: 1px solid #3a3333;
+        }
+        .actions {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .small-btn {
+            padding: 8px 16px;
+            font-size: 16px;
+            border-radius: 10px;
+            margin: 5px;
+            display: inline-block;
+            background:#4c3b2f;
+            color:#fff;
+            text-decoration:none;
+        }
+        body.dark .small-btn {
+            background:#6b5645;
+        }
+        .poem-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            animation: fadeDown 0.7s forwards;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -13,13 +52,17 @@
 
 <div class="container fade">
 
-    <h1 id="title"></h1>
+    <div id="title" class="poem-title"></div>
 
-    <div style="text-align:center; margin-bottom:20px;">
+    <div class="actions">
         <a class="btn" href="index.html">عودة</a>
+        <button class="small-btn" onclick="copyPoem()">نسخ القصيدة</button>
+        <button class="small-btn" onclick="sharePoem()">مشاركة</button>
     </div>
 
-    <pre id="content"></pre>
+    <div class="poem-box">
+        <pre id="content"></pre>
+    </div>
 
 </div>
 
@@ -41,6 +84,17 @@ async function loadPoem(){
     content.textContent = lines.slice(2).join("\n");
 }
 loadPoem();
+
+function copyPoem() {
+    navigator.clipboard.writeText(content.textContent);
+    alert("تم نسخ القصيدة ✔");
+}
+
+function sharePoem() {
+    const text = title.textContent + "\n\n" + content.textContent;
+    navigator.share ? navigator.share({ text }) :
+    alert("المشاركة غير مدعومة على جهازك");
+}
 </script>
 
 </body>
