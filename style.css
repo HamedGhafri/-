@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 
+/* الألوان */
 :root {
     --bg: #f8f4ef;
     --text: #332b2b;
@@ -14,14 +15,14 @@
     --accent-light: #c7b199;
 }
 
-/* منع النسخ */
+/* منع النسخ والتحديد */
 * {
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
 }
 
-/* الخلفية */
+/* العامة */
 body {
     margin: 0;
     background: var(--bg);
@@ -29,17 +30,19 @@ body {
     font-family: "Amiri", serif;
     transition: .3s;
     overflow-x: hidden;
+    text-align: center; /* محاذاة للوسط */
 }
+
 body.dark {
     background: var(--dark-bg);
     color: var(--dark-text);
 }
 
-/* الحاوية */
 .container {
     max-width: 950px;
-    padding: 26px;
     margin: auto;
+    padding: 26px;
+    text-align: center; /* محاذاة للوسط */
 }
 
 /* الزخارف المخطوطة */
@@ -68,16 +71,18 @@ h1 {
     transform: translateY(20px);
     animation: fadeUp .8s forwards;
 }
+
 @keyframes fadeUp {
     to { opacity:1; transform: translateY(0); }
 }
+
 @keyframes fadeDown {
     from {opacity:0; transform: translateY(-15px);}
     to {opacity:1; transform: translateY(0);}
 }
 
 /* الأزرار */
-.btn, .back-btn {
+.btn, .back-btn, .fav-btn {
     padding: 10px 22px;
     background: var(--accent);
     color: #fff;
@@ -86,10 +91,18 @@ h1 {
     text-decoration: none;
     margin: 6px;
     display: inline-block;
+    text-align: center;
     transition: .25s;
 }
-.btn:hover, .back-btn:hover {
+
+.btn:hover, .back-btn:hover, .fav-btn:hover {
     transform: scale(1.07);
+}
+
+/* زر المفضلة */
+.fav-btn {
+    margin-top: 12px;
+    padding: 10px 24px;
 }
 
 /* البحث */
@@ -99,6 +112,8 @@ h1 {
     border-radius: 12px;
     border: 1px solid var(--border);
     font-size: 18px;
+    margin: 18px 0;
+    text-align: center;
 }
 
 /* الفهرس */
@@ -106,20 +121,23 @@ h1 {
     margin-top: 25px;
     display: grid;
     gap: 18px;
-    grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 }
+
 .poem-card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 18px;
     font-size: 20px;
-    text-align: center;
     text-decoration: none;
     color: var(--text);
     box-shadow: 0 4px 14px rgba(0,0,0,0.08);
     transition: .3s;
+    text-align: center;
 }
+
 .poem-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 12px 24px rgba(0,0,0,0.18);
@@ -130,11 +148,12 @@ h1 {
     padding: 22px;
     background: #efe6dd;
     border-radius: 14px;
-    text-align: center;
     border: 1px solid #dacbbd;
-    margin: 20px auto;
+    margin: 25px auto;
     width: 80%;
+    text-align: center;
 }
+
 .today-title {
     font-size: 22px;
     margin-bottom: 6px;
@@ -143,47 +162,33 @@ h1 {
 /* صفحة القصيدة */
 .poem-box {
     background: var(--card);
-    padding: 26px;
-    margin: 25px 0;
+    padding: 28px;
+    margin: 28px auto;
     border-radius: 14px;
     border: 1px solid var(--border);
     box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    text-align: center;
 }
 
-/* مفصل الأبيات */
+/* الأبيات — مسافة أكبر ومحاذاة وسط */
 .bayt {
-    margin-bottom: 35px;   /* بين كل بيت */
-    padding-bottom: 20px;
+    margin-bottom: 40px;        /* مسافة كبيرة بين الأبيات */
+    padding-bottom: 22px;
+    border-bottom: 1px dashed #c3b4a7;
 }
 
 .bayt div {
     font-size: 26px;
-    line-height: 2.8;      /* جعل السطور أوسع */
-    margin: 6px 0;         /* مسافة إضافية بين الشطرين */
+    line-height: 2.9;           /* ارتفاع كبير للسطور */
+    margin: 12px 0;             /* مسافة بين الشطرين */
 }
-
 
 /* الختم */
 .stamp {
     text-align: center;
     font-size: 18px;
     opacity: .7;
-    margin-top: 20px;
-}
-
-/* زر المفضلة */
-.fav-btn {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background: #b08b6e;
-    color: white;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition:.3s;
-}
-.fav-btn:hover {
-    transform: scale(1.08);
+    margin-top: 25px;
 }
 
 /* سحابة الكلمات */
@@ -191,15 +196,14 @@ h1 {
     text-align:center;
     margin-top:30px;
 }
+
 .word-cloud span {
     display:inline-block;
-    margin:6px;
+    margin:8px;
     cursor:pointer;
     transition:.25s;
 }
+
 .word-cloud span:hover {
     transform:scale(1.3);
-}
-body, .container, h1, .decor, .today-box, #list, .poem-box, .bayt, .stamp {
-    text-align: center;
 }
