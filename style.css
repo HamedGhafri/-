@@ -200,3 +200,6 @@ h1 {
 .word-cloud span:hover {
     transform:scale(1.3);
 }
+body, .container, h1, .decor, .today-box, #list, .poem-box, .bayt, .stamp {
+    text-align: center;
+}
