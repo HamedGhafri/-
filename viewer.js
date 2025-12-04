@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("darkMode", isDark ? "on" : "off");
     });
   }
+
   loadPoem();
 });
 
@@ -26,7 +27,9 @@ async function loadPoem() {
 
     const poemData = poems[id].split("\n");
     const title = poemData[0].trim();
-    const category = poemData[1] && poemData[1].startsWith("@") ? poemData[1].substring(1).trim() : "";
+    const category = poemData[1] && poemData[1].startsWith("@")
+      ? poemData[1].substring(1).trim()
+      : "";
 
     document.getElementById("title").textContent = title;
     const catEl = document.getElementById("category");
@@ -45,7 +48,6 @@ async function loadPoem() {
         </div>`;
     }
     poemEl.innerHTML = html;
-
   } catch (error) {
     console.error("خطأ في تحميل القصيدة:", error);
   }
