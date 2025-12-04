@@ -69,3 +69,27 @@ function display(arr){
         list.innerHTML += `
         <a class="poem-card" href="viewer.html?id=${p.id}">
             ${p.title}
+        </a>`;
+    });
+}
+
+function filterPoems(){
+    const t = search.value.trim();
+    display(poemList.filter(p=>p.title.includes(t)));
+}
+
+function randomPoem(){
+    location.href = "viewer.html?id=" + Math.floor(Math.random()*poemList.length);
+}
+
+function showBayt(){
+    const today = new Date().getDate();
+    const i = today % allLines.length;
+    todayContent.innerHTML = allLines[i] + "<br>" + (allLines[i+1] || "");
+}
+
+loadPoems();
+</script>
+
+</body>
+</html>
