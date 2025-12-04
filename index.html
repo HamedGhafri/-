@@ -4,21 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ديوان حمد الغافري</title>
-  <!-- وسوم منع الكاش -->
-  <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="pragma" content="no-cache">
-  <meta http-equiv="expires" content="0">
+
+  <!-- SEO & Social -->
+  <meta name="description" content="ديوان حمد الغافري — مجموعة من قصائد الشاعر حمد الغافري.">
+  <link rel="canonical" href="https://hamedghafri.github.io/-/index.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ديوان حمد الغافري">
+  <meta property="og:description" content="ديوان حمد الغافري — مجموعة من قصائد الشاعر حمد الغافري.">
+  <meta property="og:url" content="https://hamedghafri.github.io/-/index.html">
+  <meta name="twitter:card" content="summary">
 
   <link rel="stylesheet" href="style.css?v=2">
   <script>
+    // صغير ومبكر لتطبيق الوضع الداكن قبل رسم الصفحة
     if (localStorage.getItem("darkMode") === "on") {
       document.documentElement.classList.add("dark");
     }
   </script>
 </head>
 <body>
-  <div class="container fade-up">
-    <button id="toggle-dark-mode" class="btn toggle-btn">
+  <a class="skip-link" href="#main-content">تخطي إلى المحتوى</a>
+
+  <main id="main-content" class="container fade-up" role="main">
+    <button id="toggle-dark-mode" class="btn toggle-btn" aria-label="تبديل الوضع الداكن" aria-pressed="false">
       <span id="dark-mode-icon">🌙</span>
     </button>
 
@@ -27,19 +35,19 @@
     <div class="decor">ـــ༻❁༺ـــ</div>
 
     <div class="btn-group">
-      <a class="btn" onclick="randomPoem()">قصيدة عشوائية</a>
+      <button class="btn" onclick="randomPoem()" id="random-btn">قصيدة عشوائية</button>
       <a class="btn" href="about.html">عن الشاعر</a>
     </div>
 
-    <input id="search" type="text" placeholder="ابحث عن قصيدة..." oninput="runSearch()">
+    <input id="search" type="search" placeholder="ابحث عن قصيدة..." oninput="runSearch()" aria-label="بحث عن قصيدة">
 
     <div class="today-box fade-up">
       <div class="today-title">بيت اليوم</div>
-      <div id="todayContent"></div>
+      <div id="todayContent" aria-live="polite"></div>
     </div>
 
     <div id="list"></div>
-  </div>
+  </main>
 
   <script src="script.js?v=2"></script>
 </body>
