@@ -6,7 +6,7 @@
   <title>ديوان حمد الغافري</title>
 
   <!-- SEO & Social -->
-  <meta name="description" content="ديوان حمد الغافري — مجموعة من قصائد الشاعر حمد الغافري.">
+  <meta name="description" content="ديوان حمد الغافري — مجموعة من قصائد الشاعر حمد الغافري. تصفّح، ابحث، واستمتع بأجمل الأبيات.">
   <link rel="canonical" href="https://hamedghafri.github.io/-/index.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="ديوان حمد الغافري">
@@ -14,41 +14,60 @@
   <meta property="og:url" content="https://hamedghafri.github.io/-/index.html">
   <meta name="twitter:card" content="summary">
 
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ديوان حمد الغافري",
+    "url": "https://hamedghafri.github.io/-/",
+    "description": "ديوان حمد الغافري — مجموعة من قصائد الشاعر حمد الغافري."
+  }
+  </script>
+
+  <!-- Critical CSS: keep external, browser will request it; can be inlined later if needed -->
   <link rel="stylesheet" href="style.css?v=2">
+
+  <!-- Apply dark mode early to avoid FOUC -->
   <script>
-    // صغير ومبكر لتطبيق الوضع الداكن قبل رسم الصفحة
-    if (localStorage.getItem("darkMode") === "on") {
-      document.documentElement.classList.add("dark");
-    }
+    (function(){
+      try {
+        if (localStorage.getItem("darkMode") === "on") {
+          document.documentElement.classList.add("dark");
+        }
+      } catch(e){}
+    })();
   </script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">تخطي إلى المحتوى</a>
 
-  <main id="main-content" class="container fade-up" role="main">
-    <button id="toggle-dark-mode" class="btn toggle-btn" aria-label="تبديل الوضع الداكن" aria-pressed="false">
-      <span id="dark-mode-icon">🌙</span>
-    </button>
+  <main id="main-content" class="container fade-up" role="main" aria-labelledby="main-title">
+    <div class="top-controls">
+      <button id="toggle-dark-mode" class="btn toggle-btn" aria-label="تبديل الوضع الداكن" aria-pressed="false">🌙</button>
+    </div>
 
     <div class="decor">ـــ༻❁༺ـــ</div>
     <h1 id="main-title">ديوان حمد الغافري</h1>
     <div class="decor">ـــ༻❁༺ـــ</div>
 
     <div class="btn-group">
-      <button class="btn" onclick="randomPoem()" id="random-btn">قصيدة عشوائية</button>
+      <button class="btn" id="random-btn">قصيدة عشوائية</button>
       <a class="btn" href="about.html">عن الشاعر</a>
     </div>
 
-    <input id="search" type="search" placeholder="ابحث عن قصيدة..." oninput="runSearch()" aria-label="بحث عن قصيدة">
+    <label for="search" class="visually-hidden">ابحث عن قصيدة</label>
+    <input id="search" type="search" placeholder="ابحث عن قصيدة..." aria-label="بحث عن قصيدة">
 
-    <div class="today-box fade-up">
+    <div class="today-box fade-up" aria-live="polite">
       <div class="today-title">بيت اليوم</div>
-      <div id="todayContent" aria-live="polite"></div>
+      <div id="todayContent"></div>
     </div>
 
-    <div id="list"></div>
+    <div id="list" aria-live="polite"></div>
   </main>
 
-  <script src="script.js?v=2"></script>
+  <!-- Deferred script: uses lazy-loading for poems and non-blocking rendering -->
+  <script src="script.js?v=2" defer></script>
 </body>
 </html>
