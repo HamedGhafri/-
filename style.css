@@ -25,9 +25,32 @@ html, body {
   overflow-x: hidden;
 }
 
-/* الوضع الليلي */
 html.dark, body.dark {
   background: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: var(--accent);
+  color: var(--text);
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-btn #dark-mode-icon {
+  font-size: 20px;
+}
+
+html.dark .toggle-btn {
+  background: var(--accent);
   color: var(--dark-text);
 }
 
@@ -45,8 +68,7 @@ html.dark .poem-box, body.dark .poem-box {
   border-color: var(--dark-border);
 }
 html.dark .btn, body.dark .btn,
-html.dark .back-btn, body.dark .back-btn,
-html.dark .toggle-btn {
+html.dark .back-btn, body.dark .back-btn {
   background: var(--accent);
   color: var(--dark-text);
 }
@@ -107,13 +129,6 @@ h1 {
 
 .btn:hover, .back-btn:hover {
   transform: scale(1.07);
-}
-
-.toggle-btn {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
 }
 
 .btn-group a {
@@ -187,7 +202,7 @@ h1 {
 .bayt {
   margin-bottom: 40px;
   padding-bottom: 0;
-  /* الفواصل بين الأبيات أُزيلت */
+  /* الفواصل أُزيلت */
 }
 
 .bayt div {
