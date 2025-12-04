@@ -152,14 +152,17 @@ h1 {
 
 /* مفصل الأبيات */
 .bayt {
-    margin-bottom: 26px;
-    padding-bottom: 18px;
+    margin-bottom: 35px;   /* بين كل بيت */
+    padding-bottom: 20px;
     border-bottom: 1px dashed #c3b4a7;
 }
+
 .bayt div {
-    font-size: 0px;
-    line-height: 2.3;
+    font-size: 26px;
+    line-height: 2.8;      /* جعل السطور أوسع */
+    margin: 6px 0;         /* مسافة إضافية بين الشطرين */
 }
+
 
 /* الختم */
 .stamp {
