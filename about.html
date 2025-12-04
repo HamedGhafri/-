@@ -1,77 +1,31 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <title>عن الشاعر</title>
     <link rel="stylesheet" href="style.css">
-
-    <style>
-        .about-box {
-            background: #faf5ef;
-            border: 1px solid #e0d4c8;
-            border-radius: 18px;
-            padding: 30px;
-            max-width: 750px;
-            margin: 25px auto;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.05);
-            animation: fadeIn 0.9s forwards;
-        }
-        body.dark .about-box {
-            background: #251f1f;
-            border-color: #3a3333;
-        }
-
-        .about-title {
-            font-size: 30px;
-            text-align: center;
-            margin-bottom: 15px;
-            animation: fadeDown 0.7s forwards;
-        }
-
-        .about-text {
-            font-size: 20px;
-            line-height: 2.2;
-            text-align: center;
-        }
-
-        .back-btn {
-            text-align:center;
-            margin-top:20px;
-        }
-    </style>
 </head>
 
 <body>
 
-<button id="modeToggle" onclick="toggleMode()">🌓</button>
+<div class="container fade-up">
 
-<div class="container">
+    <h1>عن الشاعر</h1>
 
-    <div class="about-box fade">
-        <div class="about-title">عن الشاعر</div>
-
-        <p class="about-text">
-            حمد الغافري، شاعر يهتم بتجسيد الجمال في اللغة وإحياء روح القصيدة العربية الأصيلة.<br>
-            يجمع في كتاباته بين العاطفة والخيال، وبين الموسيقى والمعنى، ليقدّم شعراً نابضًا بالحياة.<br><br>
-
-            هذا الموقع صُمّم ليكون ديوانه الرقمي الذي يضم قصائده، وبيت اليوم، وفهرسًا أنيقًا لكل أعماله.
+    <div class="poem-box" style="text-align:center; font-size:22px;">
+        <p>
+        شاعر يمزج بين الفصحى العريقة والروح الحديثة،  
+        ويكتب من عمق القلب ليصل إلى القلب.  
+        ديوان حمد الغافري مساحة تسافر عبر البوح،  
+        وتلمس جمال المفردة وقوة الإحساس.
         </p>
-
-        <div class="back-btn">
-            <a class="btn" href="index.html">رجوع</a>
-        </div>
     </div>
 
-</div>
+    <div class="stamp">— ديوان حمد الغافري —</div>
 
-<script>
-function toggleMode(){
-    document.body.classList.toggle("dark");
-    localStorage.setItem("darkMode", document.body.classList.contains("dark"));
-}
-if(localStorage.getItem("darkMode")==="true") document.body.classList.add("dark");
-</script>
+    <a class="back-btn" href="index.html">عودة للفهرس</a>
+
+</div>
 
 </body>
 </html>
