@@ -38,6 +38,26 @@ body.dark {
     color: var(--dark-text);
 }
 
+/* دعم وضع الداكن للعناصر */
+body.dark .decor {
+    color: var(--accent-light);
+}
+body.dark h1 {
+    color: var(--dark-text);
+}
+body.dark .poem-card {
+    background-color: var(--dark-card);
+    border-color: var(--border);
+}
+body.dark .today-box {
+    background-color: #3b3636; /* خلفية مميزة لوضع الداكن */
+    border-color: #5a4a4a;
+}
+body.dark .today-title {
+    color: var(--dark-text);
+}
+
+/* الحاوية */
 .container {
     max-width: 950px;
     margin: auto;
@@ -63,6 +83,9 @@ h1 {
     font-size: 42px;
     margin-bottom: 10px;
     animation: fadeDown 1s ease;
+}
+body.dark h1 {
+    color: var(--dark-text);
 }
 
 /* تأثيرات */
@@ -93,10 +116,13 @@ h1 {
     display: inline-block;
     text-align: center;
     transition: .25s;
+    cursor: pointer;
 }
 
 .btn:hover, .back-btn:hover, .fav-btn:hover {
     transform: scale(1.07);
+    background-color: #6b4f3b; /* لون أغمق عند المرور */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 /* زر المفضلة */
@@ -154,9 +180,15 @@ h1 {
     text-align: center;
 }
 
+body.dark .today-box {
+    background-color: #3b3636;
+    border-color: #5a4a4a;
+}
+
 .today-title {
     font-size: 22px;
     margin-bottom: 6px;
+    color: var(--text);
 }
 
 /* صفحة القصيدة */
@@ -170,6 +202,11 @@ h1 {
     text-align: center;
 }
 
+body.dark .poem-box {
+    background-color: var(--dark-card);
+    border-color: var(--border);
+}
+
 /* الأبيات — مسافة أكبر ومحاذاة وسط */
 .bayt {
     margin-bottom: 40px;        /* مسافة كبيرة بين الأبيات */
@@ -181,6 +218,7 @@ h1 {
     font-size: 26px;
     line-height: 2.9;           /* ارتفاع كبير للسطور */
     margin: 12px 0;             /* مسافة بين الشطرين */
+    color: inherit;
 }
 
 /* الختم */
@@ -189,6 +227,7 @@ h1 {
     font-size: 18px;
     opacity: .7;
     margin-top: 25px;
+    color: var(--text);
 }
 
 /* سحابة الكلمات */
@@ -206,4 +245,12 @@ h1 {
 
 .word-cloud span:hover {
     transform:scale(1.3);
+}
+
+/* استجابة الشاشة الصغيرة */
+@media (max-width: 600px) {
+    .today-box {
+        width: 95%;
+        padding: 16px;
+    }
 }
