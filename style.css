@@ -1,42 +1,88 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ديوان حمد الغافري</title>
-  <link rel="stylesheet" href="style.css" />
-  <script>
-    // تفعيل الوضع الداكن من التخزين المحلي مباشرة
-    if (localStorage.getItem("darkMode") === "on") {
-      document.documentElement.classList.add("dark");
-    }
-  </script>
-</head>
-<body>
-  <div class="container fade-up">
+// تفعيل الوضع الليلي من التخزين المحلي وتنفيذ التبديل عبر الزر
+document.addEventListener("DOMContentLoaded", () => {
+  const toggleBtn = document.getElementById("toggle-dark-mode");
+  toggleBtn.addEventListener("click", () => {
+    document.documentElement.classList.toggle("dark");
+    const isDark = document.documentElement.classList.contains("dark");
+    localStorage.setItem("darkMode", isDark ? "on" : "off");
+  });
+});
 
-    <button id="toggle-dark-mode" class="btn" style="position: absolute; top: 20px; left: 20px;">تبديل الوضع الليلي</button>
+// مصفوفات لتخزين القصائد والأبيات
+let poemList = [];
+let allLines = [];
 
-    <div class="decor">ـــ༻❁༺ـــ</div>
-    <h1 id="title">ديوان حمد الغافري</h1>
-    <div class="decor">ـــ༻❁༺ـــ</div>
+// تحميل القصائد وتشغيل العرض
+async function loadPoems() {
+  try {
+    const txt = await fetch("poems.txt?update=" + Date.now()).then(res => res.text());
+    const poems = txt.split("===\n").map(p => p.trim()).filter(p => p);
+    poemList = poems.map((p, i) => {
+      const lines = p.split("\n");
+      return {
+        id: i,
+        title: lines[0] || "",
+        category: lines[1] ? lines[1].replace("@", "").trim() : "",
+        lines: lines.slice(2)
+      };
+    });
+    displayPoemList(poemList);
+    extractBayt(poems);
+  } catch (err) {
+    console.error("خطأ في تحميل القصائد:", err);
+  }
+}
 
-    <div style="text-align:center; margin-bottom: 20px;">
-      <a class="btn" onclick="randomPoem()">قصيدة عشوائية</a>
-      <a class="btn" href="about.html">عن الشاعر</a>
-    </div>
+// عرض قائمة القصائد
+function displayPoemList(arr) {
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+  arr.forEach(p => {
+    const a = document.createElement("a");
+    a.className = "poem-card fade";
+    a.href = `viewer.html?id=${p.id}`;
+    a.textContent = p.title || "بدون عنوان";
+    list.appendChild(a);
+  });
+}
 
-    <input id="search" type="text" placeholder="ابحث عن قصيدة..." oninput="runSearch()" />
+// البحث داخل العنوان، التصنيف، والنص الكامل
+function runSearch() {
+  const term = document.getElementById("search").value.trim().toLowerCase();
+  if (!term) {
+    displayPoemList(poemList);
+    return;
+  }
+  const filtered = poemList.filter(p => {
+    const titleMatch = p.title.toLowerCase().includes(term);
+    const categoryMatch = p.category.toLowerCase().includes(term);
+    const linesMatch = p.lines.some(line => line.toLowerCase().includes(term));
+    return titleMatch || categoryMatch || linesMatch;
+  });
+  displayPoemList(filtered);
+}
 
-    <div class="today-box fade-up">
-      <div class="today-title">بيت اليوم</div>
-      <div id="todayContent"></div>
-    </div>
+// اختيار قصيدة عشوائية
+function randomPoem() {
+  if (poemList.length === 0) return;
+  const id = Math.floor(Math.random() * poemList.length);
+  window.location.href = `viewer.html?id=${id}`;
+}
 
-    <div id="list"></div>
+// استخراج بيت اليوم
+function extractBayt(poems) {
+  allLines = [];
+  poems.forEach(poem => {
+    const lines = poem.split("\n").slice(2).filter(l => l.trim() !== "");
+    allLines.push(...lines);
+  });
+  if (allLines.length === 0) return;
+  const today = new Date().getDate();
+  const index = today % allLines.length;
+  const l1 = allLines[index] || "";
+  const l2 = allLines[(index + 1) % allLines.length] || "";
+  document.getElementById("todayContent").innerHTML = `${l1}<br>${l2}`;
+}
 
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+// بدء التنفيذ
+loadPoems();
