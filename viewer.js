@@ -1,11 +1,7 @@
 function updateDarkModeIcon() {
   const iconEl = document.getElementById("dark-mode-icon");
   if (!iconEl) return;
-  if (document.documentElement.classList.contains("dark")) {
-    iconEl.textContent = "☀️";
-  } else {
-    iconEl.textContent = "🌙";
-  }
+  iconEl.textContent = document.documentElement.classList.contains("dark") ? '☀️' : '🌙';
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -13,12 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
       document.documentElement.classList.toggle("dark");
-      const isDark = document.documentElement.classList.contains("dark");
-      localStorage.setItem("darkMode", isDark ? "on" : "off");
+      localStorage.setItem('darkMode', document.documentElement.classList.contains('dark') ? 'on' : 'off');
       updateDarkModeIcon();
     });
   }
-
   updateDarkModeIcon();
   loadPoem();
 });
