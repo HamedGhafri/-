@@ -5,6 +5,41 @@
     <meta charset="UTF-8">
     <title>عن الشاعر</title>
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .about-box {
+            background: #faf5ef;
+            border: 1px solid #e0d4c8;
+            border-radius: 18px;
+            padding: 30px;
+            max-width: 750px;
+            margin: 25px auto;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+            animation: fadeIn 0.9s forwards;
+        }
+        body.dark .about-box {
+            background: #251f1f;
+            border-color: #3a3333;
+        }
+
+        .about-title {
+            font-size: 30px;
+            text-align: center;
+            margin-bottom: 15px;
+            animation: fadeDown 0.7s forwards;
+        }
+
+        .about-text {
+            font-size: 20px;
+            line-height: 2.2;
+            text-align: center;
+        }
+
+        .back-btn {
+            text-align:center;
+            margin-top:20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -13,29 +48,29 @@
 
 <div class="container">
 
-    <h1>عن الشاعر</h1>
+    <div class="about-box fade">
+        <div class="about-title">عن الشاعر</div>
 
-    <p style="text-align:center; font-size:22px; line-height:2.2;">
-        هنا يمكنك كتابة نبذة قصيرة عن الشاعر.<br>
-        يمكنك إضافة سيرتك الذاتية، بداياتك في الشعر، وأسلوبك، والمواضيع التي تكتب فيها.<br><br>
-        الموقع مصمم لعرض ديوانك بطريقة جميلة وسهلة، مع فهرس القصائد وبيت اليوم ووضع ليلي.
-    </p>
+        <p class="about-text">
+            حمد الغافري، شاعر يهتم بتجسيد الجمال في اللغة وإحياء روح القصيدة العربية الأصيلة.<br>
+            يجمع في كتاباته بين العاطفة والخيال، وبين الموسيقى والمعنى، ليقدّم شعراً نابضًا بالحياة.<br><br>
 
-    <div style="text-align:center; margin-top:25px;">
-        <a href="index.html" class="btn">رجوع</a>
+            هذا الموقع صُمّم ليكون ديوانه الرقمي الذي يضم قصائده، وبيت اليوم، وفهرسًا أنيقًا لكل أعماله.
+        </p>
+
+        <div class="back-btn">
+            <a class="btn" href="index.html">رجوع</a>
+        </div>
     </div>
 
 </div>
 
 <script>
-/* الوضع الليلي */
-function toggleMode() {
+function toggleMode(){
     document.body.classList.toggle("dark");
     localStorage.setItem("darkMode", document.body.classList.contains("dark"));
 }
-if (localStorage.getItem("darkMode") === "true") {
-    document.body.classList.add("dark");
-}
+if(localStorage.getItem("darkMode")==="true") document.body.classList.add("dark");
 </script>
 
 </body>
