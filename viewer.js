@@ -1,11 +1,11 @@
-// تفعيل الوضع الليلي من التخزين المحلي فورًا
+// تفعيل الوضع الليلي من التخزين المحلي
 (function() {
   if (localStorage.getItem("darkMode") === "on") {
     document.documentElement.classList.add("dark");
   }
 })();
 
-// مستمع لزر الوضع الليلي في صفحة العرض
+// تفعيل زر الوضع الليلي عند وجوده
 document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("toggle-dark-mode");
   if (toggleBtn) {
@@ -15,12 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("darkMode", isDark ? "on" : "off");
     });
   }
+  loadPoem();
 });
 
+// تحميل القصيدة بناءً على التنسيق الذي وضحته
 async function loadPoem() {
   try {
     const res = await fetch("poems.txt?update=" + Date.now());
     const text = await res.text();
+    // تقسيم النص إلى قصائد بناءً على "===\n"
     const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
 
     const params = new URLSearchParams(window.location.search);
@@ -32,29 +35,41 @@ async function loadPoem() {
     }
 
     const poemData = poems[id].split("\n");
-    const title = poemData[0] || "";
-    const category = poemData[1] ? poemData[1].replace("@", "").trim() : "";
+    const title = poemData[0].trim();
+    let category = "";
+    if (poemData[1] && poemData[1].startsWith("@")) {
+      category = poemData[1].substring(1).trim();
+    }
 
     // عرض العنوان والتصنيف
     document.getElementById("title").textContent = title;
     const categoryEl = document.getElementById("category");
-    if (categoryEl) {
-      categoryEl.textContent = category ? `📌 ${category}` : "";
+    categoryEl.textContent = category ? `📌 ${category}` : "";
+
+    // الأبيات: تبدأ من السطر 2 بعد التصنيف
+    // تنسيقات: بعد السطرين بيت، قد يكون سطر فارغ، ثم بيت آخر...
+    const lines = [];
+    for (let i = 2; i < poemData.length; i++) {
+      const line = poemData[i].trim();
+      if (line === "") continue;
+      lines.push(line);
     }
 
-    // جمع الأبيات
-    const lines = poemData.slice(2).filter(line => line.trim() !== "");
+    // عرض الأبيات ضمن عناصر div
     const poemEl = document.getElementById("poem");
-    if (poemEl) {
-      let html = "";
-      lines.forEach((line, idx) => {
-        html += `<div class="bayt fade-up" style="animation-delay:${idx * 0.1}s">${line}</div>`;
-      });
-      poemEl.innerHTML = html;
+    let html = "";
+    for (let i = 0; i < lines.length; i += 2) {
+      const l1 = lines[i] || "";
+      const l2 = lines[i + 1] || "";
+      html += `
+        <div class="bayt fade-up" style="animation-delay:${(i/2) * 0.2}s">
+          <div>${l1}</div>
+          <div>${l2}</div>
+        </div>`;
     }
+
+    poemEl.innerHTML = html;
   } catch (error) {
-    console.error("حدث خطأ أثناء تحميل القصيدة:", error);
+    console.error("خطأ في تحميل القصيدة:", error);
   }
 }
-
-loadPoem();
