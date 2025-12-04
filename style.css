@@ -254,3 +254,30 @@ body.dark .poem-box {
         padding: 16px;
     }
 }
+/* إضافة دعم وضع الداكن */
+body.dark {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+}
+body.dark .decor {
+    color: var(--accent-light);
+}
+body.dark h1 {
+    color: var(--dark-text);
+}
+body.dark .poem-card {
+    background-color: var(--dark-card);
+    border-color: var(--border);
+}
+body.dark .today-box {
+    background-color: #3b3636;
+    border-color: #5a4a4a;
+}
+body.dark .today-title,
+body.dark #title,
+body.dark .stamp,
+body.dark .btn,
+body.dark .back-btn,
+body.dark .fav-btn {
+    color: var(--dark-text);
+}
