@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <title>عرض القصيدة</title>
@@ -10,12 +11,12 @@
 
 <button id="modeToggle" onclick="toggleMode()">🌓</button>
 
-<div class="container">
+<div class="container fade">
 
     <h1 id="title"></h1>
 
     <div style="text-align:center; margin-bottom:20px;">
-        <a class="btn" href="index.html">رجوع</a>
+        <a class="btn" href="index.html">عودة</a>
     </div>
 
     <pre id="content"></pre>
@@ -23,27 +24,22 @@
 </div>
 
 <script>
-/* الوضع الليلي */
-function toggleMode() {
+function toggleMode(){
     document.body.classList.toggle("dark");
     localStorage.setItem("darkMode", document.body.classList.contains("dark"));
 }
-if (localStorage.getItem("darkMode") === "true")
-    document.body.classList.add("dark");
+if(localStorage.getItem("darkMode")==="true") document.body.classList.add("dark");
 
-/* تحميل القصيدة */
-async function loadPoem() {
-    const res = await fetch("poems.txt");
-    const text = await res.text();
+async function loadPoem(){
+    const t = await (await fetch("poems.txt")).text();
+    const poems = t.split("===\n").map(p=>p.trim()).filter(p=>p);
 
-    const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
-    const id = new URLSearchParams(window.location.search).get("id");
-    const lines = poems[id].split("\n").filter(x => x.trim());
+    const id = new URLSearchParams(location.search).get("id");
+    const lines = poems[id].split("\n").filter(x=>x.trim());
 
-    document.getElementById("title").textContent = lines[0];
-    document.getElementById("content").textContent = lines.slice(2).join("\n");
+    title.textContent = lines[0];
+    content.textContent = lines.slice(2).join("\n");
 }
-
 loadPoem();
 </script>
 
