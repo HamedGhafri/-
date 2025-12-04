@@ -30,17 +30,16 @@ async function loadPoems() {
     });
 
     displayPoemList(poemList);
-    extractBayt(allLinesFromPoems(poems));
+    extractBayt(allLinesFromPoems(poemList));
   } catch (e) {
     console.error("خطأ في تحميل القصائد:", e);
   }
 }
 
-function allLinesFromPoems(poems) {
+function allLinesFromPoems(plist) {
   const arr = [];
-  poems.forEach(p => {
-    const linesAll = p.split("\n").slice(2).filter(l => l.trim() !== "");
-    arr.push(...linesAll);
+  plist.forEach(p => {
+    arr.push(...p.lines);
   });
   return arr;
 }
@@ -77,8 +76,8 @@ function randomPoem() {
   window.location.href = `viewer.html?id=${id}`;
 }
 
-function extractBayt(allLinesArr) {
-  allLines = allLinesArr;
+function extractBayt(linesArr) {
+  allLines = linesArr;
   if (allLines.length === 0) return;
   const today = new Date().getDate();
   const idx = today % allLines.length;
