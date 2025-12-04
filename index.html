@@ -6,7 +6,7 @@
   <title>ديوان حمد الغافري</title>
   <link rel="stylesheet" href="style.css">
   <script>
-    // تفعيل الوضع الليلي إن كان مخزنًا مسبقًا
+    // تفعيل الوضع الليلي عند التحميل إن كان مخزنًا
     if (localStorage.getItem("darkMode") === "on") {
       document.documentElement.classList.add("dark");
     }
@@ -14,7 +14,9 @@
 </head>
 <body>
   <div class="container fade-up">
-    <button id="toggle-dark-mode" class="btn toggle-btn">تبديل الوضع الليلي</button>
+    <button id="toggle-dark-mode" class="btn toggle-btn">
+      <span id="dark-mode-icon">🌙</span>
+    </button>
 
     <div class="decor">ـــ༻❁༺ـــ</div>
     <h1 id="main-title">ديوان حمد الغافري</h1>
