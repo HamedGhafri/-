@@ -31,7 +31,6 @@ html.dark, body.dark {
   color: var(--dark-text);
 }
 
-/* عناصر الوضع الليلي */
 html.dark .decor, body.dark .decor {
   color: var(--accent-light);
 }
@@ -124,8 +123,8 @@ h1 {
 #search {
   width: 100%;
   padding: 14px;
-  border-radius: 12px;
   border: 1px solid var(--border);
+  border-radius: 12px;
   font-size: 18px;
   margin: 18px 0;
 }
@@ -135,7 +134,7 @@ h1 {
   display: grid;
   gap: 18px;
   justify-content: center;
-  grid-template-columns: repeat(auto-fill, minmax(230px,1fr));
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 }
 
 .poem-card {
