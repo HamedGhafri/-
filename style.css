@@ -1,222 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
-
-/* الألوان */
-:root {
-    --bg: #f8f4ef;
-    --text: #332b2b;
-    --card: #ffffff;
-    --border: #e4d7c7;
-
-    --dark-bg: #1a1616;
-    --dark-text: #f2e9df;
-    --dark-card: #2b2525;
-
-    --accent: #8b6e53;
-    --accent-light: #c7b199;
-}
-
-/* منع النسخ والتحديد */
-* {
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-/* العامة */
-body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Amiri", serif;
-    transition: .3s;
-    overflow-x: hidden;
-    text-align: center;
-}
-
-/* وضع داكن */
-body.dark {
-    background: var(--dark-bg);
-    color: var(--dark-text);
-}
-
-/* دعم الوضع الداكن للعناصر */
-body.dark .decor {
-    color: var(--accent-light);
-}
-body.dark h1 {
-    color: var(--dark-text);
-}
-body.dark .poem-card {
-    background-color: var(--dark-card);
-    border-color: var(--border);
-}
-body.dark .today-box {
-    background-color: #3b3636;
-    border-color: #5a4a4a;
-}
-body.dark .today-title,
-body.dark #title,
-body.dark .stamp,
-body.dark .btn,
-body.dark .back-btn,
-body.dark .fav-btn {
-    color: var(--dark-text);
-}
-
-/* الحاوية */
-.container {
-    max-width: 950px;
-    margin: auto;
-    padding: 26px;
-    text-align: center;
-}
-
-/* الزخارف المخطوطة */
-.decor {
-    text-align: center;
-    font-size: 32px;
-    opacity: .7;
-    margin: 10px 0 20px;
-    color: var(--accent);
-}
-
-/* العنوان */
-h1 {
-    text-align: center;
-    font-size: 42px;
-    margin-bottom: 10px;
-    animation: fadeDown 1s ease;
-}
-
-/* تأثيرات */
-.fade-up {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp .8s forwards;
-}
-
-@keyframes fadeUp {
-    to { opacity:1; transform: translateY(0); }
-}
-
-@keyframes fadeDown {
-    from {opacity:0; transform: translateY(-15px);}
-    to {opacity:1; transform: translateY(0);}
-}
-
-/* الأزرار */
-.btn, .back-btn, .fav-btn {
-    padding: 10px 22px;
-    background: var(--accent);
-    color: #fff;
-    border-radius: 10px;
-    font-size: 18px;
-    text-decoration: none;
-    margin: 6px;
-    display: inline-block;
-    text-align: center;
-    transition: .25s;
-    cursor: pointer;
-}
-
-.btn:hover, .back-btn:hover, .fav-btn:hover {
-    transform: scale(1.07);
-    background-color: #6b4f3b;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-/* البحث */
-#search {
-    width: 100%;
-    padding: 14px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    font-size: 18px;
-    margin: 18px 0;
-    text-align: center;
-}
-
-/* الفهرس */
-#list {
-    margin-top: 25px;
-    display: grid;
-    gap: 18px;
-    justify-content: center;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-}
-
-.poem-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px;
-    font-size: 20px;
-    text-decoration: none;
-    color: var(--text);
-    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-    transition: .3s;
-    text-align: center;
-}
-
-.poem-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.18);
-}
-
-/* بيت اليوم */
-.today-box {
-    padding: 22px;
-    background: #efe6dd;
-    border-radius: 14px;
-    border: 1px solid #dacbbd;
-    margin: 25px auto;
-    width: 80%;
-    text-align: center;
-}
-
-.today-title {
-    font-size: 22px;
-    margin-bottom: 6px;
-    color: var(--text);
-}
-
-/* صفحة القصيدة */
-.poem-box {
-    background: var(--card);
-    padding: 28px;
-    margin: 28px auto;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-/* الأبيات — مسافة أكبر ومحاذاة وسط */
-.bayt {
-    margin-bottom: 40px;
-    padding-bottom: 22px;
-    border-bottom: 1px dashed #c3b4a7;
-}
-
-.bayt div {
-    font-size: 26px;
-    line-height: 2.9;
-    margin: 12px 0;
-    color: inherit;
-}
-
-/* الختم */
-.stamp {
-    text-align: center;
-    font-size: 18px;
-    opacity: .7;
-    margin-top: 25px;
-}
-
-/* استجابة الشاشة الصغيرة */
-@media (max-width: 600px) {
-    .today-box {
-        width: 95%;
-        padding: 16px;
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ديوان حمد الغافري</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    // تفعيل الوضع الداكن من التخزين المحلي مباشرة
+    if (localStorage.getItem("darkMode") === "on") {
+      document.documentElement.classList.add("dark");
     }
-}
+  </script>
+</head>
+<body>
+  <div class="container fade-up">
+
+    <button id="toggle-dark-mode" class="btn" style="position: absolute; top: 20px; left: 20px;">تبديل الوضع الليلي</button>
+
+    <div class="decor">ـــ༻❁༺ـــ</div>
+    <h1 id="title">ديوان حمد الغافري</h1>
+    <div class="decor">ـــ༻❁༺ـــ</div>
+
+    <div style="text-align:center; margin-bottom: 20px;">
+      <a class="btn" onclick="randomPoem()">قصيدة عشوائية</a>
+      <a class="btn" href="about.html">عن الشاعر</a>
+    </div>
+
+    <input id="search" type="text" placeholder="ابحث عن قصيدة..." oninput="runSearch()" />
+
+    <div class="today-box fade-up">
+      <div class="today-title">بيت اليوم</div>
+      <div id="todayContent"></div>
+    </div>
+
+    <div id="list"></div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
