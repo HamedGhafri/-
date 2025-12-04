@@ -246,3 +246,63 @@ h1 {
   width: auto;
   height: auto;
 }
+/* إضافات / تحسينات على الـ CSS الحالي */
+:root {
+  --focus-color: #ffcc00;
+  --modal-backdrop: rgba(0,0,0,0.6);
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  padding: .5rem .75rem;
+  background: #000;
+  color: #fff;
+  z-index: 9999;
+}
+
+/* Focus styles */
+:focus {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+/* Minor UI for poem cards and loading */
+.loading { padding: 1rem; color: #666; }
+.poem-card { margin: .6rem 0; padding: .6rem; border-radius: 6px; background: rgba(0,0,0,0.03); }
+.poem-card:focus { box-shadow: 0 0 0 3px rgba(255,204,0,0.15); }
+
+/* Modal styles */
+.poem-modal .modal-backdrop {
+  position: fixed; inset: 0; background: var(--modal-backdrop); z-index: 9998;
+}
+.poem-modal .modal-dialog {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  background: #fff; max-width: 90vw; max-height: 80vh;
+  overflow: auto; padding: 1rem 1rem 1.5rem;
+  border-radius: 8px; z-index: 9999;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  direction: rtl;
+}
+.poem-modal .modal-body pre { white-space: pre-wrap; word-wrap: break-word; font-family: inherit; }
+.poem-modal .modal-close {
+  position: absolute; top: .4rem; left: .4rem; background: transparent; border: 0; font-size: 1.4rem; cursor: pointer;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
