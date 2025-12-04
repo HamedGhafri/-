@@ -200,14 +200,14 @@ h1 {
 }
 
 .bayt {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding-bottom: 0;
   /* الفواصل أُزيلت */
 }
 
 .bayt div {
   font-size: 26px;
-  line-height: 2.9;
+  line-height: 2.5;
   margin: 12px 0;
   color: inherit;
 }
