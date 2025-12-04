@@ -9,25 +9,18 @@
 
 <body>
 
-<button id="modeToggle" onclick="toggleMode()">🌓</button>
-
-<div class="container fade">
+<div class="container fade-up">
 
     <h1>ديوان حمد الغافري</h1>
 
-    <div style="text-align:center; margin-bottom:10px;">
+    <div style="text-align:center;">
         <a class="btn" onclick="randomPoem()">قصيدة عشوائية</a>
         <a class="btn" href="about.html">عن الشاعر</a>
     </div>
 
-    <input 
-        id="search"
-        type="text" 
-        placeholder="ابحث عن قصيدة..."
-        oninput="filterPoems()"
-    >
+    <input id="search" type="text" placeholder="ابحث عن قصيدة..." oninput="filterPoems()">
 
-    <div class="today-box fade">
+    <div class="today-box fade-up">
         <div class="today-title">بيت اليوم</div>
         <div id="todayContent"></div>
     </div>
@@ -39,11 +32,7 @@
 <script>
 let poemList = [], allLines = [];
 
-function toggleMode(){
-    document.body.classList.toggle("dark");
-    localStorage.setItem("darkMode", document.body.classList.contains("dark"));
-}
-if(localStorage.getItem("darkMode")==="true") document.body.classList.add("dark");
+document.addEventListener("contextmenu", e => e.preventDefault());
 
 async function loadPoems(){
     const txt = await (await fetch("poems.txt")).text();
@@ -51,13 +40,14 @@ async function loadPoems(){
 
     poemList = poems.map((p,i)=>({
         id:i,
-        title: p.split("\n")[0].trim()
+        title:p.split("\n")[0].trim()
     }));
 
     display(poemList);
 
     poems.forEach(p=>{
-        allLines.push(...p.split("\n").slice(2));
+        const lines = p.split("\n").slice(2).filter(l=>l.trim()!="");
+        allLines.push(...lines);
     });
 
     showBayt();
@@ -67,25 +57,36 @@ function display(arr){
     list.innerHTML = "";
     arr.forEach(p=>{
         list.innerHTML += `
-        <a class="poem-card" href="viewer.html?id=${p.id}">
+        <a class="poem-card fade-up" href="viewer.html?id=${p.id}">
             ${p.title}
         </a>`;
     });
 }
 
-function filterPoems(){
+function filterPoems() {
     const t = search.value.trim();
     display(poemList.filter(p=>p.title.includes(t)));
 }
 
-function randomPoem(){
+function randomPoem() {
     location.href = "viewer.html?id=" + Math.floor(Math.random()*poemList.length);
 }
 
 function showBayt(){
     const today = new Date().getDate();
-    const i = today % allLines.length;
-    todayContent.innerHTML = allLines[i] + "<br>" + (allLines[i+1] || "");
+    let index = today % allLines.length;
+
+    const line1 = allLines[index] || "";
+
+    let line2 = "";
+    for (let i = index+1; i < allLines.length; i++){
+        if (allLines[i].trim() !== ""){
+            line2 = allLines[i];
+            break;
+        }
+    }
+
+    todayContent.innerHTML = `${line1}<br>${line2}`;
 }
 
 loadPoems();
