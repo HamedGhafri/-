@@ -11,7 +11,11 @@
 
 <div class="container fade-up">
 
+    <div class="decor">ـــ༻❁༺ـــ</div>
     <h1 id="title"></h1>
+    <div class="decor">ـــ༻❁༺ـــ</div>
+
+    <button class="fav-btn" onclick="addFav()">♡ أضف إلى المفضلة</button>
 
     <div id="poem" class="poem-box"></div>
 
@@ -24,31 +28,42 @@
 <script>
 document.addEventListener("contextmenu", e => e.preventDefault());
 
+let currentID = null;
+
 async function loadPoem(){
     const txt = await (await fetch("poems.txt")).text();
     const poems = txt.split("===\n").map(p=>p.trim()).filter(p=>p);
 
-    const id = new URLSearchParams(location.search).get("id");
-    const lines = poems[id].split("\n");
+    currentID = new URLSearchParams(location.search).get("id");
+    const lines = poems[currentID].split("\n");
 
-    document.getElementById("title").textContent = lines[0];
+    title.textContent = lines[0];
 
     const poetic = lines.slice(2).filter(l=>l.trim()!="");
 
     let html = "";
-    for (let i=0; i<poetic.length; i+=2){
+    for(let i=0;i<poetic.length;i+=2){
         let l1 = poetic[i] || "";
         let l2 = poetic[i+1] || "";
 
         html += `
-            <div class="bayt fade-up" style="animation-delay:${i*0.1}s">
+            <div class="bayt fade-up" style="animation-delay:${i*0.12}s">
                 <div>${l1}</div>
                 <div>${l2}</div>
-            </div>
-        `;
+            </div>`;
     }
 
-    document.getElementById("poem").innerHTML = html;
+    poem.innerHTML = html;
+}
+
+function addFav(){
+    let favs = JSON.parse(localStorage.getItem("fav-poems") || "[]");
+
+    if(!favs.includes(currentID)){
+        favs.push(currentID);
+        localStorage.setItem("fav-poems",JSON.stringify(favs));
+        alert("تمت الإضافة إلى المفضلة!");
+    }
 }
 
 loadPoem();
