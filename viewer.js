@@ -1,3 +1,13 @@
+function updateDarkModeIcon() {
+  const iconEl = document.getElementById("dark-mode-icon");
+  if (!iconEl) return;
+  if (document.documentElement.classList.contains("dark")) {
+    iconEl.textContent = "☀️";
+  } else {
+    iconEl.textContent = "🌙";
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("toggle-dark-mode");
   if (toggleBtn) {
@@ -5,9 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
       document.documentElement.classList.toggle("dark");
       const isDark = document.documentElement.classList.contains("dark");
       localStorage.setItem("darkMode", isDark ? "on" : "off");
+      updateDarkModeIcon();
     });
   }
 
+  updateDarkModeIcon();
   loadPoem();
 });
 
