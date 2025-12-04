@@ -1,11 +1,11 @@
-// تفعيل الوضع الليلي من التخزين المحلي عند التحميل
+// تفعيل الوضع الليلي من التخزين المحلي فورًا
 (function() {
   if (localStorage.getItem("darkMode") === "on") {
     document.documentElement.classList.add("dark");
   }
 })();
 
-// إضافة مستمع للنقر على زر التبديل، إذا كان موجودًا
+// مستمع لزر الوضع الليلي في صفحة العرض
 document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("toggle-dark-mode");
   if (toggleBtn) {
@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// تحميل القصيدة وعرضها
 async function loadPoem() {
   try {
     const res = await fetch("poems.txt?update=" + Date.now());
@@ -27,35 +26,34 @@ async function loadPoem() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
-    if (id === null || id >= poems.length || isNaN(id)) {
+    if (id === null || isNaN(id) || id < 0 || id >= poems.length) {
       document.getElementById("title").textContent = "قصيدة غير متوفّرة";
-      // إخفاء المحتوى أو عرض رسالة
-      const contentEl = document.getElementById("content");
-      if (contentEl) {
-        contentEl.innerHTML = "";
-      }
       return;
     }
 
-    const poem = poems[id].split("\n");
-    const title = poem[0] || "";
-    const category = poem[1] ? poem[1].replace("@", "").trim() : "";
+    const poemData = poems[id].split("\n");
+    const title = poemData[0] || "";
+    const category = poemData[1] ? poemData[1].replace("@", "").trim() : "";
 
+    // عرض العنوان والتصنيف
     document.getElementById("title").textContent = title;
-
     const categoryEl = document.getElementById("category");
     if (categoryEl) {
-      categoryEl.textContent = category ? ("📌 " + category) : "";
+      categoryEl.textContent = category ? `📌 ${category}` : "";
     }
 
-    const lines = poem.slice(2).filter(l => l.trim() !== "");
-    const contentEl = document.getElementById("content");
-    if (contentEl) {
-      // عرض كل سطر مع الفاصل br
-      contentEl.innerHTML = lines.map(line => `<div>${line}</div>`).join("");
+    // جمع الأبيات
+    const lines = poemData.slice(2).filter(line => line.trim() !== "");
+    const poemEl = document.getElementById("poem");
+    if (poemEl) {
+      let html = "";
+      lines.forEach((line, idx) => {
+        html += `<div class="bayt fade-up" style="animation-delay:${idx * 0.1}s">${line}</div>`;
+      });
+      poemEl.innerHTML = html;
     }
   } catch (error) {
-    console.error("خطأ في تحميل القصيدة:", error);
+    console.error("حدث خطأ أثناء تحميل القصيدة:", error);
   }
 }
 
