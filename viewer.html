@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>عرض القصيدة</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
   <script>
-    // تفعيل الوضع الليلي بناءً على التخزين المحلي
+    // تفعيل الوضع الليلي من التخزين المحلي مباشرة
     if (localStorage.getItem("darkMode") === "on") {
       document.documentElement.classList.add("dark");
     }
@@ -15,9 +15,7 @@
 <body>
   <div class="container fade-up">
 
-    <button id="toggle-dark-mode" class="btn" style="position: absolute; top: 20px; left: 20px;">
-      تبديل الوضع الليلي
-    </button>
+    <button id="toggle-dark-mode" class="btn toggle-btn">تبديل الوضع الليلي</button>
 
     <div class="decor">ـــ༻❁༺ـــ</div>
     <h1 id="title"></h1>
