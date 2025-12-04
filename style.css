@@ -1,14 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 
 :root {
-    --bg: #faf7f2;
-    --text: #3b2f2f;
+    --bg: #f7f3ee;
+    --text: #3a2f2f;
     --card: #ffffff;
-    --border: #e5ded6;
+    --border: #e5dcd1;
 
-    --dark-bg: #1a1717;
-    --dark-text: #f3ece6;
+    --dark-bg: #1d1818;
+    --dark-text: #f5eee7;
     --dark-card: #2a2525;
+}
+
+/* منع التحديد والنسخ */
+* {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 body {
@@ -27,69 +34,33 @@ body.dark {
     color: var(--dark-text);
 }
 
-body.dark .poem-card {
-    background: var(--dark-card);
-    border-color: #3a3333;
+/* تأثيرات */
+.fade-up {
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeUp 1s forwards;
 }
 
-.container {
-    max-width: 1000px;
-    margin: auto;
-    padding: 28px;
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* عنوان الموقع */
 h1 {
     text-align: center;
-    font-size: 38px;
+    font-size: 40px;
     margin-bottom: 20px;
-    opacity: 0;
-    animation: fadeDown 0.8s forwards;
+    animation: fadeUp 1s forwards;
 }
 
-/* تأثيرات */
-@keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fade {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.fade {
-    opacity: 0;
-    animation: fade 0.9s forwards;
-}
-
-/* أزرار */
-.btn {
-    padding: 12px 24px;
-    margin: 6px;
-    background: #4c3b2f;
-    color: white;
-    border-radius: 12px;
-    font-size: 18px;
-    text-decoration: none;
-    transition: 0.25s;
-}
-
-.btn:hover {
-    transform: scale(1.05);
-    opacity: .9;
-}
-
-body.dark .btn {
-    background: #6b5645;
-}
-
-/* الفهرس — النسخة الاحترافية */
+/* فهرس البطاقات */
 #list {
     display: grid;
     gap: 18px;
-    margin-top: 30px;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    margin-top: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 }
 
 .poem-card {
@@ -97,61 +68,88 @@ body.dark .btn {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 14px;
+    font-size: 21px;
     text-align: center;
-    font-size: 20px;
-    text-decoration: none;
     color: var(--text);
-    transition: 0.3s;
-    animation: fade 1s forwards;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    text-decoration: none;
+    transition: 0.25s;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+    animation: fadeUp 0.8s forwards;
 }
 
 .poem-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
 }
 
-body.dark .poem-card {
-    color: var(--dark-text);
-    box-shadow: 0 4px 14px rgba(0,0,0,0.40);
-}
-
-/* مربع بيت اليوم — الآن في المنتصف */
+/* بيت اليوم */
 .today-box {
-    padding: 22px;
-    background: #f5ede4;
-    border: 1px solid #ddd0c3;
+    padding: 24px;
+    background: #efe6dc;
+    border: 1px solid #d8ccc0;
     border-radius: 14px;
-    margin: 25px auto;
     width: 80%;
+    margin: 20px auto;
     text-align: center;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-    animation: fade 1s forwards;
-}
-
-body.dark .today-box {
-    background: #2a2323;
-    border-color: #3a3333;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
 }
 
 .today-title {
     font-size: 22px;
     font-weight: bold;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
-/* صندوق البحث */
+/* البحث */
 #search {
     width: 100%;
     padding: 14px;
-    margin-top: 18px;
     border-radius: 12px;
-    border: 1px solid #ccc;
     font-size: 18px;
+    border: 1px solid #c8b8a8;
     transition: 0.3s;
 }
 
 #search:focus {
-    border-color: #a8927c;
     transform: scale(1.02);
+    border-color: #866f5e;
+}
+
+/* زر العودة */
+.back-btn {
+    display: block;
+    width: 180px;
+    margin: 40px auto 0;
+    padding: 12px;
+    background: #4c3b2f;
+    color: #fff;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    transition: 0.25s;
+}
+
+.back-btn:hover {
+    transform: scale(1.07);
+}
+
+/* صفحة القصيدة */
+.poem-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 25px;
+    margin-top: 25px;
+    font-size: 23px;
+    line-height: 2.3;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.1);
+}
+
+/* الختم */
+.stamp {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 30px;
+    opacity: 0.7;
 }
