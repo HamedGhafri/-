@@ -213,3 +213,19 @@ h1 {
 .dark .category {
   color: var(--accent-light);
 }
+.category {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: var(--accent);
+}
+
+.dark .category {
+  color: var(--accent-light);
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+}
