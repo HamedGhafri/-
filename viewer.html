@@ -6,6 +6,7 @@
   <title>عرض القصيدة</title>
   <link rel="stylesheet" href="style.css" />
   <script>
+    // تفعيل الوضع الليلي بناءً على التخزين المحلي
     if (localStorage.getItem("darkMode") === "on") {
       document.documentElement.classList.add("dark");
     }
@@ -14,8 +15,13 @@
 <body>
   <div class="container fade-up">
 
+    <button id="toggle-dark-mode" class="btn" style="position: absolute; top: 20px; left: 20px;">
+      تبديل الوضع الليلي
+    </button>
+
     <div class="decor">ـــ༻❁༺ـــ</div>
     <h1 id="title"></h1>
+    <div id="category" class="category"></div>
     <div class="decor">ـــ༻❁༺ـــ</div>
 
     <div id="poem" class="poem-box"></div>
@@ -25,34 +31,6 @@
     <a href="index.html" class="back-btn">عودة للفهرس</a>
   </div>
 
-  <script>
-    document.addEventListener("contextmenu", e => e.preventDefault());
-
-    let currentID = null;
-
-    async function loadPoem() {
-      const txt = await fetch("poems.txt").then(res => res.text());
-      const poems = txt.split("===\n").map(p => p.trim()).filter(p => p);
-      const params = new URLSearchParams(location.search);
-      currentID = params.get("id");
-      if (currentID === null || currentID >= poems.length) {
-        document.getElementById("title").textContent = "لم يتم العثور على القصيدة";
-        return;
-      }
-      const poemData = poems[currentID].split("\n");
-      document.getElementById("title").textContent = poemData[0] || "";
-      const poetic = poemData.slice(2).filter(l => l.trim() !== "");
-      let html = "";
-      poetic.forEach((line, idx) => {
-        html += `
-          <div class="bayt fade-up" style="animation-delay:${idx * 0.1}s">
-            <div>${line}</div>
-          </div>`;
-      });
-      document.getElementById("poem").innerHTML = html;
-    }
-
-    loadPoem();
-  </script>
+  <script src="viewer.js"></script>
 </body>
 </html>
