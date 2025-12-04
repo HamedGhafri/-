@@ -11,11 +11,15 @@
 
 <div class="container fade-up">
 
+    <div class="decor">ـــ༻❁༺ـــ</div>
     <h1>ديوان حمد الغافري</h1>
+    <div class="decor">ـــ༻❁༺ـــ</div>
 
     <div style="text-align:center;">
         <a class="btn" onclick="randomPoem()">قصيدة عشوائية</a>
         <a class="btn" href="about.html">عن الشاعر</a>
+        <a class="btn" href="favorites.html">مفضلاتي</a>
+        <a class="btn" href="wordcloud.html">سحابة الكلمات</a>
     </div>
 
     <input id="search" type="text" placeholder="ابحث عن قصيدة..." oninput="filterPoems()">
@@ -32,7 +36,8 @@
 <script>
 let poemList = [], allLines = [];
 
-document.addEventListener("contextmenu", e => e.preventDefault());
+// منع النسخ
+document.addEventListener("contextmenu",e=>e.preventDefault());
 
 async function loadPoems(){
     const txt = await (await fetch("poems.txt")).text();
@@ -56,19 +61,16 @@ async function loadPoems(){
 function display(arr){
     list.innerHTML = "";
     arr.forEach(p=>{
-        list.innerHTML += `
-        <a class="poem-card fade-up" href="viewer.html?id=${p.id}">
-            ${p.title}
-        </a>`;
+        list.innerHTML += `<a class="poem-card fade-up" href="viewer.html?id=${p.id}">${p.title}</a>`;
     });
 }
 
-function filterPoems() {
+function filterPoems(){
     const t = search.value.trim();
     display(poemList.filter(p=>p.title.includes(t)));
 }
 
-function randomPoem() {
+function randomPoem(){
     location.href = "viewer.html?id=" + Math.floor(Math.random()*poemList.length);
 }
 
@@ -77,13 +79,9 @@ function showBayt(){
     let index = today % allLines.length;
 
     const line1 = allLines[index] || "";
-
     let line2 = "";
-    for (let i = index+1; i < allLines.length; i++){
-        if (allLines[i].trim() !== ""){
-            line2 = allLines[i];
-            break;
-        }
+    for(let i=index+1;i<allLines.length;i++){
+        if(allLines[i].trim()!=""){ line2 = allLines[i]; break; }
     }
 
     todayContent.innerHTML = `${line1}<br>${line2}`;
