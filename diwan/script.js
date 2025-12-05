@@ -8,17 +8,17 @@ let currentTheme = localStorage.getItem('theme') || 'light';
 /* ====================================
    DOM Content Loaded
    ==================================== */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     // Initialize theme
     initializeTheme();
-    
-    // Load poems data
-    loadPoems();
     
     // Initialize navigation
     initializeNavigation();
     
-    // Initialize event listeners
+    // Load poems data (wait for it to complete)
+    await loadPoems();
+    
+    // Initialize event listeners (after poems are loaded)
     initializeEventListeners();
     
     // Load verse of the day
@@ -559,49 +559,9 @@ if (document.readyState === 'loading') {
 }
 
 /* ====================================
-   NEW ENHANCEMENTS - Animated Counter
+   NEW ENHANCEMENTS - Enhanced Statistics with Animation
    ==================================== */
-function animateCounter(element, target, duration = 1000) {
-    const start = 0;
-    const increment = target / (duration / 16); // 60 FPS
-    let current = start;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            current = target;
-            clearInterval(timer);
-        }
-        element.textContent = Math.floor(current);
-    }, 16);
-}
-
-function initStatCounters() {
-    const statNumbers = document.querySelectorAll('.stat-number');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const target = parseInt(entry.target.getAttribute('data-target')) || 0;
-                animateCounter(entry.target, target, 1500);
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.5 });
-    
-    statNumbers.forEach(stat => {
-        observer.observe(stat);
-    });
-}
-
-// Initialize stat counters
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(initStatCounters, 500);
-    });
-} else {
-    setTimeout(initStatCounters, 500);
-}
+// Note: animateCounter is already defined above, we'll use it
 
 /* ====================================
    NEW ENHANCEMENTS - Smooth Scroll
@@ -623,29 +583,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 /* ====================================
-   NEW ENHANCEMENTS - Enhance Statistics Update
+   NEW ENHANCEMENTS - Enhanced Statistics Display
    ==================================== */
-// Override the original updateStatistics function
-const originalUpdateStatistics = window.updateStatistics;
-window.updateStatistics = function() {
-    // Call original function
-    if (typeof originalUpdateStatistics === 'function') {
-        originalUpdateStatistics();
-    }
-    
-    // Update data-target attributes for animation
-    setTimeout(() => {
-        const totalPoemsEl = document.getElementById('totalPoems');
-        const totalVersesEl = document.getElementById('totalVerses');
-        const totalCategoriesEl = document.getElementById('totalCategories');
-        const totalFavoritesEl = document.getElementById('totalFavorites');
-        
-        if (totalPoemsEl) totalPoemsEl.setAttribute('data-target', totalPoemsEl.textContent);
-        if (totalVersesEl) totalVersesEl.setAttribute('data-target', totalVersesEl.textContent);
-        if (totalCategoriesEl) totalCategoriesEl.setAttribute('data-target', totalCategoriesEl.textContent);
-        if (totalFavoritesEl) totalFavoritesEl.setAttribute('data-target', totalFavoritesEl.textContent);
-    }, 100);
-};
+// Statistics are already handled by the existing updateStatistics function above
 
 /* ====================================
    Export for use in other pages
