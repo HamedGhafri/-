@@ -1,437 +1,186 @@
-/* ====================================
-   Global Variables & Configuration
-   ==================================== */
+// script.js (Rewritten and Improved)
+
+// ==========================
+// Global Variables
+// ==========================
 let poems = [];
-let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-let currentTheme = localStorage.getItem('theme') || 'light';
+let theme = localStorage.getItem('theme') || 'light';
 
-/* ====================================
-   DOM Content Loaded
-   ==================================== */
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize theme
-    initializeTheme();
-    
-    // Load poems data
-    loadPoems();
-    
-    // Initialize navigation
-    initializeNavigation();
-    
-    // Initialize event listeners
-    initializeEventListeners();
-    
-    // Load verse of the day
-    loadVerseOfTheDay();
-    
-    // Update statistics
-    updateStatistics();
-    
-    // Load recent poems
-    loadRecentPoems();
-});
-
-/* ====================================
-   Theme Management
-   ==================================== */
+// ==========================
+// Theme Initialization
+// ==========================
 function initializeTheme() {
-    const themeToggle = document.getElementById('themeToggle');
-    
-    if (currentTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        if (themeToggle) {
-            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-    }
-    
-    if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
-    }
+    document.documentElement.setAttribute('data-theme', theme);
 }
 
 function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-    localStorage.setItem('theme', currentTheme);
-    
-    const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-        themeToggle.innerHTML = currentTheme === 'dark' 
-            ? '<i class="fas fa-sun"></i>' 
-            : '<i class="fas fa-moon"></i>';
-    }
+    theme = theme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
 }
 
-/* ====================================
-   Navigation
-   ==================================== */
+// ==========================
+// Navigation Controls
+// ==========================
 function initializeNavigation() {
-    const navToggle = document.getElementById('navToggle');
+    const menuBtn = document.getElementById('menuBtn');
     const navMenu = document.getElementById('navMenu');
-    
-    if (navToggle && navMenu) {
-        navToggle.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
-            const icon = navToggle.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
-                navMenu.classList.remove('active');
-                const icon = navToggle.querySelector('i');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        });
-    }
+
+    menuBtn?.addEventListener('click', () => {
+        navMenu.classList.toggle('open');
+    });
 }
 
-/* ====================================
-   Load Poems Data
-   ==================================== */
+// ==========================
+// Toast Messages
+// ==========================
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.classList.add('visible'), 100);
+    setTimeout(() => {
+        toast.classList.remove('visible');
+        setTimeout(() => toast.remove(), 300);
+    }, 2500);
+}
+
+// ==========================
+// Poems Parsing
+// ==========================
+function parsePoems(text) {
+    const blocks = text.split('---').map(b => b.trim()).filter(Boolean);
+
+    return blocks.map(block => {
+        const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+        const title = lines[0] || "قصيدة";
+        const content = lines.slice(1).join('\n');
+
+        return {
+            title,
+            content,
+            verses: content.split('\n')
+        };
+    });
+}
+
+// ==========================
+// Load Poems (Main Fix Added)
+// ==========================
 async function loadPoems() {
     try {
         const response = await fetch('poems.txt');
         const text = await response.text();
+
         poems = parsePoems(text);
+
+        // FIX: Update after loading
+        updateStatistics();
+        loadRecentPoems();
+
     } catch (error) {
         console.error('Error loading poems:', error);
         showToast('خطأ في تحميل القصائد');
     }
 }
 
-function parsePoems(text) {
-    const lines = text.split('\n');
-    const poemsArray = [];
-    let currentPoem = null;
-    
-    for (let line of lines) {
-        line = line.trim();
-        
-        if (line.startsWith('###')) {
-            // New poem title
-            if (currentPoem) {
-                poemsArray.push(currentPoem);
-            }
-            currentPoem = {
-                title: line.replace('###', '').trim(),
-                verses: [],
-                category: 'غير مصنف'
-            };
-        } else if (line && currentPoem) {
-            // Verse line
-            currentPoem.verses.push(line);
-        }
-    }
-    
-    if (currentPoem) {
-        poemsArray.push(currentPoem);
-    }
-    
-    return poemsArray;
-}
-
-/* ====================================
-   Event Listeners
-   ==================================== */
-function initializeEventListeners() {
-    // Refresh verse button
-    const refreshBtn = document.getElementById('refreshVerse');
-    if (refreshBtn) {
-        refreshBtn.addEventListener('click', loadVerseOfTheDay);
-    }
-    
-    // Random poem button
-    const randomPoemBtn = document.getElementById('randomPoemBtn');
-    if (randomPoemBtn) {
-        randomPoemBtn.addEventListener('click', showRandomPoem);
-    }
-}
-
-/* ====================================
-   Verse of the Day
-   ==================================== */
-function loadVerseOfTheDay() {
-    const verseCard = document.getElementById('verseCard');
-    if (!verseCard) return;
-    
-    // Show loading
-    verseCard.innerHTML = `
-        <div class="verse-content loading">
-            <div class="loader"></div>
-            <p>جارٍ التحميل...</p>
-        </div>
-    `;
-    
-    // Simulate loading delay
-    setTimeout(() => {
-        if (poems.length === 0) {
-            verseCard.innerHTML = `
-                <div class="verse-content">
-                    <p class="verse-text">لا توجد أبيات متاحة حالياً</p>
-                </div>
-            `;
-            return;
-        }
-        
-        const randomPoem = poems[Math.floor(Math.random() * poems.length)];
-        const randomVerse = randomPoem.verses[Math.floor(Math.random() * randomPoem.verses.length)];
-        
-        verseCard.innerHTML = `
-            <div class="verse-content">
-                <p class="verse-text">${randomVerse}</p>
-                <div class="verse-meta">
-                    <span class="verse-source">من قصيدة: ${randomPoem.title}</span>
-                </div>
-                <div class="verse-actions">
-                    <button onclick="copyVerse('${randomVerse.replace(/'/g, "\\'")}')">
-                        <i class="fas fa-copy"></i> نسخ
-                    </button>
-                    <button onclick="shareVerse('${randomVerse.replace(/'/g, "\\'")}', '${randomPoem.title.replace(/'/g, "\\'")}')">
-                        <i class="fas fa-share-alt"></i> مشاركة
-                    </button>
-                    <button onclick="toggleFavoriteVerse('${randomVerse.replace(/'/g, "\\'")}', '${randomPoem.title.replace(/'/g, "\\'")}')">
-                        <i class="fas fa-heart"></i> حفظ
-                    </button>
-                </div>
-            </div>
-        `;
-    }, 500);
-}
-
-/* ====================================
-   Verse Actions
-   ==================================== */
-function copyVerse(verse) {
-    navigator.clipboard.writeText(verse).then(() => {
-        showToast('تم نسخ البيت بنجاح ✓');
-    }).catch(() => {
-        showToast('فشل نسخ البيت');
-    });
-}
-
-function shareVerse(verse, poemTitle) {
-    if (navigator.share) {
-        navigator.share({
-            title: 'بيت من ديوان حمد الغافري',
-            text: `${verse}\n\nمن قصيدة: ${poemTitle}`,
-            url: window.location.href
-        }).then(() => {
-            showToast('تمت المشاركة بنجاح ✓');
-        }).catch(() => {
-            // User cancelled sharing
-        });
-    } else {
-        // Fallback: copy to clipboard
-        copyVerse(`${verse}\n\nمن قصيدة: ${poemTitle}\n${window.location.href}`);
-        showToast('تم نسخ البيت للمشاركة ✓');
-    }
-}
-
-function toggleFavoriteVerse(verse, poemTitle) {
-    const favorite = {
-        verse: verse,
-        poemTitle: poemTitle,
-        timestamp: Date.now()
-    };
-    
-    const index = favorites.findIndex(f => f.verse === verse);
-    
-    if (index > -1) {
-        favorites.splice(index, 1);
-        showToast('تم إزالة البيت من المفضلة');
-    } else {
-        favorites.push(favorite);
-        showToast('تم إضافة البيت للمفضلة ✓');
-    }
-    
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    updateStatistics();
-}
-
-/* ====================================
-   Random Poem
-   ==================================== */
-function showRandomPoem() {
-    if (poems.length === 0) {
-        showToast('لا توجد قصائد متاحة');
-        return;
-    }
-    
-    const randomPoem = poems[Math.floor(Math.random() * poems.length)];
-    const poemIndex = poems.indexOf(randomPoem);
-    
-    // Redirect to viewer with poem index
-    window.location.href = `viewer.html?poem=${poemIndex}`;
-}
-
-/* ====================================
-   Statistics
-   ==================================== */
+// ==========================
+// Statistics
+// ==========================
 function updateStatistics() {
-    const totalPoemsEl = document.getElementById('totalPoems');
-    const totalVersesEl = document.getElementById('totalVerses');
-    const totalCategoriesEl = document.getElementById('totalCategories');
-    const totalFavoritesEl = document.getElementById('totalFavorites');
-    
-    if (totalPoemsEl) {
-        animateCounter(totalPoemsEl, poems.length);
-    }
-    
-    if (totalVersesEl) {
-        const totalVerses = poems.reduce((sum, poem) => sum + poem.verses.length, 0);
-        animateCounter(totalVersesEl, totalVerses);
-    }
-    
-    if (totalCategoriesEl) {
-        const categories = new Set(poems.map(p => p.category));
-        animateCounter(totalCategoriesEl, categories.size);
-    }
-    
-    if (totalFavoritesEl) {
-        animateCounter(totalFavoritesEl, favorites.length);
-    }
+    const countEl = document.getElementById('poemsCount');
+    if (countEl) countEl.textContent = poems.length;
 }
 
-function animateCounter(element, target) {
-    let current = 0;
-    const increment = target / 50;
-    const duration = 1000; // 1 second
-    const stepTime = duration / 50;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target;
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(current);
-        }
-    }, stepTime);
-}
-
-/* ====================================
-   Recent Poems
-   ==================================== */
+// ==========================
+// Recent Poems
+// ==========================
 function loadRecentPoems() {
-    const recentPoemsGrid = document.getElementById('recentPoemsGrid');
-    if (!recentPoemsGrid) return;
-    
-    if (poems.length === 0) {
-        recentPoemsGrid.innerHTML = '<p>لا توجد قصائد متاحة</p>';
-        return;
-    }
-    
-    // Get last 6 poems
-    const recentPoems = poems.slice(-6).reverse();
-    
-    recentPoemsGrid.innerHTML = recentPoems.map((poem, index) => {
-        const preview = poem.verses.slice(0, 2).join('\n');
-        const poemIndex = poems.indexOf(poem);
-        
-        return `
-            <div class="poem-card" onclick="window.location.href='viewer.html?poem=${poemIndex}'">
-                <h3 class="poem-title">
-                    <i class="fas fa-feather-alt"></i>
-                    ${poem.title}
-                </h3>
-                <p class="poem-preview">${preview}</p>
-                <div class="poem-meta">
-                    <span class="poem-category">${poem.category}</span>
-                    <span><i class="fas fa-align-left"></i> ${poem.verses.length} بيت</span>
-                </div>
-            </div>
+    const recentContainer = document.getElementById('recentPoems');
+    if (!recentContainer) return;
+
+    recentContainer.innerHTML = '';
+
+    poems.slice(-6).reverse().forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'poem-card';
+        card.innerHTML = `
+            <h3>${p.title}</h3>
+            <p>${p.verses[0] || ''}</p>
         `;
-    }).join('');
+        card.addEventListener('click', () => openPoem(p.title));
+        recentContainer.appendChild(card);
+    });
 }
 
-/* ====================================
-   Search Functionality
-   ==================================== */
+// ==========================
+// Verse of the Day
+// ==========================
+function loadVerseOfTheDay() {
+    if (poems.length === 0) return;
+
+    const poem = poems[Math.floor(Math.random() * poems.length)];
+    const verse = poem.verses[Math.floor(Math.random() * poem.verses.length)];
+
+    const verseBox = document.getElementById('verseOfTheDay');
+    if (verseBox) verseBox.textContent = verse;
+}
+
+// ==========================
+// Open Poem Page
+// ==========================
+function openPoem(title) {
+    localStorage.setItem('selectedPoem', title);
+    window.location.href = 'poem.html';
+}
+
+// ==========================
+// Search Function
+// ==========================
 function searchPoems(query) {
-    query = query.trim().toLowerCase();
-    
-    if (!query) return poems;
-    
-    return poems.filter(poem => {
-        return poem.title.toLowerCase().includes(query) ||
-               poem.verses.some(verse => verse.toLowerCase().includes(query)) ||
-               poem.category.toLowerCase().includes(query);
-    });
+    query = query.trim();
+    const results = poems.filter(p => p.title.includes(query) || p.content.includes(query));
+    return results;
 }
 
-/* ====================================
-   Categories
-   ==================================== */
-function getCategories() {
-    const categoriesMap = new Map();
-    
-    poems.forEach(poem => {
-        const category = poem.category;
-        if (!categoriesMap.has(category)) {
-            categoriesMap.set(category, []);
-        }
-        categoriesMap.get(category).push(poem);
-    });
-    
-    return categoriesMap;
+// ==========================
+// Event Listeners Setup
+// ==========================
+function initializeEventListeners() {
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn?.addEventListener('click', toggleTheme);
+
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value;
+            const results = searchPoems(query);
+
+            searchResults.innerHTML = '';
+            results.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'search-item';
+                item.textContent = p.title;
+                item.addEventListener('click', () => openPoem(p.title));
+                searchResults.appendChild(item);
+            });
+        });
+    }
 }
 
-function getPoemsByCategory(category) {
-    return poems.filter(poem => poem.category === category);
-}
+// ==========================
+// DOM Ready
+// ==========================
 
-/* ====================================
-   Toast Notification
-   ==================================== */
-function showToast(message, duration = 3000) {
-    const toast = document.getElementById('toast');
-    const toastMessage = document.getElementById('toastMessage');
-    
-    if (!toast || !toastMessage) return;
-    
-    toastMessage.textContent = message;
-    toast.classList.add('show');
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, duration);
-}
+document.addEventListener('DOMContentLoaded', function() {
+    initializeTheme();
+    initializeNavigation();
+    initializeEventListeners();
 
-/* ====================================
-   Utility Functions
-   ==================================== */
-function formatDate(timestamp) {
-    const date = new Date(timestamp);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('ar-SA', options);
-}
-
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-/* ====================================
-   Export for use in other pages
-   ==================================== */
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        poems,
-        favorites,
-        searchPoems,
-        getCategories,
-        getPoemsByCategory,
-        showToast
-    };
-}
+    loadPoems();
+    loadVerseOfTheDay();
+});
