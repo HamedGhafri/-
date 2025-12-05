@@ -71,21 +71,6 @@
                     <i class="fas fa-arrow-right"></i> العودة للقائمة
                 </button>
                 <div class="poem-actions">
-                    <button class="action-btn" id="copyPoemBtn" title="نسخ القصيدة">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                    <button class="action-btn" id="sharePoemBtn" title="مشاركة">
-                        <i class="fas fa-share-alt"></i>
-                    </button>
-                    <button class="action-btn" id="shareImageBtn" title="مشاركة كصورة">
-                        <i class="fas fa-image"></i>
-                    </button>
-                    <button class="action-btn" id="favoritePoemBtn" title="إضافة للمفضلة">
-                        <i class="far fa-heart"></i>
-                    </button>
-                    <button class="action-btn" id="printPoemBtn" title="طباعة">
-                        <i class="fas fa-print"></i>
-                    </button>
                     <button class="action-btn" id="focusModeBtn" title="وضع القراءة المركزة">
                         <i class="fas fa-eye"></i>
                     </button>
@@ -619,16 +604,6 @@
             document.getElementById('backBtn')?.addEventListener('click', showPoemsList);
 
             // Poem actions
-            document.getElementById('copyPoemBtn')?.addEventListener('click', copyCurrentPoem);
-            document.getElementById('sharePoemBtn')?.addEventListener('click', shareCurrentPoem);
-            document.getElementById('shareImageBtn')?.addEventListener('click', () => {
-                if (currentPoemIndex < 0) return;
-                const poem = viewerPoems[currentPoemIndex];
-                const firstVerse = poem.verses[0] || '';
-                window.location.href = `share-image.html?verse=${encodeURIComponent(firstVerse)}&title=${encodeURIComponent(poem.title)}`;
-            });
-            document.getElementById('favoritePoemBtn')?.addEventListener('click', toggleFavoritePoem);
-            document.getElementById('printPoemBtn')?.addEventListener('click', () => window.print());
             document.getElementById('focusModeBtn')?.addEventListener('click', () => {
                 window.location.href = `focus.html?poem=${currentPoemIndex}`;
             });
@@ -719,67 +694,7 @@
             }
         }
 
-        function copyCurrentPoem() {
-            if (currentPoemIndex < 0) return;
-            
-            const poem = viewerPoems[currentPoemIndex];
-            const text = `${poem.title}\n\n${poem.verses.join('\n')}\n\n— ديوان حمد الغافري —`;
-            
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('تم نسخ القصيدة بنجاح ✓');
-            }).catch(() => {
-                showToast('فشل نسخ القصيدة');
-            });
-        }
 
-        function shareCurrentPoem() {
-            if (currentPoemIndex < 0) return;
-            
-            const poem = viewerPoems[currentPoemIndex];
-            const url = window.location.href;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: poem.title,
-                    text: `${poem.title} - ديوان حمد الغافري`,
-                    url: url
-                }).then(() => {
-                    showToast('تمت المشاركة بنجاح ✓');
-                }).catch(() => {});
-            } else {
-                navigator.clipboard.writeText(url).then(() => {
-                    showToast('تم نسخ الرابط للمشاركة ✓');
-                });
-            }
-        }
-
-        function toggleFavoritePoem() {
-            if (currentPoemIndex < 0) return;
-            
-            const poem = viewerPoems[currentPoemIndex];
-            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            
-            const index = favorites.findIndex(f => f.poemTitle === poem.title);
-            const btn = document.getElementById('favoritePoemBtn');
-            
-            if (index > -1) {
-                favorites.splice(index, 1);
-                btn.innerHTML = '<i class="far fa-heart"></i>';
-                btn.classList.remove('active');
-                showToast('تم إزالة القصيدة من المفضلة');
-            } else {
-                favorites.push({
-                    poemTitle: poem.title,
-                    poemIndex: currentPoemIndex,
-                    timestamp: Date.now()
-                });
-                btn.innerHTML = '<i class="fas fa-heart"></i>';
-                btn.classList.add('active');
-                showToast('تم إضافة القصيدة للمفضلة ✓');
-            }
-            
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-        }
     </script>
     
 </body>
