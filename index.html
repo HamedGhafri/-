@@ -5,69 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ديوان حمد الغافري</title>
 
-  <!-- SEO & Social -->
-  <meta name="description" content="ديوان حمد الغافري — مجموعة من قصائد الشاعر حمد الغافري. تصفّح، ابحث، واستمتع بأجمل الأبيات.">
-  <link rel="canonical" href="https://hamedghafri.github.io/-/index.html">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="ديوان حمد الغافري">
-  <meta property="og:description" content="ديوان حمد الغافري — مجموعة من قصائد الشاعر حمد الغافري.">
-  <meta property="og:url" content="https://hamedghafri.github.io/-/index.html">
-  <meta name="twitter:card" content="summary">
+  <!-- تقليل الكاش -->
+  <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="expires" content="0">
 
-  <!-- Structured Data (JSON-LD) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "ديوان حمد الغافري",
-    "url": "https://hamedghafri.github.io/-/",
-    "description": "ديوان حمد الغافري — مجموعة من قصائد الشاعر حمد الغافري."
-  }
-  </script>
-
-  <!-- Critical CSS: keep external, browser will request it; can be inlined later if needed -->
-  <link rel="stylesheet" href="style.css?v=2">
-
-  <!-- Apply dark mode early to avoid FOUC -->
+  <link rel="stylesheet" href="style.css?v=3">
   <script>
-    (function(){
-      try {
-        if (localStorage.getItem("darkMode") === "on") {
-          document.documentElement.classList.add("dark");
-        }
-      } catch(e){}
-    })();
+    // إعداد الوضع الليلي عند التحميل: تفضيل المستخدم إن وُجد، وإلا تفضيل النظام
+    const saved = localStorage.getItem("darkMode");
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (saved === "on" || (!saved && prefersDark)) {
+      document.documentElement.classList.add("dark");
+    }
   </script>
 </head>
 <body>
-  <a class="skip-link" href="#main-content">تخطي إلى المحتوى</a>
-
-  <main id="main-content" class="container fade-up" role="main" aria-labelledby="main-title">
-    <div class="top-controls">
-      <button id="toggle-dark-mode" class="btn toggle-btn" aria-label="تبديل الوضع الداكن" aria-pressed="false">🌙</button>
-    </div>
+  <div class="container fade-up">
+    <button id="toggle-dark-mode" class="btn toggle-btn" aria-label="تبديل الوضع">
+      <span id="dark-mode-icon">🌙</span>
+    </button>
 
     <div class="decor">ـــ༻❁༺ـــ</div>
     <h1 id="main-title">ديوان حمد الغافري</h1>
     <div class="decor">ـــ༻❁༺ـــ</div>
 
     <div class="btn-group">
-      <button class="btn" id="random-btn">قصيدة عشوائية</button>
+      <a class="btn" onclick="randomPoem()">قصيدة عشوائية</a>
       <a class="btn" href="about.html">عن الشاعر</a>
     </div>
 
-    <label for="search" class="visually-hidden">ابحث عن قصيدة</label>
-    <input id="search" type="search" placeholder="ابحث عن قصيدة..." aria-label="بحث عن قصيدة">
+    <input id="search" type="text" placeholder="ابحث عن قصيدة..." oninput="runSearch()">
 
-    <div class="today-box fade-up" aria-live="polite">
+    <div class="today-box fade-up">
       <div class="today-title">بيت اليوم</div>
       <div id="todayContent"></div>
     </div>
 
-    <div id="list" aria-live="polite"></div>
-  </main>
+    <div id="list"></div>
+  </div>
 
-  <!-- Deferred script: uses lazy-loading for poems and non-blocking rendering -->
-  <script src="script.js?v=2" defer></script>
+  <script src="script.js?v=3"></script>
 </body>
 </html>
