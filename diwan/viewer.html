@@ -393,12 +393,6 @@
             position: relative;
         }
 
-        .verse-card {
-            position: relative;
-            margin: var(--spacing-sm) 0;
-            padding: 0;
-        }
-
         .verse-line {
             font-size: 2rem;
             line-height: 3.2;
@@ -469,12 +463,8 @@
                 display: none;
             }
 
-            .verse-card {
-                page-break-inside: avoid;
-                margin: var(--spacing-xs) 0;
-            }
-
             .verse-line {
+                page-break-inside: avoid;
                 font-size: 1.4rem;
                 line-height: 2.8;
                 padding: var(--spacing-xs) 0;
@@ -691,9 +681,7 @@
             
             const versesContainer = document.getElementById('poemVerses');
             versesContainer.innerHTML = poem.verses.map((verse) => 
-                `<div class="verse-card">
-                    <div class="verse-line">${verse.replace(/\n/g, '<br>')}</div>
-                </div>`
+                `<p class="verse-line">${verse.replace(/\n/g, '<br>')}</p>`
             ).join('');
 
             // Update navigation buttons
