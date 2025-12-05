@@ -4,21 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>عرض القصيدة</title>
-  <!-- وسوم منع الكاش -->
+
   <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="expires" content="0">
 
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
   <script>
-    if (localStorage.getItem("darkMode") === "on") {
+    const saved = localStorage.getItem("darkMode");
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (saved === "on" || (!saved && prefersDark)) {
       document.documentElement.classList.add("dark");
     }
   </script>
 </head>
 <body>
   <div class="container fade-up">
-    <button id="toggle-dark-mode" class="btn toggle-btn">
+    <button id="toggle-dark-mode" class="btn toggle-btn" aria-label="تبديل الوضع">
       <span id="dark-mode-icon">🌙</span>
     </button>
 
@@ -31,9 +33,12 @@
 
     <div class="stamp">— ديوان حمد الغافري —</div>
 
-    <a href="index.html" class="back-btn">عودة للفهرس</a>
+    <div class="btn-group">
+      <a href="index.html" class="back-btn">عودة للفهرس</a>
+      <a href="about.html" class="btn">عن الشاعر</a>
+    </div>
   </div>
 
-  <script src="viewer.js?v=2"></script>
+  <script src="viewer.js?v=3"></script>
 </body>
 </html>
