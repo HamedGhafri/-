@@ -1,44 +1,636 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>عرض القصيدة</title>
-
-  <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="pragma" content="no-cache">
-  <meta http-equiv="expires" content="0">
-
-  <link rel="stylesheet" href="style.css?v=3">
-  <script>
-    const saved = localStorage.getItem("darkMode");
-    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    if (saved === "on" || (!saved && prefersDark)) {
-      document.documentElement.classList.add("dark");
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="عرض القصائد - ديوان حمد الغافري">
+    <title>عرض القصائد | ديوان حمد الغافري</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
-  <div class="container fade-up">
-    <button id="toggle-dark-mode" class="btn toggle-btn" aria-label="تبديل الوضع">
-      <span id="dark-mode-icon">🌙</span>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع الليلي">
+        <i class="fas fa-moon"></i>
     </button>
 
-    <div class="decor">ـــ༻❁༺ـــ</div>
-    <h1 id="title"></h1>
-    <div id="category" class="category"></div>
-    <div class="decor">ـــ༻❁༺ـــ</div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-book-open"></i>
+                <span>ديوان حمد الغافري</span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="categories.html"><i class="fas fa-layer-group"></i> التصنيفات</a></li>
+                <li><a href="search.html"><i class="fas fa-search"></i> البحث</a></li>
+                <li><a href="favorites.html"><i class="fas fa-heart"></i> المفضلة</a></li>
+                <li><a href="about.html"><i class="fas fa-user"></i> عن الشاعر</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="قائمة التنقل">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
 
-    <div id="poem" class="poem-box"></div>
+    <!-- Main Content -->
+    <main class="container main-content">
+        
+        <!-- Poems List View -->
+        <div id="poemsListView" class="poems-view">
+            <div class="section-header">
+                <h1><i class="fas fa-book"></i> جميع القصائد</h1>
+                <div class="view-controls">
+                    <button class="control-btn" id="gridViewBtn" title="عرض شبكي">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="control-btn active" id="listViewBtn" title="عرض قائمة">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
 
-    <div class="stamp">— ديوان حمد الغافري —</div>
+            <div class="poems-container" id="poemsContainer">
+                <div class="loading-container">
+                    <div class="loader"></div>
+                    <p>جارٍ تحميل القصائد...</p>
+                </div>
+            </div>
+        </div>
 
-    <div class="btn-group">
-      <a href="index.html" class="back-btn">عودة للفهرس</a>
-      <a href="about.html" class="btn">عن الشاعر</a>
+        <!-- Poem Detail View -->
+        <div id="poemDetailView" class="poem-detail-view" style="display: none;">
+            <div class="poem-header">
+                <button class="back-btn" id="backBtn">
+                    <i class="fas fa-arrow-right"></i> العودة للقائمة
+                </button>
+                <div class="poem-actions">
+                    <button class="action-btn" id="copyPoemBtn" title="نسخ القصيدة">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="action-btn" id="sharePoemBtn" title="مشاركة">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                    <button class="action-btn" id="favoritePoemBtn" title="إضافة للمفضلة">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <button class="action-btn" id="printPoemBtn" title="طباعة">
+                        <i class="fas fa-print"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="poem-content-wrapper">
+                <div class="decorative-line">ـــ༻❁༺ـــ</div>
+                <h2 class="poem-main-title" id="poemTitle"></h2>
+                <p class="poem-subtitle">— ديوان حمد الغافري —</p>
+                <div class="decorative-line">ـــ༻❁༺ـــ</div>
+
+                <div class="poem-verses-container" id="poemVerses"></div>
+
+                <div class="poem-navigation">
+                    <button class="nav-poem-btn" id="prevPoemBtn">
+                        <i class="fas fa-chevron-right"></i> القصيدة السابقة
+                    </button>
+                    <button class="nav-poem-btn" id="nextPoemBtn">
+                        القصيدة التالية <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-book-open"></i> ديوان حمد الغافري</h3>
+                    <p>منصة إلكترونية لعرض الأعمال الشعرية للشاعر حمد الغافري</p>
+                </div>
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="categories.html">التصنيفات</a></li>
+                        <li><a href="about.html">عن الشاعر</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ديوان حمد الغافري. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
     </div>
-  </div>
 
-  <script src="viewer.js?v=3"></script>
+    <style>
+        .poems-view {
+            min-height: 60vh;
+        }
+
+        .view-controls {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .control-btn {
+            background: var(--surface-color);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .control-btn:hover,
+        .control-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .poems-container {
+            margin-top: var(--spacing-lg);
+        }
+
+        .poems-container.grid-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .poems-container.list-view .poem-item {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .poem-item {
+            background: var(--surface-color);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            border-right: 4px solid var(--primary-color);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .poem-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .poem-item-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .poem-item-preview {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.1rem;
+        }
+
+        .poem-item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-family: var(--font-secondary);
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: var(--spacing-xl);
+        }
+
+        /* Poem Detail View */
+        .poem-detail-view {
+            min-height: 70vh;
+        }
+
+        .poem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-family: var(--font-secondary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            transition: all var(--transition-fast);
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .poem-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .action-btn {
+            background: var(--surface-color);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+
+        .action-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .action-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .poem-content-wrapper {
+            background: var(--surface-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .poem-main-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin: var(--spacing-md) 0;
+            font-family: var(--font-decorative);
+        }
+
+        .poem-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-lg);
+            font-family: var(--font-secondary);
+        }
+
+        .poem-verses-container {
+            margin: var(--spacing-xl) 0;
+        }
+
+        .verse-line {
+            font-size: 1.8rem;
+            line-height: 2.5;
+            color: var(--text-primary);
+            text-align: center;
+            padding: var(--spacing-sm) 0;
+            font-family: var(--font-decorative);
+            transition: all var(--transition-fast);
+            border-radius: var(--radius-sm);
+        }
+
+        .verse-line:hover {
+            background: var(--bg-color);
+            cursor: pointer;
+        }
+
+        .poem-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: 2px solid var(--border-color);
+        }
+
+        .nav-poem-btn {
+            flex: 1;
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-family: var(--font-secondary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            transition: all var(--transition-fast);
+        }
+
+        .nav-poem-btn:hover:not(:disabled) {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-poem-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        @media print {
+            .navbar, .theme-toggle, .footer, .poem-header, .poem-navigation, .action-btn {
+                display: none !important;
+            }
+
+            .poem-content-wrapper {
+                box-shadow: none;
+                padding: 0;
+            }
+
+            .verse-line {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .poem-header {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+
+            .poem-main-title {
+                font-size: 2rem;
+            }
+
+            .verse-line {
+                font-size: 1.5rem;
+                line-height: 2.2;
+            }
+
+            .poem-navigation {
+                flex-direction: column;
+            }
+        }
+    </style>
+
+    <script src="script.js"></script>
+    <script>
+        let poems = [];
+        let currentPoemIndex = -1;
+        let currentView = 'list'; // 'list' or 'grid'
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadPoems();
+            initializeViewer();
+        });
+
+        async function loadPoems() {
+            try {
+                const response = await fetch('poems.txt');
+                const text = await response.text();
+                poems = parsePoems(text);
+                
+                // Check if there's a poem parameter in URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const poemIndex = urlParams.get('poem');
+                
+                if (poemIndex !== null && poems[poemIndex]) {
+                    showPoemDetail(parseInt(poemIndex));
+                } else {
+                    showPoemsList();
+                }
+            } catch (error) {
+                console.error('Error loading poems:', error);
+                showToast('خطأ في تحميل القصائد');
+            }
+        }
+
+        function parsePoems(text) {
+            const lines = text.split('\n');
+            const poemsArray = [];
+            let currentPoem = null;
+            
+            for (let line of lines) {
+                line = line.trim();
+                
+                if (line.startsWith('###')) {
+                    if (currentPoem) {
+                        poemsArray.push(currentPoem);
+                    }
+                    currentPoem = {
+                        title: line.replace('###', '').trim(),
+                        verses: [],
+                        category: 'غير مصنف'
+                    };
+                } else if (line && currentPoem) {
+                    currentPoem.verses.push(line);
+                }
+            }
+            
+            if (currentPoem) {
+                poemsArray.push(currentPoem);
+            }
+            
+            return poemsArray;
+        }
+
+        function initializeViewer() {
+            // View controls
+            document.getElementById('gridViewBtn')?.addEventListener('click', () => {
+                currentView = 'grid';
+                document.querySelector('.poems-container').classList.remove('list-view');
+                document.querySelector('.poems-container').classList.add('grid-view');
+                document.getElementById('gridViewBtn').classList.add('active');
+                document.getElementById('listViewBtn').classList.remove('active');
+            });
+
+            document.getElementById('listViewBtn')?.addEventListener('click', () => {
+                currentView = 'list';
+                document.querySelector('.poems-container').classList.remove('grid-view');
+                document.querySelector('.poems-container').classList.add('list-view');
+                document.getElementById('listViewBtn').classList.add('active');
+                document.getElementById('gridViewBtn').classList.remove('active');
+            });
+
+            // Back button
+            document.getElementById('backBtn')?.addEventListener('click', showPoemsList);
+
+            // Poem actions
+            document.getElementById('copyPoemBtn')?.addEventListener('click', copyCurrentPoem);
+            document.getElementById('sharePoemBtn')?.addEventListener('click', shareCurrentPoem);
+            document.getElementById('favoritePoemBtn')?.addEventListener('click', toggleFavoritePoem);
+            document.getElementById('printPoemBtn')?.addEventListener('click', () => window.print());
+
+            // Navigation
+            document.getElementById('prevPoemBtn')?.addEventListener('click', showPreviousPoem);
+            document.getElementById('nextPoemBtn')?.addEventListener('click', showNextPoem);
+        }
+
+        function showPoemsList() {
+            document.getElementById('poemsListView').style.display = 'block';
+            document.getElementById('poemDetailView').style.display = 'none';
+            
+            const container = document.getElementById('poemsContainer');
+            container.className = 'poems-container list-view';
+            
+            if (poems.length === 0) {
+                container.innerHTML = '<p class="empty-state">لا توجد قصائد متاحة</p>';
+                return;
+            }
+
+            container.innerHTML = poems.map((poem, index) => {
+                const preview = poem.verses.slice(0, 2).join('<br>');
+                return `
+                    <div class="poem-item" onclick="showPoemDetail(${index})">
+                        <h3 class="poem-item-title">
+                            <i class="fas fa-feather-alt"></i>
+                            ${poem.title}
+                        </h3>
+                        <p class="poem-item-preview">${preview}</p>
+                        <div class="poem-item-meta">
+                            <span class="poem-category">${poem.category}</span>
+                            <span><i class="fas fa-align-left"></i> ${poem.verses.length} بيت</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Update URL
+            window.history.pushState({}, '', 'viewer.html');
+        }
+
+        function showPoemDetail(index) {
+            if (index < 0 || index >= poems.length) return;
+
+            currentPoemIndex = index;
+            const poem = poems[index];
+
+            document.getElementById('poemsListView').style.display = 'none';
+            document.getElementById('poemDetailView').style.display = 'block';
+
+            document.getElementById('poemTitle').textContent = poem.title;
+            
+            const versesContainer = document.getElementById('poemVerses');
+            versesContainer.innerHTML = poem.verses.map(verse => 
+                `<p class="verse-line">${verse}</p>`
+            ).join('');
+
+            // Update navigation buttons
+            document.getElementById('prevPoemBtn').disabled = index === 0;
+            document.getElementById('nextPoemBtn').disabled = index === poems.length - 1;
+
+            // Update URL
+            window.history.pushState({}, '', `viewer.html?poem=${index}`);
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function showPreviousPoem() {
+            if (currentPoemIndex > 0) {
+                showPoemDetail(currentPoemIndex - 1);
+            }
+        }
+
+        function showNextPoem() {
+            if (currentPoemIndex < poems.length - 1) {
+                showPoemDetail(currentPoemIndex + 1);
+            }
+        }
+
+        function copyCurrentPoem() {
+            if (currentPoemIndex < 0) return;
+            
+            const poem = poems[currentPoemIndex];
+            const text = `${poem.title}\n\n${poem.verses.join('\n')}\n\n— ديوان حمد الغافري —`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('تم نسخ القصيدة بنجاح ✓');
+            }).catch(() => {
+                showToast('فشل نسخ القصيدة');
+            });
+        }
+
+        function shareCurrentPoem() {
+            if (currentPoemIndex < 0) return;
+            
+            const poem = poems[currentPoemIndex];
+            const url = window.location.href;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: poem.title,
+                    text: `${poem.title} - ديوان حمد الغافري`,
+                    url: url
+                }).then(() => {
+                    showToast('تمت المشاركة بنجاح ✓');
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('تم نسخ الرابط للمشاركة ✓');
+                });
+            }
+        }
+
+        function toggleFavoritePoem() {
+            if (currentPoemIndex < 0) return;
+            
+            const poem = poems[currentPoemIndex];
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            
+            const index = favorites.findIndex(f => f.poemTitle === poem.title);
+            const btn = document.getElementById('favoritePoemBtn');
+            
+            if (index > -1) {
+                favorites.splice(index, 1);
+                btn.innerHTML = '<i class="far fa-heart"></i>';
+                btn.classList.remove('active');
+                showToast('تم إزالة القصيدة من المفضلة');
+            } else {
+                favorites.push({
+                    poemTitle: poem.title,
+                    poemIndex: currentPoemIndex,
+                    timestamp: Date.now()
+                });
+                btn.innerHTML = '<i class="fas fa-heart"></i>';
+                btn.classList.add('active');
+                showToast('تم إضافة القصيدة للمفضلة ✓');
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+    </script>
 </body>
 </html>
