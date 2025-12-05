@@ -259,7 +259,7 @@
 
     <script src="script.js"></script>
     <script>
-        let searchPoems = [];
+        let poemsData = [];
         let searchTimeout;
 
         document.addEventListener('DOMContentLoaded', async function() {
@@ -271,7 +271,7 @@
             try {
                 const response = await fetch('poems.txt');
                 const text = await response.text();
-                searchPoems = parsePoems(text);
+                poemsData = parsePoems(text);
             } catch (error) {
                 console.error('Error loading poems:', error);
             }
@@ -329,7 +329,7 @@
             const sortFilter = document.getElementById('sortFilter');
 
             // Load categories into filter
-            const categories = [...new Set(searchPoems.map(p => p.category))];
+            const categories = [...new Set(poemsData.map(p => p.category))];
             categories.forEach(cat => {
                 const option = document.createElement('option');
                 option.value = cat;
@@ -399,7 +399,7 @@
             let results = [];
             const lowerQuery = query.toLowerCase();
 
-            searchPoems.forEach((poem, index) => {
+            poemsData.forEach((poem, index) => {
                 // Apply category filter
                 if (categoryFilter && poem.category !== categoryFilter) {
                     return;
