@@ -391,6 +391,12 @@
         .poem-verses-container {
             margin: var(--spacing-xl) 0;
             position: relative;
+            background: var(--surface-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl) var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            border-right: 3px solid var(--primary-color);
+            border-left: 3px solid var(--primary-color);
         }
 
         .verse-line {
@@ -461,6 +467,12 @@
             .poem-content-wrapper::before,
             .poem-content-wrapper::after {
                 display: none;
+            }
+
+            .poem-verses-container {
+                border: none;
+                box-shadow: none;
+                padding: var(--spacing-md) 0;
             }
 
             .verse-line {
