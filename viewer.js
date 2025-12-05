@@ -1,19 +1,23 @@
 function updateDarkModeIcon() {
   const iconEl = document.getElementById("dark-mode-icon");
   if (!iconEl) return;
-  iconEl.textContent = document.documentElement.classList.contains("dark") ? '☀️' : '🌙';
+  iconEl.textContent = document.documentElement.classList.contains("dark") ? "☀️" : "🌙";
+}
+
+function initDarkModeToggle() {
+  const btn = document.getElementById("toggle-dark-mode");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    document.documentElement.classList.toggle("dark");
+    const isDark = document.documentElement.classList.contains("dark");
+    localStorage.setItem("darkMode", isDark ? "on" : "off");
+    updateDarkModeIcon();
+  });
+  updateDarkModeIcon();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const toggleBtn = document.getElementById("toggle-dark-mode");
-  if (toggleBtn) {
-    toggleBtn.addEventListener("click", () => {
-      document.documentElement.classList.toggle("dark");
-      localStorage.setItem('darkMode', document.documentElement.classList.contains('dark') ? 'on' : 'off');
-      updateDarkModeIcon();
-    });
-  }
-  updateDarkModeIcon();
+  initDarkModeToggle();
   loadPoem();
 });
 
@@ -24,16 +28,16 @@ async function loadPoem() {
     const poems = text.split("===\n").map(p => p.trim()).filter(p => p);
 
     const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
+    const id = parseInt(params.get("id"), 10);
 
-    if (id === null || isNaN(id) || id < 0 || id >= poems.length) {
+    if (isNaN(id) || id < 0 || id >= poems.length) {
       document.getElementById("title").textContent = "قصيدة غير متوفّرة";
       return;
     }
 
     const poemData = poems[id].split("\n");
-    const title = poemData[0].trim();
-    const category = poemData[1] && poemData[1].startsWith("@")
+    const title = (poemData[0] || "").trim();
+    const category = (poemData[1] || "").startsWith("@")
       ? poemData[1].substring(1).trim()
       : "";
 
@@ -48,9 +52,9 @@ async function loadPoem() {
       const l1 = lines[i] || "";
       const l2 = lines[i + 1] || "";
       html += `
-        <div class="bayt fade-up" style="animation-delay:${(i/2)*0.2}s">
-          <div>${l1}</div>
-          <div>${l2}</div>
+        <div class="bayt fade-up" style="animation-delay:${(i/2)*0.15}s">
+          <div class="hemistich">${l1}</div>
+          <div class="hemistich">${l2}</div>
         </div>`;
     }
     poemEl.innerHTML = html;
