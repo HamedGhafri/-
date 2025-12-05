@@ -407,26 +407,28 @@
 
     <script src="script.js"></script>
     <script>
-        let poems = [];
+        // Use poems from script.js, don't redeclare
         let currentPoemIndex = -1;
         let currentView = 'list'; // 'list' or 'grid'
 
         document.addEventListener('DOMContentLoaded', async function() {
-            await loadPoems();
+            await loadPoemsForViewer();
             initializeViewer();
         });
 
-        async function loadPoems() {
+        let viewerPoems = [];
+        
+        async function loadPoemsForViewer() {
             try {
                 const response = await fetch('poems.txt');
                 const text = await response.text();
-                poems = parsePoems(text);
+                viewerPoems = parsePoemsViewer(text);
                 
                 // Check if there's a poem parameter in URL
                 const urlParams = new URLSearchParams(window.location.search);
                 const poemIndex = urlParams.get('poem');
                 
-                if (poemIndex !== null && poems[poemIndex]) {
+                if (poemIndex !== null && viewerPoems[poemIndex]) {
                     showPoemDetail(parseInt(poemIndex));
                 } else {
                     showPoemsList();
@@ -437,30 +439,46 @@
             }
         }
 
-        function parsePoems(text) {
-            const lines = text.split('\n');
+        function parsePoemsViewer(text) {
+            // Split poems by === separator
+            const poemBlocks = text.split('===').filter(block => block.trim());
             const poemsArray = [];
-            let currentPoem = null;
             
-            for (let line of lines) {
-                line = line.trim();
+            for (let block of poemBlocks) {
+                const lines = block.trim().split('\n').filter(line => line.trim());
                 
-                if (line.startsWith('###')) {
-                    if (currentPoem) {
-                        poemsArray.push(currentPoem);
+                if (lines.length === 0) continue;
+                
+                // First line is the title
+                const title = lines[0].trim();
+                
+                // Remaining lines are verses (combine pairs of lines into verses)
+                const verses = [];
+                let currentVerse = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line) {
+                        currentVerse.push(line);
+                        
+                        // Every 2 lines form one verse (shatr1 + shatr2)
+                        if (currentVerse.length === 2) {
+                            verses.push(currentVerse.join('\n'));
+                            currentVerse = [];
+                        }
                     }
-                    currentPoem = {
-                        title: line.replace('###', '').trim(),
-                        verses: [],
-                        category: 'غير مصنف'
-                    };
-                } else if (line && currentPoem) {
-                    currentPoem.verses.push(line);
                 }
-            }
-            
-            if (currentPoem) {
-                poemsArray.push(currentPoem);
+                
+                // If there's an odd line left, add it as a single-line verse
+                if (currentVerse.length > 0) {
+                    verses.push(currentVerse.join('\n'));
+                }
+                
+                poemsArray.push({
+                    title: title,
+                    verses: verses,
+                    category: 'غير مصنف'
+                });
             }
             
             return poemsArray;
@@ -505,12 +523,12 @@
             const container = document.getElementById('poemsContainer');
             container.className = 'poems-container list-view';
             
-            if (poems.length === 0) {
+            if (viewerPoems.length === 0) {
                 container.innerHTML = '<p class="empty-state">لا توجد قصائد متاحة</p>';
                 return;
             }
 
-            container.innerHTML = poems.map((poem, index) => {
+            container.innerHTML = viewerPoems.map((poem, index) => {
                 const preview = poem.verses.slice(0, 2).join('<br>');
                 return `
                     <div class="poem-item" onclick="showPoemDetail(${index})">
@@ -532,10 +550,10 @@
         }
 
         function showPoemDetail(index) {
-            if (index < 0 || index >= poems.length) return;
+            if (index < 0 || index >= viewerPoems.length) return;
 
             currentPoemIndex = index;
-            const poem = poems[index];
+            const poem = viewerPoems[index];
 
             document.getElementById('poemsListView').style.display = 'none';
             document.getElementById('poemDetailView').style.display = 'block';
@@ -543,13 +561,13 @@
             document.getElementById('poemTitle').textContent = poem.title;
             
             const versesContainer = document.getElementById('poemVerses');
-            versesContainer.innerHTML = poem.verses.map(verse => 
-                `<p class="verse-line">${verse}</p>`
+            versesContainer.innerHTML = poem.verses.map((verse, index) => 
+                `<p class="verse-line">${verse.replace(/\n/g, '<br>')}</p>`
             ).join('');
 
             // Update navigation buttons
             document.getElementById('prevPoemBtn').disabled = index === 0;
-            document.getElementById('nextPoemBtn').disabled = index === poems.length - 1;
+            document.getElementById('nextPoemBtn').disabled = index === viewerPoems.length - 1;
 
             // Update URL
             window.history.pushState({}, '', `viewer.html?poem=${index}`);
@@ -565,7 +583,7 @@
         }
 
         function showNextPoem() {
-            if (currentPoemIndex < poems.length - 1) {
+            if (currentPoemIndex < viewerPoems.length - 1) {
                 showPoemDetail(currentPoemIndex + 1);
             }
         }
@@ -573,7 +591,7 @@
         function copyCurrentPoem() {
             if (currentPoemIndex < 0) return;
             
-            const poem = poems[currentPoemIndex];
+            const poem = viewerPoems[currentPoemIndex];
             const text = `${poem.title}\n\n${poem.verses.join('\n')}\n\n— ديوان حمد الغافري —`;
             
             navigator.clipboard.writeText(text).then(() => {
@@ -586,7 +604,7 @@
         function shareCurrentPoem() {
             if (currentPoemIndex < 0) return;
             
-            const poem = poems[currentPoemIndex];
+            const poem = viewerPoems[currentPoemIndex];
             const url = window.location.href;
             
             if (navigator.share) {
@@ -607,7 +625,7 @@
         function toggleFavoritePoem() {
             if (currentPoemIndex < 0) return;
             
-            const poem = poems[currentPoemIndex];
+            const poem = viewerPoems[currentPoemIndex];
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             
             const index = favorites.findIndex(f => f.poemTitle === poem.title);

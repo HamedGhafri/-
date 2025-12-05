@@ -406,6 +406,21 @@ a:hover {
     text-align: center;
     margin: var(--spacing-lg) 0;
     font-family: var(--font-decorative);
+    white-space: pre-line; /* Preserve line breaks */
+}
+
+.verse-meta {
+    text-align: center;
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.verse-source {
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-family: var(--font-secondary);
+    font-style: italic;
 }
 
 .verse-actions {
@@ -1286,6 +1301,30 @@ a:hover {
 }
 
 /* ====================================
+   Poem Viewer Styles
+   ==================================== */
+.verse-line {
+    font-size: 1.5rem;
+    line-height: 2;
+    color: var(--text-primary);
+    text-align: center;
+    margin: var(--spacing-lg) auto;
+    padding: var(--spacing-md);
+    max-width: 800px;
+    font-family: var(--font-decorative);
+    border-right: 3px solid var(--secondary-color);
+    background: var(--surface-color);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-normal);
+}
+
+.verse-line:hover {
+    background: var(--bg-color);
+    transform: translateX(-5px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* ====================================
    Responsive Enhancements
    ==================================== */
 @media (max-width: 768px) {
@@ -1311,5 +1350,9 @@ a:hover {
     
     .action-icon-wrapper i {
         font-size: 2rem;
+    }
+    
+    .verse-line {
+        font-size: 1.3rem;
     }
 }

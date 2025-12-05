@@ -178,6 +178,10 @@ function loadVerseOfTheDay() {
             <div class="loader"></div>
             <p>جارٍ التحميل...</p>
         </div>
+        <div class="verse-decoration">
+            <div class="verse-ornament verse-ornament-left">✦</div>
+            <div class="verse-ornament verse-ornament-right">✦</div>
+        </div>
     `;
     
     // Simulate loading delay
@@ -187,30 +191,50 @@ function loadVerseOfTheDay() {
                 <div class="verse-content">
                     <p class="verse-text">لا توجد أبيات متاحة حالياً</p>
                 </div>
+                <div class="verse-decoration">
+                    <div class="verse-ornament verse-ornament-left">✦</div>
+                    <div class="verse-ornament verse-ornament-right">✦</div>
+                </div>
             `;
             return;
         }
         
-        const randomPoem = poems[Math.floor(Math.random() * poems.length)];
-        const randomVerse = randomPoem.verses[Math.floor(Math.random() * randomPoem.verses.length)];
+        // Get verse of the day based on date (changes every 24 hours)
+        const today = new Date();
+        const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+        
+        // Calculate total number of verses
+        let totalVerses = 0;
+        const versesWithPoem = [];
+        poems.forEach(poem => {
+            poem.verses.forEach(verse => {
+                versesWithPoem.push({ verse, poem });
+                totalVerses++;
+            });
+        });
+        
+        // Select verse based on day of year (same verse for 24 hours)
+        const verseIndex = dayOfYear % totalVerses;
+        const { verse, poem } = versesWithPoem[verseIndex];
+        
+        // Store in localStorage to show it was loaded today
+        const verseOfDay = {
+            verse: verse,
+            poemTitle: poem.title,
+            date: today.toDateString()
+        };
+        localStorage.setItem('verseOfDay', JSON.stringify(verseOfDay));
         
         verseCard.innerHTML = `
             <div class="verse-content">
-                <p class="verse-text">${randomVerse}</p>
+                <p class="verse-text">${verse.replace(/\n/g, '<br>')}</p>
                 <div class="verse-meta">
-                    <span class="verse-source">من قصيدة: ${randomPoem.title}</span>
+                    <span class="verse-source">من قصيدة: ${poem.title}</span>
                 </div>
-                <div class="verse-actions">
-                    <button onclick="copyVerse('${randomVerse.replace(/'/g, "\\'")}')">
-                        <i class="fas fa-copy"></i> نسخ
-                    </button>
-                    <button onclick="shareVerse('${randomVerse.replace(/'/g, "\\'")}', '${randomPoem.title.replace(/'/g, "\\'")}')">
-                        <i class="fas fa-share-alt"></i> مشاركة
-                    </button>
-                    <button onclick="toggleFavoriteVerse('${randomVerse.replace(/'/g, "\\'")}', '${randomPoem.title.replace(/'/g, "\\'")}')">
-                        <i class="fas fa-heart"></i> حفظ
-                    </button>
-                </div>
+            </div>
+            <div class="verse-decoration">
+                <div class="verse-ornament verse-ornament-left">✦</div>
+                <div class="verse-ornament verse-ornament-right">✦</div>
             </div>
         `;
     }, 500);
