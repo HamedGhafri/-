@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ديوان الشاعر حمد الغافري - مجموعة شعرية متنوعة من القصائد العربية الأصيلة">
+    <meta name="keywords" content="شعر عربي, حمد الغافري, ديوان شعر, قصائد, شعر عماني">
+    <meta name="author" content="حمد الغافري">
+    <meta name="theme-color" content="#8b6914">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="ديوان حمد الغافري">
+    <meta property="og:description" content="ديوان شعري للشاعر حمد الغافري - قصائد عربية أصيلة">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hamedghafri.github.io/-/index.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ديوان حمد الغافري">
+    <meta name="twitter:description" content="ديوان شعري للشاعر حمد الغافري">
+    
+    <title>ديوان حمد الغافري | الصفحة الرئيسية</title>
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Manifest for PWA -->
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع الليلي">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-book-open"></i>
+                <span>ديوان حمد الغافري</span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="categories.html"><i class="fas fa-layer-group"></i> التصنيفات</a></li>
+                <li><a href="search.html"><i class="fas fa-search"></i> البحث</a></li>
+                <li><a href="favorites.html"><i class="fas fa-heart"></i> المفضلة</a></li>
+                <li><a href="about.html"><i class="fas fa-user"></i> عن الشاعر</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="قائمة التنقل">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="decorative-line">ـــ༻❁༺ـــ</div>
+            <h1 class="hero-title animate-fade-in">ديوان حمد الغافري</h1>
+            <p class="hero-subtitle animate-fade-in-delay">رحلة في عالم الشعر والكلمة</p>
+            <div class="decorative-line">ـــ༻❁༺ـــ</div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container main-content">
+        
+        <!-- Verse of the Day Section -->
+        <section class="section verse-of-day">
+            <div class="section-header">
+                <h2><i class="fas fa-star"></i> بيت اليوم</h2>
+                <button class="refresh-btn" id="refreshVerse" aria-label="تحديث بيت اليوم">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+            <div class="verse-card" id="verseCard">
+                <div class="verse-content loading">
+                    <div class="loader"></div>
+                    <p>جارٍ التحميل...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="section quick-actions">
+            <div class="section-header">
+                <h2><i class="fas fa-bolt"></i> خيارات سريعة</h2>
+            </div>
+            <div class="action-grid">
+                <button class="action-card" id="randomPoemBtn">
+                    <i class="fas fa-random"></i>
+                    <h3>قصيدة عشوائية</h3>
+                    <p>اكتشف قصيدة جديدة</p>
+                </button>
+                <a href="categories.html" class="action-card">
+                    <i class="fas fa-list"></i>
+                    <h3>تصفح حسب الموضوع</h3>
+                    <p>استكشف القصائد المصنفة</p>
+                </a>
+                <a href="search.html" class="action-card">
+                    <i class="fas fa-search"></i>
+                    <h3>ابحث في الديوان</h3>
+                    <p>ابحث عن قصيدة أو بيت</p>
+                </a>
+                <a href="favorites.html" class="action-card">
+                    <i class="fas fa-heart"></i>
+                    <h3>المفضلة</h3>
+                    <p>قصائدك المحفوظة</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="section stats-section">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-bar"></i> إحصائيات الديوان</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-book"></i>
+                    <div class="stat-number" id="totalPoems">0</div>
+                    <div class="stat-label">قصيدة</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-align-left"></i>
+                    <div class="stat-number" id="totalVerses">0</div>
+                    <div class="stat-label">بيت شعري</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-layer-group"></i>
+                    <div class="stat-number" id="totalCategories">0</div>
+                    <div class="stat-label">تصنيف</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-heart"></i>
+                    <div class="stat-number" id="totalFavorites">0</div>
+                    <div class="stat-label">في المفضلة</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Poems Section -->
+        <section class="section recent-poems">
+            <div class="section-header">
+                <h2><i class="fas fa-clock"></i> أحدث القصائد</h2>
+                <a href="viewer.html" class="view-all-btn">عرض الكل <i class="fas fa-arrow-left"></i></a>
+            </div>
+            <div class="poems-grid" id="recentPoemsGrid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-book-open"></i> ديوان حمد الغافري</h3>
+                    <p>منصة إلكترونية لعرض الأعمال الشعرية للشاعر حمد الغافري</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="فيسبوك"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="إنستغرام"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="يوتيوب"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="categories.html">التصنيفات</a></li>
+                        <li><a href="search.html">البحث</a></li>
+                        <li><a href="about.html">عن الشاعر</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>معلومات</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">سياسة الخصوصية</a></li>
+                        <li><a href="#">شروط الاستخدام</a></li>
+                        <li><a href="#">اتصل بنا</a></li>
+                        <li><a href="sitemap.xml">خريطة الموقع</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ديوان حمد الغافري. جميع الحقوق محفوظة.</p>
+                <p class="footer-credits">تم التطوير بـ <i class="fas fa-heart"></i></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
