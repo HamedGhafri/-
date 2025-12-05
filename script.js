@@ -1,98 +1,437 @@
-function updateDarkModeIcon() {
-  const iconEl = document.getElementById("dark-mode-icon");
-  if (!iconEl) return;
-  iconEl.textContent = document.documentElement.classList.contains("dark") ? "☀️" : "🌙";
-}
+/* ====================================
+   Global Variables & Configuration
+   ==================================== */
+let poems = [];
+let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+let currentTheme = localStorage.getItem('theme') || 'light';
 
-function initDarkModeToggle() {
-  const btn = document.getElementById("toggle-dark-mode");
-  if (!btn) return;
-  btn.addEventListener("click", () => {
-    document.documentElement.classList.toggle("dark");
-    const isDark = document.documentElement.classList.contains("dark");
-    localStorage.setItem("darkMode", isDark ? "on" : "off");
-    updateDarkModeIcon();
-  });
-  updateDarkModeIcon();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  initDarkModeToggle();
-  const listEl = document.getElementById("list");
-  if (listEl) {
+/* ====================================
+   DOM Content Loaded
+   ==================================== */
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize theme
+    initializeTheme();
+    
+    // Load poems data
     loadPoems();
-  }
+    
+    // Initialize navigation
+    initializeNavigation();
+    
+    // Initialize event listeners
+    initializeEventListeners();
+    
+    // Load verse of the day
+    loadVerseOfTheDay();
+    
+    // Update statistics
+    updateStatistics();
+    
+    // Load recent poems
+    loadRecentPoems();
 });
 
-let poemList = [];
-let allLines = [];
+/* ====================================
+   Theme Management
+   ==================================== */
+function initializeTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (themeToggle) {
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+    }
+    
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+}
 
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+    localStorage.setItem('theme', currentTheme);
+    
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.innerHTML = currentTheme === 'dark' 
+            ? '<i class="fas fa-sun"></i>' 
+            : '<i class="fas fa-moon"></i>';
+    }
+}
+
+/* ====================================
+   Navigation
+   ==================================== */
+function initializeNavigation() {
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+    
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            const icon = navToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                const icon = navToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+    }
+}
+
+/* ====================================
+   Load Poems Data
+   ==================================== */
 async function loadPoems() {
-  try {
-    const txt = await fetch("poems.txt?update=" + Date.now()).then(r => r.text());
-    const poems = txt.split("===\n").map(p => p.trim()).filter(p => p);
+    try {
+        const response = await fetch('poems.txt');
+        const text = await response.text();
+        poems = parsePoems(text);
+    } catch (error) {
+        console.error('Error loading poems:', error);
+        showToast('خطأ في تحميل القصائد');
+    }
+}
 
-    poemList = poems.map((p, idx) => {
-      const linesAll = p.split("\n");
-      const title = (linesAll[0] || "").trim();
-      const category = (linesAll[1] || "").startsWith("@") ? linesAll[1].substring(1).trim() : "";
-      const contentLines = linesAll.slice(2).filter(l => l.trim() !== "");
-      return { id: idx, title, category, lines: contentLines };
+function parsePoems(text) {
+    const lines = text.split('\n');
+    const poemsArray = [];
+    let currentPoem = null;
+    
+    for (let line of lines) {
+        line = line.trim();
+        
+        if (line.startsWith('###')) {
+            // New poem title
+            if (currentPoem) {
+                poemsArray.push(currentPoem);
+            }
+            currentPoem = {
+                title: line.replace('###', '').trim(),
+                verses: [],
+                category: 'غير مصنف'
+            };
+        } else if (line && currentPoem) {
+            // Verse line
+            currentPoem.verses.push(line);
+        }
+    }
+    
+    if (currentPoem) {
+        poemsArray.push(currentPoem);
+    }
+    
+    return poemsArray;
+}
+
+/* ====================================
+   Event Listeners
+   ==================================== */
+function initializeEventListeners() {
+    // Refresh verse button
+    const refreshBtn = document.getElementById('refreshVerse');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', loadVerseOfTheDay);
+    }
+    
+    // Random poem button
+    const randomPoemBtn = document.getElementById('randomPoemBtn');
+    if (randomPoemBtn) {
+        randomPoemBtn.addEventListener('click', showRandomPoem);
+    }
+}
+
+/* ====================================
+   Verse of the Day
+   ==================================== */
+function loadVerseOfTheDay() {
+    const verseCard = document.getElementById('verseCard');
+    if (!verseCard) return;
+    
+    // Show loading
+    verseCard.innerHTML = `
+        <div class="verse-content loading">
+            <div class="loader"></div>
+            <p>جارٍ التحميل...</p>
+        </div>
+    `;
+    
+    // Simulate loading delay
+    setTimeout(() => {
+        if (poems.length === 0) {
+            verseCard.innerHTML = `
+                <div class="verse-content">
+                    <p class="verse-text">لا توجد أبيات متاحة حالياً</p>
+                </div>
+            `;
+            return;
+        }
+        
+        const randomPoem = poems[Math.floor(Math.random() * poems.length)];
+        const randomVerse = randomPoem.verses[Math.floor(Math.random() * randomPoem.verses.length)];
+        
+        verseCard.innerHTML = `
+            <div class="verse-content">
+                <p class="verse-text">${randomVerse}</p>
+                <div class="verse-meta">
+                    <span class="verse-source">من قصيدة: ${randomPoem.title}</span>
+                </div>
+                <div class="verse-actions">
+                    <button onclick="copyVerse('${randomVerse.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-copy"></i> نسخ
+                    </button>
+                    <button onclick="shareVerse('${randomVerse.replace(/'/g, "\\'")}', '${randomPoem.title.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-share-alt"></i> مشاركة
+                    </button>
+                    <button onclick="toggleFavoriteVerse('${randomVerse.replace(/'/g, "\\'")}', '${randomPoem.title.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-heart"></i> حفظ
+                    </button>
+                </div>
+            </div>
+        `;
+    }, 500);
+}
+
+/* ====================================
+   Verse Actions
+   ==================================== */
+function copyVerse(verse) {
+    navigator.clipboard.writeText(verse).then(() => {
+        showToast('تم نسخ البيت بنجاح ✓');
+    }).catch(() => {
+        showToast('فشل نسخ البيت');
     });
-
-    displayPoemList(poemList);
-    extractBayt(allLinesFromPoems(poemList));
-  } catch (e) {
-    console.error("خطأ في تحميل القصائد:", e);
-  }
 }
 
-function allLinesFromPoems(plist) {
-  const arr = [];
-  plist.forEach(p => arr.push(...p.lines));
-  return arr;
+function shareVerse(verse, poemTitle) {
+    if (navigator.share) {
+        navigator.share({
+            title: 'بيت من ديوان حمد الغافري',
+            text: `${verse}\n\nمن قصيدة: ${poemTitle}`,
+            url: window.location.href
+        }).then(() => {
+            showToast('تمت المشاركة بنجاح ✓');
+        }).catch(() => {
+            // User cancelled sharing
+        });
+    } else {
+        // Fallback: copy to clipboard
+        copyVerse(`${verse}\n\nمن قصيدة: ${poemTitle}\n${window.location.href}`);
+        showToast('تم نسخ البيت للمشاركة ✓');
+    }
 }
 
-function displayPoemList(arr) {
-  const listEl = document.getElementById("list");
-  if (!listEl) return;
-  listEl.innerHTML = "";
-  arr.forEach(p => {
-    const a = document.createElement("a");
-    a.className = "poem-card fade-up";
-    a.href = `viewer.html?id=${p.id}`;
-    a.textContent = p.title || "بدون عنوان";
-    listEl.appendChild(a);
-  });
+function toggleFavoriteVerse(verse, poemTitle) {
+    const favorite = {
+        verse: verse,
+        poemTitle: poemTitle,
+        timestamp: Date.now()
+    };
+    
+    const index = favorites.findIndex(f => f.verse === verse);
+    
+    if (index > -1) {
+        favorites.splice(index, 1);
+        showToast('تم إزالة البيت من المفضلة');
+    } else {
+        favorites.push(favorite);
+        showToast('تم إضافة البيت للمفضلة ✓');
+    }
+    
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    updateStatistics();
 }
 
-function runSearch() {
-  const term = document.getElementById("search").value.trim().toLowerCase();
-  if (!term) {
-    displayPoemList(poemList);
-    return;
-  }
-  const filtered = poemList.filter(p => {
-    if ((p.title || "").toLowerCase().includes(term)) return true;
-    if ((p.category || "").toLowerCase().includes(term)) return true;
-    return p.lines.some(l => (l || "").toLowerCase().includes(term));
-  });
-  displayPoemList(filtered);
+/* ====================================
+   Random Poem
+   ==================================== */
+function showRandomPoem() {
+    if (poems.length === 0) {
+        showToast('لا توجد قصائد متاحة');
+        return;
+    }
+    
+    const randomPoem = poems[Math.floor(Math.random() * poems.length)];
+    const poemIndex = poems.indexOf(randomPoem);
+    
+    // Redirect to viewer with poem index
+    window.location.href = `viewer.html?poem=${poemIndex}`;
 }
 
-function randomPoem() {
-  if (poemList.length === 0) return;
-  const id = Math.floor(Math.random() * poemList.length);
-  window.location.href = `viewer.html?id=${id}`;
+/* ====================================
+   Statistics
+   ==================================== */
+function updateStatistics() {
+    const totalPoemsEl = document.getElementById('totalPoems');
+    const totalVersesEl = document.getElementById('totalVerses');
+    const totalCategoriesEl = document.getElementById('totalCategories');
+    const totalFavoritesEl = document.getElementById('totalFavorites');
+    
+    if (totalPoemsEl) {
+        animateCounter(totalPoemsEl, poems.length);
+    }
+    
+    if (totalVersesEl) {
+        const totalVerses = poems.reduce((sum, poem) => sum + poem.verses.length, 0);
+        animateCounter(totalVersesEl, totalVerses);
+    }
+    
+    if (totalCategoriesEl) {
+        const categories = new Set(poems.map(p => p.category));
+        animateCounter(totalCategoriesEl, categories.size);
+    }
+    
+    if (totalFavoritesEl) {
+        animateCounter(totalFavoritesEl, favorites.length);
+    }
 }
 
-function extractBayt(linesArr) {
-  allLines = linesArr;
-  if (allLines.length === 0) return;
-  const today = new Date().getDate();
-  const idx = today % allLines.length;
-  const l1 = allLines[idx] || "";
-  const l2 = allLines[(idx + 1) % allLines.length] || "";
-  const el = document.getElementById("todayContent");
-  if (el) el.innerHTML = `${l1}<br>${l2}`;
+function animateCounter(element, target) {
+    let current = 0;
+    const increment = target / 50;
+    const duration = 1000; // 1 second
+    const stepTime = duration / 50;
+    
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            element.textContent = target;
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(current);
+        }
+    }, stepTime);
+}
+
+/* ====================================
+   Recent Poems
+   ==================================== */
+function loadRecentPoems() {
+    const recentPoemsGrid = document.getElementById('recentPoemsGrid');
+    if (!recentPoemsGrid) return;
+    
+    if (poems.length === 0) {
+        recentPoemsGrid.innerHTML = '<p>لا توجد قصائد متاحة</p>';
+        return;
+    }
+    
+    // Get last 6 poems
+    const recentPoems = poems.slice(-6).reverse();
+    
+    recentPoemsGrid.innerHTML = recentPoems.map((poem, index) => {
+        const preview = poem.verses.slice(0, 2).join('\n');
+        const poemIndex = poems.indexOf(poem);
+        
+        return `
+            <div class="poem-card" onclick="window.location.href='viewer.html?poem=${poemIndex}'">
+                <h3 class="poem-title">
+                    <i class="fas fa-feather-alt"></i>
+                    ${poem.title}
+                </h3>
+                <p class="poem-preview">${preview}</p>
+                <div class="poem-meta">
+                    <span class="poem-category">${poem.category}</span>
+                    <span><i class="fas fa-align-left"></i> ${poem.verses.length} بيت</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+/* ====================================
+   Search Functionality
+   ==================================== */
+function searchPoems(query) {
+    query = query.trim().toLowerCase();
+    
+    if (!query) return poems;
+    
+    return poems.filter(poem => {
+        return poem.title.toLowerCase().includes(query) ||
+               poem.verses.some(verse => verse.toLowerCase().includes(query)) ||
+               poem.category.toLowerCase().includes(query);
+    });
+}
+
+/* ====================================
+   Categories
+   ==================================== */
+function getCategories() {
+    const categoriesMap = new Map();
+    
+    poems.forEach(poem => {
+        const category = poem.category;
+        if (!categoriesMap.has(category)) {
+            categoriesMap.set(category, []);
+        }
+        categoriesMap.get(category).push(poem);
+    });
+    
+    return categoriesMap;
+}
+
+function getPoemsByCategory(category) {
+    return poems.filter(poem => poem.category === category);
+}
+
+/* ====================================
+   Toast Notification
+   ==================================== */
+function showToast(message, duration = 3000) {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    
+    if (!toast || !toastMessage) return;
+    
+    toastMessage.textContent = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, duration);
+}
+
+/* ====================================
+   Utility Functions
+   ==================================== */
+function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('ar-SA', options);
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+/* ====================================
+   Export for use in other pages
+   ==================================== */
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        poems,
+        favorites,
+        searchPoems,
+        getCategories,
+        getPoemsByCategory,
+        showToast
+    };
 }
