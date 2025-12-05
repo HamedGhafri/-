@@ -41,6 +41,9 @@
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress" id="readingProgress"></div>
+
     <!-- Theme Toggle Button -->
     <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع الليلي">
         <i class="fas fa-moon"></i>
@@ -69,11 +72,29 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-overlay"></div>
+        <div class="hero-particles" id="heroParticles"></div>
         <div class="hero-content">
             <div class="decorative-line">ـــ༻❁༺ـــ</div>
-            <h1 class="hero-title animate-fade-in">ديوان حمد الغافري</h1>
-            <p class="hero-subtitle animate-fade-in-delay">رحلة في عالم الشعر والكلمة</p>
+            <h1 class="hero-title animate-fade-in">
+                <span class="title-word">ديوان</span>
+                <span class="title-word">حمد</span>
+                <span class="title-word">الغافري</span>
+            </h1>
+            <p class="hero-subtitle animate-fade-in-delay">
+                <span class="subtitle-text">رحلة في عالم الشعر والكلمة</span>
+                <span class="subtitle-ornament">✦</span>
+            </p>
             <div class="decorative-line">ـــ༻❁༺ـــ</div>
+            <div class="hero-buttons animate-fade-in-delay-2">
+                <a href="viewer.html" class="hero-btn hero-btn-primary">
+                    <i class="fas fa-book-reader"></i>
+                    <span>تصفح الديوان</span>
+                </a>
+                <a href="search.html" class="hero-btn hero-btn-secondary">
+                    <i class="fas fa-search"></i>
+                    <span>ابحث في القصائد</span>
+                </a>
+            </div>
         </div>
         <div class="scroll-indicator">
             <i class="fas fa-chevron-down"></i>
@@ -87,14 +108,26 @@
         <section class="section verse-of-day">
             <div class="section-header">
                 <h2><i class="fas fa-star"></i> بيت اليوم</h2>
-                <button class="refresh-btn" id="refreshVerse" aria-label="تحديث بيت اليوم">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
+                <div class="verse-actions">
+                    <button class="icon-btn" id="copyVerse" aria-label="نسخ البيت" title="نسخ البيت">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="icon-btn" id="shareVerse" aria-label="مشاركة البيت" title="مشاركة">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                    <button class="icon-btn" id="refreshVerse" aria-label="تحديث بيت اليوم" title="تحديث">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
             </div>
             <div class="verse-card" id="verseCard">
                 <div class="verse-content loading">
                     <div class="loader"></div>
                     <p>جارٍ التحميل...</p>
+                </div>
+                <div class="verse-decoration">
+                    <div class="verse-ornament verse-ornament-left">✦</div>
+                    <div class="verse-ornament verse-ornament-right">✦</div>
                 </div>
             </div>
         </section>
@@ -105,25 +138,41 @@
                 <h2><i class="fas fa-bolt"></i> خيارات سريعة</h2>
             </div>
             <div class="action-grid">
-                <button class="action-card" id="randomPoemBtn">
-                    <i class="fas fa-random"></i>
+                <button class="action-card action-card-1" id="randomPoemBtn">
+                    <div class="action-icon-wrapper">
+                        <i class="fas fa-random"></i>
+                        <div class="action-shine"></div>
+                    </div>
                     <h3>قصيدة عشوائية</h3>
                     <p>اكتشف قصيدة جديدة</p>
+                    <div class="action-arrow"><i class="fas fa-arrow-left"></i></div>
                 </button>
-                <a href="categories.html" class="action-card">
-                    <i class="fas fa-list"></i>
+                <a href="categories.html" class="action-card action-card-2">
+                    <div class="action-icon-wrapper">
+                        <i class="fas fa-layer-group"></i>
+                        <div class="action-shine"></div>
+                    </div>
                     <h3>تصفح حسب الموضوع</h3>
                     <p>استكشف القصائد المصنفة</p>
+                    <div class="action-arrow"><i class="fas fa-arrow-left"></i></div>
                 </a>
-                <a href="search.html" class="action-card">
-                    <i class="fas fa-search"></i>
+                <a href="search.html" class="action-card action-card-3">
+                    <div class="action-icon-wrapper">
+                        <i class="fas fa-search"></i>
+                        <div class="action-shine"></div>
+                    </div>
                     <h3>ابحث في الديوان</h3>
                     <p>ابحث عن قصيدة أو بيت</p>
+                    <div class="action-arrow"><i class="fas fa-arrow-left"></i></div>
                 </a>
-                <a href="favorites.html" class="action-card">
-                    <i class="fas fa-heart"></i>
+                <a href="favorites.html" class="action-card action-card-4">
+                    <div class="action-icon-wrapper">
+                        <i class="fas fa-heart"></i>
+                        <div class="action-shine"></div>
+                    </div>
                     <h3>المفضلة</h3>
                     <p>قصائدك المحفوظة</p>
+                    <div class="action-arrow"><i class="fas fa-arrow-left"></i></div>
                 </a>
             </div>
         </section>
@@ -134,25 +183,41 @@
                 <h2><i class="fas fa-chart-bar"></i> إحصائيات الديوان</h2>
             </div>
             <div class="stats-grid">
-                <div class="stat-card">
-                    <i class="fas fa-book"></i>
-                    <div class="stat-number" id="totalPoems">0</div>
+                <div class="stat-card stat-card-animate" data-delay="0">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-book"></i>
+                        <div class="stat-circle"></div>
+                    </div>
+                    <div class="stat-number" id="totalPoems" data-target="0">0</div>
                     <div class="stat-label">قصيدة</div>
+                    <div class="stat-decoration">✦</div>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-align-left"></i>
-                    <div class="stat-number" id="totalVerses">0</div>
+                <div class="stat-card stat-card-animate" data-delay="100">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-align-left"></i>
+                        <div class="stat-circle"></div>
+                    </div>
+                    <div class="stat-number" id="totalVerses" data-target="0">0</div>
                     <div class="stat-label">بيت شعري</div>
+                    <div class="stat-decoration">✦</div>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-layer-group"></i>
-                    <div class="stat-number" id="totalCategories">0</div>
+                <div class="stat-card stat-card-animate" data-delay="200">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-layer-group"></i>
+                        <div class="stat-circle"></div>
+                    </div>
+                    <div class="stat-number" id="totalCategories" data-target="0">0</div>
                     <div class="stat-label">تصنيف</div>
+                    <div class="stat-decoration">✦</div>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-heart"></i>
-                    <div class="stat-number" id="totalFavorites">0</div>
+                <div class="stat-card stat-card-animate" data-delay="300">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-heart"></i>
+                        <div class="stat-circle"></div>
+                    </div>
+                    <div class="stat-number" id="totalFavorites" data-target="0">0</div>
                     <div class="stat-label">في المفضلة</div>
+                    <div class="stat-decoration">✦</div>
                 </div>
             </div>
         </section>

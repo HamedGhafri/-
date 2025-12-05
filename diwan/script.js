@@ -423,6 +423,231 @@ function debounce(func, wait) {
 }
 
 /* ====================================
+   NEW ENHANCEMENTS - Reading Progress Bar
+   ==================================== */
+function initReadingProgress() {
+    const progressBar = document.getElementById('readingProgress');
+    if (!progressBar) return;
+    
+    window.addEventListener('scroll', () => {
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight - windowHeight;
+        const scrolled = window.scrollY;
+        const progress = (scrolled / documentHeight) * 100;
+        
+        progressBar.style.width = progress + '%';
+    });
+}
+
+// Initialize reading progress on load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initReadingProgress);
+} else {
+    initReadingProgress();
+}
+
+/* ====================================
+   NEW ENHANCEMENTS - Hero Particles
+   ==================================== */
+function createHeroParticles() {
+    const particlesContainer = document.getElementById('heroParticles');
+    if (!particlesContainer) return;
+    
+    const particleCount = 30;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'hero-particle';
+        
+        // Random position
+        particle.style.left = Math.random() * 100 + '%';
+        
+        // Random animation duration (5-15 seconds)
+        const duration = 5 + Math.random() * 10;
+        particle.style.animationDuration = duration + 's';
+        
+        // Random delay
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        
+        // Random size
+        const size = 2 + Math.random() * 4;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        
+        particlesContainer.appendChild(particle);
+    }
+}
+
+// Create particles after DOM loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', createHeroParticles);
+} else {
+    createHeroParticles();
+}
+
+/* ====================================
+   NEW ENHANCEMENTS - Copy Verse Function
+   ==================================== */
+function initCopyVerseButton() {
+    const copyBtn = document.getElementById('copyVerse');
+    if (!copyBtn) return;
+    
+    copyBtn.addEventListener('click', () => {
+        const verseText = document.querySelector('.verse-text');
+        if (!verseText) return;
+        
+        const text = verseText.textContent;
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('تم نسخ البيت بنجاح');
+        }).catch(err => {
+            console.error('Error copying text:', err);
+            showToast('فشل نسخ البيت');
+        });
+    });
+}
+
+// Initialize copy button
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCopyVerseButton);
+} else {
+    initCopyVerseButton();
+}
+
+/* ====================================
+   NEW ENHANCEMENTS - Share Verse Function
+   ==================================== */
+function initShareVerseButton() {
+    const shareBtn = document.getElementById('shareVerse');
+    if (!shareBtn) return;
+    
+    shareBtn.addEventListener('click', () => {
+        const verseText = document.querySelector('.verse-text');
+        if (!verseText) return;
+        
+        const text = verseText.textContent;
+        const shareData = {
+            title: 'بيت من ديوان حمد الغافري',
+            text: text,
+            url: window.location.href
+        };
+        
+        // Check if Web Share API is supported
+        if (navigator.share) {
+            navigator.share(shareData)
+                .then(() => showToast('تمت المشاركة بنجاح'))
+                .catch(err => {
+                    if (err.name !== 'AbortError') {
+                        console.error('Error sharing:', err);
+                    }
+                });
+        } else {
+            // Fallback: copy to clipboard
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('تم نسخ البيت - يمكنك مشاركته الآن');
+            });
+        }
+    });
+}
+
+// Initialize share button
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initShareVerseButton);
+} else {
+    initShareVerseButton();
+}
+
+/* ====================================
+   NEW ENHANCEMENTS - Animated Counter
+   ==================================== */
+function animateCounter(element, target, duration = 1000) {
+    const start = 0;
+    const increment = target / (duration / 16); // 60 FPS
+    let current = start;
+    
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            current = target;
+            clearInterval(timer);
+        }
+        element.textContent = Math.floor(current);
+    }, 16);
+}
+
+function initStatCounters() {
+    const statNumbers = document.querySelectorAll('.stat-number');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = parseInt(entry.target.getAttribute('data-target')) || 0;
+                animateCounter(entry.target, target, 1500);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    statNumbers.forEach(stat => {
+        observer.observe(stat);
+    });
+}
+
+// Initialize stat counters
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(initStatCounters, 500);
+    });
+} else {
+    setTimeout(initStatCounters, 500);
+}
+
+/* ====================================
+   NEW ENHANCEMENTS - Smooth Scroll
+   ==================================== */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === '#' || href === '') return;
+        
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+/* ====================================
+   NEW ENHANCEMENTS - Enhance Statistics Update
+   ==================================== */
+// Override the original updateStatistics function
+const originalUpdateStatistics = window.updateStatistics;
+window.updateStatistics = function() {
+    // Call original function
+    if (typeof originalUpdateStatistics === 'function') {
+        originalUpdateStatistics();
+    }
+    
+    // Update data-target attributes for animation
+    setTimeout(() => {
+        const totalPoemsEl = document.getElementById('totalPoems');
+        const totalVersesEl = document.getElementById('totalVerses');
+        const totalCategoriesEl = document.getElementById('totalCategories');
+        const totalFavoritesEl = document.getElementById('totalFavorites');
+        
+        if (totalPoemsEl) totalPoemsEl.setAttribute('data-target', totalPoemsEl.textContent);
+        if (totalVersesEl) totalVersesEl.setAttribute('data-target', totalVersesEl.textContent);
+        if (totalCategoriesEl) totalCategoriesEl.setAttribute('data-target', totalCategoriesEl.textContent);
+        if (totalFavoritesEl) totalFavoritesEl.setAttribute('data-target', totalFavoritesEl.textContent);
+    }, 100);
+};
+
+/* ====================================
    Export for use in other pages
    ==================================== */
 if (typeof module !== 'undefined' && module.exports) {
