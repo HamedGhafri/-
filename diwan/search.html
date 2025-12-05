@@ -206,7 +206,7 @@
 
     <script src="script.js"></script>
     <script>
-        let poems = [];
+        let searchPoems = [];
         let searchTimeout;
 
         document.addEventListener('DOMContentLoaded', async function() {
@@ -218,27 +218,45 @@
             try {
                 const response = await fetch('poems.txt');
                 const text = await response.text();
-                poems = parsePoems(text);
+                searchPoems = parsePoems(text);
             } catch (error) {
                 console.error('Error loading poems:', error);
             }
         }
 
         function parsePoems(text) {
-            const lines = text.split('\n');
+            const poemBlocks = text.split('===').filter(block => block.trim());
             const poemsArray = [];
-            let currentPoem = null;
             
-            for (let line of lines) {
-                line = line.trim();
-                if (line.startsWith('###')) {
-                    if (currentPoem) poemsArray.push(currentPoem);
-                    currentPoem = { title: line.replace('###', '').trim(), verses: [] };
-                } else if (line && currentPoem) {
-                    currentPoem.verses.push(line);
+            for (let block of poemBlocks) {
+                const lines = block.trim().split('\n').filter(line => line.trim());
+                if (lines.length === 0) continue;
+                
+                const title = lines[0].trim();
+                const verses = [];
+                let currentVerse = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line) {
+                        currentVerse.push(line);
+                        if (currentVerse.length === 2) {
+                            verses.push(currentVerse.join('\n'));
+                            currentVerse = [];
+                        }
+                    }
                 }
+                
+                if (currentVerse.length > 0) {
+                    verses.push(currentVerse.join('\n'));
+                }
+                
+                poemsArray.push({
+                    title: title,
+                    verses: verses
+                });
             }
-            if (currentPoem) poemsArray.push(currentPoem);
+            
             return poemsArray;
         }
 
@@ -278,7 +296,7 @@
                 return;
             }
 
-            const results = searchPoems(query);
+            const results = performSearchQuery(query);
 
             if (results.length === 0) {
                 resultsContainer.innerHTML = `
@@ -299,16 +317,16 @@
             `).join('');
         }
 
-        function searchPoems(query) {
+        function performSearchQuery(query) {
             const results = [];
             const lowerQuery = query.toLowerCase();
 
-            poems.forEach((poem, index) => {
+            searchPoems.forEach((poem, index) => {
                 if (poem.title.toLowerCase().includes(lowerQuery)) {
                     results.push({
                         poem: poem,
                         index: index,
-                        context: poem.verses.slice(0, 2).join(' ')
+                        context: poem.verses.slice(0, 2).map(v => v.replace(/\n/g, ' ')).join(' • ')
                     });
                 } else {
                     poem.verses.forEach(verse => {
@@ -316,7 +334,7 @@
                             results.push({
                                 poem: poem,
                                 index: index,
-                                context: verse
+                                context: verse.replace(/\n/g, ' ')
                             });
                         }
                     });

@@ -123,7 +123,7 @@
 
     <script src="script.js"></script>
     <script>
-        let poems = [];
+        let categoriesPoems = [];
         let categories = {};
 
         document.addEventListener('DOMContentLoaded', async function() {
@@ -145,26 +145,45 @@
         }
 
         function parsePoems(text) {
-            const lines = text.split('\n');
+            const poemBlocks = text.split('===').filter(block => block.trim());
             const poemsArray = [];
-            let currentPoem = null;
             
-            for (let line of lines) {
-                line = line.trim();
-                if (line.startsWith('###')) {
-                    if (currentPoem) poemsArray.push(currentPoem);
-                    currentPoem = { title: line.replace('###', '').trim(), verses: [], category: 'غير مصنف' };
-                } else if (line && currentPoem) {
-                    currentPoem.verses.push(line);
+            for (let block of poemBlocks) {
+                const lines = block.trim().split('\n').filter(line => line.trim());
+                if (lines.length === 0) continue;
+                
+                const title = lines[0].trim();
+                const verses = [];
+                let currentVerse = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line) {
+                        currentVerse.push(line);
+                        if (currentVerse.length === 2) {
+                            verses.push(currentVerse.join('\n'));
+                            currentVerse = [];
+                        }
+                    }
                 }
+                
+                if (currentVerse.length > 0) {
+                    verses.push(currentVerse.join('\n'));
+                }
+                
+                poemsArray.push({
+                    title: title,
+                    verses: verses,
+                    category: 'غير مصنف'
+                });
             }
-            if (currentPoem) poemsArray.push(currentPoem);
+            
             return poemsArray;
         }
 
         function categorizePoems() {
             categories = {};
-            poems.forEach((poem, index) => {
+            categoriesPoems.forEach((poem, index) => {
                 const cat = poem.category || 'غير مصنف';
                 if (!categories[cat]) categories[cat] = [];
                 categories[cat].push({ ...poem, index });
@@ -211,7 +230,7 @@
             
             const grid = document.getElementById('categoryPoemsGrid');
             grid.innerHTML = categories[categoryName].map(poem => {
-                const preview = poem.verses.slice(0, 2).join('<br>');
+                const preview = poem.verses.slice(0, 2).map(v => v.replace(/\n/g, '<br>')).join('<br><br>');
                 return `
                     <div class="poem-card" onclick="window.location.href='viewer.html?poem=${poem.index}'">
                         <h3 class="poem-title">

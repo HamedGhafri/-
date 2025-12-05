@@ -395,7 +395,7 @@
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
-                    <div class="favorite-text">${fav.text}</div>
+                    <div class="favorite-text">${(fav.verse || fav.text || '').replace(/\n/g, '<br>')}</div>
                     <div class="favorite-meta">
                         <span class="favorite-source">من قصيدة: ${fav.poemTitle}</span>
                         <span>${formatDate(fav.savedAt)}</span>
