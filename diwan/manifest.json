@@ -1,34 +1,33 @@
 {
   "name": "ديوان حمد الغافري",
   "short_name": "ديوان الغافري",
-  "description": "ديوان شعري للشاعر حمد الغافري - قصائد عربية أصيلة",
-  "start_url": "/index.html",
+  "description": "ديوان شعري للشاعر حمد الغافري - قصائد عربية أصيلة مع ميزات متقدمة",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#faf8f3",
-  "theme_color": "#8b6914",
-  "orientation": "portrait",
+  "theme_color": "#8b7355",
+  "orientation": "portrait-primary",
   "dir": "rtl",
   "lang": "ar",
   "icons": [
     {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ],
-  "categories": ["books", "education", "literature"],
-  "screenshots": [
-    {
-      "src": "/screenshot1.png",
-      "sizes": "540x720",
-      "type": "image/png"
-    }
-  ]
+  "categories": ["books", "education", "literature", "poetry"],
+  "features": [
+    "قراءة القصائد بدون إنترنت",
+    "وضع القراءة المركزة",
+    "مشاركة القصائد كصور",
+    "قوائم تشغيل مخصصة",
+    "ثيمات متعددة",
+    "بحث متقدم",
+    "التصنيفات",
+    "المفضلة"
+  ],
+  "prefer_related_applications": false
 }

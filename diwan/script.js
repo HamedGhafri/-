@@ -116,11 +116,20 @@ function parsePoems(text) {
         // First line is the title
         const title = lines[0].trim();
         
+        // Check if second line is a category (starts with @)
+        let category = 'غير مصنف';
+        let startIndex = 1;
+        
+        if (lines.length > 1 && lines[1].trim().startsWith('@')) {
+            category = lines[1].trim().substring(1); // Remove @ symbol
+            startIndex = 2; // Start verses from line 3
+        }
+        
         // Remaining lines are verses (combine pairs of lines into verses)
         const verses = [];
         let currentVerse = [];
         
-        for (let i = 1; i < lines.length; i++) {
+        for (let i = startIndex; i < lines.length; i++) {
             const line = lines[i].trim();
             if (line) {
                 currentVerse.push(line);
@@ -141,7 +150,7 @@ function parsePoems(text) {
         poemsArray.push({
             title: title,
             verses: verses,
-            category: 'غير مصنف'
+            category: category
         });
     }
     
@@ -626,6 +635,51 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Statistics are already handled by the existing updateStatistics function above
 
 /* ====================================
+   Progressive Web App (PWA) Support
+   ==================================== */
+// Register service worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then((registration) => {
+                console.log('ServiceWorker registered:', registration.scope);
+            })
+            .catch((error) => {
+                console.log('ServiceWorker registration failed:', error);
+            });
+    });
+}
+
+// Request notification permission
+async function requestNotificationPermission() {
+    if ('Notification' in window && 'serviceWorker' in navigator) {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            console.log('Notification permission granted');
+        }
+    }
+}
+
+// Show install prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    // Show install button if needed
+    const installBtn = document.getElementById('installBtn');
+    if (installBtn) {
+        installBtn.style.display = 'block';
+        installBtn.addEventListener('click', async () => {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response: ${outcome}`);
+            deferredPrompt = null;
+        });
+    }
+});
+
+/* ====================================
    Export for use in other pages
    ==================================== */
 if (typeof module !== 'undefined' && module.exports) {
@@ -635,6 +689,7 @@ if (typeof module !== 'undefined' && module.exports) {
         searchPoems,
         getCategories,
         getPoemsByCategory,
-        showToast
+        showToast,
+        requestNotificationPermission
     };
 }

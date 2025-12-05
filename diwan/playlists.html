@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="قوائم تشغيل القصائد - ديوان حمد الغافري">
+    <title>قوائم التشغيل | ديوان حمد الغافري</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="themes.css">
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع الليلي">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-book-open"></i>
+                <span>ديوان حمد الغافري</span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="categories.html"><i class="fas fa-layer-group"></i> التصنيفات</a></li>
+                <li><a href="search.html"><i class="fas fa-search"></i> البحث</a></li>
+                <li><a href="favorites.html"><i class="fas fa-heart"></i> المفضلة</a></li>
+                <li><a href="playlists.html" class="active"><i class="fas fa-list-ul"></i> قوائم التشغيل</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="قائمة التنقل">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container main-content">
+        <section class="section">
+            <div class="section-header">
+                <h1><i class="fas fa-list-ul"></i> قوائم تشغيل القصائد</h1>
+                <button class="btn-primary" id="createPlaylistBtn">
+                    <i class="fas fa-plus"></i> إنشاء قائمة جديدة
+                </button>
+            </div>
+
+            <!-- Playlists Grid -->
+            <div class="playlists-grid" id="playlistsGrid">
+                <div class="loading-container">
+                    <div class="loader"></div>
+                    <p>جارٍ تحميل القوائم...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Playlist Detail Modal -->
+        <div class="modal" id="playlistModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">إنشاء قائمة تشغيل جديدة</h2>
+                    <button class="modal-close" id="modalCloseBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="playlistName">اسم القائمة</label>
+                        <input type="text" id="playlistName" placeholder="مثال: قصائد الحكمة">
+                    </div>
+                    <div class="form-group">
+                        <label for="playlistDescription">الوصف</label>
+                        <textarea id="playlistDescription" rows="3" placeholder="وصف مختصر للقائمة..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>اختر القصائد</label>
+                        <div class="poems-selector" id="poemsSelector">
+                            <!-- Poems will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-primary" id="savePlaylistBtn">
+                        <i class="fas fa-save"></i> حفظ القائمة
+                    </button>
+                    <button class="btn-secondary" id="cancelBtn">
+                        إلغاء
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Playlist Modal -->
+        <div class="modal" id="viewPlaylistModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="viewPlaylistTitle"></h2>
+                    <div>
+                        <button class="action-btn" id="editPlaylistBtn" title="تعديل">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn" id="deletePlaylistBtn" title="حذف">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <button class="modal-close" id="viewModalCloseBtn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <p id="viewPlaylistDescription" class="playlist-description"></p>
+                    <div class="playlist-poems" id="playlistPoems">
+                        <!-- Poems will be loaded here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-primary" id="playAllBtn">
+                        <i class="fas fa-play"></i> تشغيل الكل
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>ديوان حمد الغافري</h3>
+                    <p>منصة إلكترونية لعرض القصائد الشعرية</p>
+                </div>
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="categories.html">التصنيفات</a></li>
+                        <li><a href="search.html">البحث</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ديوان حمد الغافري. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+    <script src="themes.js"></script>
+    <script>
+        let playlists = JSON.parse(localStorage.getItem('playlists')) || [];
+        let allPoems = [];
+        let currentPlaylistId = null;
+        let editingPlaylistId = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadPoems();
+            displayPlaylists();
+            initializeEventListeners();
+        });
+
+        // Load poems
+        async function loadPoems() {
+            try {
+                const response = await fetch('poems.txt');
+                const text = await response.text();
+                allPoems = parsePoems(text);
+            } catch (error) {
+                console.error('Error loading poems:', error);
+                showToast('خطأ في تحميل القصائد');
+            }
+        }
+
+        // Display playlists
+        function displayPlaylists() {
+            const grid = document.getElementById('playlistsGrid');
+            
+            if (playlists.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-list-ul"></i>
+                        <h3>لا توجد قوائم تشغيل</h3>
+                        <p>ابدأ بإنشاء قائمة تشغيل جديدة لتنظيم قصائدك المفضلة</p>
+                        <button class="btn-primary" onclick="openCreatePlaylistModal()">
+                            <i class="fas fa-plus"></i> إنشاء قائمة جديدة
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = playlists.map((playlist, index) => `
+                <div class="playlist-card" onclick="openViewPlaylistModal('${playlist.id}')">
+                    <div class="playlist-icon">
+                        <i class="fas fa-list-ul"></i>
+                    </div>
+                    <h3 class="playlist-title">${playlist.name}</h3>
+                    <p class="playlist-meta">${playlist.poemIds.length} قصيدة</p>
+                    <p class="playlist-description-preview">${playlist.description || 'لا يوجد وصف'}</p>
+                </div>
+            `).join('');
+        }
+
+        // Open create playlist modal
+        function openCreatePlaylistModal() {
+            editingPlaylistId = null;
+            document.getElementById('modalTitle').textContent = 'إنشاء قائمة تشغيل جديدة';
+            document.getElementById('playlistName').value = '';
+            document.getElementById('playlistDescription').value = '';
+            loadPoemsSelector([]);
+            document.getElementById('playlistModal').style.display = 'flex';
+        }
+
+        // Load poems selector
+        function loadPoemsSelector(selectedIds) {
+            const selector = document.getElementById('poemsSelector');
+            selector.innerHTML = allPoems.map((poem, index) => `
+                <label class="poem-checkbox">
+                    <input type="checkbox" value="${index}" 
+                           ${selectedIds.includes(index) ? 'checked' : ''}>
+                    <span>${poem.title}</span>
+                    <span class="poem-category">${poem.category}</span>
+                </label>
+            `).join('');
+        }
+
+        // Save playlist
+        function savePlaylist() {
+            const name = document.getElementById('playlistName').value.trim();
+            const description = document.getElementById('playlistDescription').value.trim();
+            const selectedPoemIds = Array.from(document.querySelectorAll('#poemsSelector input:checked'))
+                .map(input => parseInt(input.value));
+
+            if (!name) {
+                showToast('الرجاء إدخال اسم القائمة');
+                return;
+            }
+
+            if (selectedPoemIds.length === 0) {
+                showToast('الرجاء اختيار قصيدة واحدة على الأقل');
+                return;
+            }
+
+            if (editingPlaylistId) {
+                // Edit existing playlist
+                const playlist = playlists.find(p => p.id === editingPlaylistId);
+                playlist.name = name;
+                playlist.description = description;
+                playlist.poemIds = selectedPoemIds;
+                showToast('تم تحديث القائمة بنجاح');
+            } else {
+                // Create new playlist
+                const playlist = {
+                    id: Date.now().toString(),
+                    name,
+                    description,
+                    poemIds: selectedPoemIds,
+                    createdAt: new Date().toISOString()
+                };
+                playlists.push(playlist);
+                showToast('تم إنشاء القائمة بنجاح');
+            }
+
+            localStorage.setItem('playlists', JSON.stringify(playlists));
+            displayPlaylists();
+            closeModal('playlistModal');
+        }
+
+        // Open view playlist modal
+        function openViewPlaylistModal(playlistId) {
+            const playlist = playlists.find(p => p.id === playlistId);
+            if (!playlist) return;
+
+            currentPlaylistId = playlistId;
+            document.getElementById('viewPlaylistTitle').textContent = playlist.name;
+            document.getElementById('viewPlaylistDescription').textContent = 
+                playlist.description || 'لا يوجد وصف';
+
+            const poemsContainer = document.getElementById('playlistPoems');
+            poemsContainer.innerHTML = playlist.poemIds.map(id => {
+                const poem = allPoems[id];
+                return `
+                    <div class="playlist-poem-item" onclick="window.location.href='viewer.html?poem=${id}'">
+                        <div class="poem-number">${playlist.poemIds.indexOf(id) + 1}</div>
+                        <div class="poem-info">
+                            <h4>${poem.title}</h4>
+                            <p class="poem-category">${poem.category}</p>
+                        </div>
+                        <i class="fas fa-chevron-left"></i>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('viewPlaylistModal').style.display = 'flex';
+        }
+
+        // Edit playlist
+        function editPlaylist() {
+            const playlist = playlists.find(p => p.id === currentPlaylistId);
+            if (!playlist) return;
+
+            editingPlaylistId = currentPlaylistId;
+            document.getElementById('modalTitle').textContent = 'تعديل القائمة';
+            document.getElementById('playlistName').value = playlist.name;
+            document.getElementById('playlistDescription').value = playlist.description;
+            loadPoemsSelector(playlist.poemIds);
+            closeModal('viewPlaylistModal');
+            document.getElementById('playlistModal').style.display = 'flex';
+        }
+
+        // Delete playlist
+        function deletePlaylist() {
+            if (!confirm('هل أنت متأكد من حذف هذه القائمة؟')) return;
+
+            playlists = playlists.filter(p => p.id !== currentPlaylistId);
+            localStorage.setItem('playlists', JSON.stringify(playlists));
+            displayPlaylists();
+            closeModal('viewPlaylistModal');
+            showToast('تم حذف القائمة بنجاح');
+        }
+
+        // Play all poems in playlist
+        function playAllPoems() {
+            const playlist = playlists.find(p => p.id === currentPlaylistId);
+            if (!playlist || playlist.poemIds.length === 0) return;
+
+            window.location.href = `viewer.html?poem=${playlist.poemIds[0]}`;
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Initialize event listeners
+        function initializeEventListeners() {
+            document.getElementById('createPlaylistBtn').addEventListener('click', openCreatePlaylistModal);
+            document.getElementById('savePlaylistBtn').addEventListener('click', savePlaylist);
+            document.getElementById('modalCloseBtn').addEventListener('click', () => closeModal('playlistModal'));
+            document.getElementById('cancelBtn').addEventListener('click', () => closeModal('playlistModal'));
+            document.getElementById('viewModalCloseBtn').addEventListener('click', () => closeModal('viewPlaylistModal'));
+            document.getElementById('editPlaylistBtn').addEventListener('click', editPlaylist);
+            document.getElementById('deletePlaylistBtn').addEventListener('click', deletePlaylist);
+            document.getElementById('playAllBtn').addEventListener('click', playAllPoems);
+
+            // Close modals on outside click
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+    <style>
+        .playlists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .playlist-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .playlist-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .playlist-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .playlist-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .playlist-meta {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .playlist-description-preview {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 25px;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 2px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+        }
+
+        .poems-selector {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .poem-checkbox {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .poem-checkbox:hover {
+            background: var(--hover-bg);
+        }
+
+        .poem-checkbox input {
+            margin-left: 10px;
+            width: auto;
+        }
+
+        .poem-checkbox .poem-category {
+            margin-right: auto;
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .playlist-poem-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--hover-bg);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .playlist-poem-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 3px 10px var(--shadow);
+        }
+
+        .poem-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-left: 15px;
+        }
+
+        .poem-info {
+            flex: 1;
+        }
+
+        .poem-info h4 {
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-color);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--hover-bg);
+        }
+
+        @media (max-width: 768px) {
+            .playlists-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

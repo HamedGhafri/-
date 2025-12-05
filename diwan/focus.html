@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وضع القراءة المركزة | ديوان حمد الغافري</title>
+    <meta name="description" content="وضع القراءة المركزة - استمتع بقراءة القصائد بدون تشتيت">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #f9f7f4;
+            --text-color: #2d2d2d;
+            --verse-color: #1a1a1a;
+            --accent-color: #8b7355;
+            --overlay-bg: rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Amiri', serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 2;
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* Dark Theme */
+        body.dark-theme {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --verse-color: #f5f5f5;
+            --accent-color: #c9a875;
+            --overlay-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Sepia Theme */
+        body.sepia-theme {
+            --bg-color: #f4ecd8;
+            --text-color: #5c4a3a;
+            --verse-color: #3d2f23;
+            --accent-color: #8b6f47;
+            --overlay-bg: rgba(92, 74, 58, 0.05);
+        }
+
+        /* Top Controls */
+        .top-controls {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px var(--overlay-bg);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-100%);
+            transition: all 0.3s ease;
+        }
+
+        .top-controls.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .controls-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background: none;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            transform: scale(1.1);
+        }
+
+        .control-btn.active {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        /* Font Size Slider */
+        .font-size-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .font-size-control input[type="range"] {
+            width: 120px;
+            accent-color: var(--accent-color);
+        }
+
+        /* Reading Container */
+        .reading-container {
+            max-width: 800px;
+            margin: 100px auto 50px;
+            padding: 40px;
+            min-height: calc(100vh - 150px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Poem Header */
+        .poem-header {
+            text-align: center;
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: fadeInDown 0.8s ease forwards;
+        }
+
+        .poem-title {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .poem-category {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        /* Verses */
+        .verses-container {
+            opacity: 0;
+            animation: fadeIn 1s ease 0.3s forwards;
+        }
+
+        .verse {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: var(--overlay-bg);
+            border-right: 4px solid var(--accent-color);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .verse:hover {
+            transform: translateX(-10px);
+            box-shadow: 0 5px 20px var(--overlay-bg);
+        }
+
+        .verse-line {
+            font-size: 1.8rem;
+            color: var(--verse-color);
+            line-height: 2.2;
+            white-space: pre-line;
+            text-align: center;
+            transition: font-size 0.3s ease;
+        }
+
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent-color);
+            color: var(--bg-color);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            z-index: 100;
+            opacity: 0.7;
+        }
+
+        .nav-arrow:hover {
+            opacity: 1;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.left {
+            left: 30px;
+        }
+
+        .nav-arrow.right {
+            right: 30px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--overlay-bg);
+            z-index: 1000;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Keyboard Hints */
+        .keyboard-hints {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-color);
+            color: var(--bg-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .keyboard-hints.visible {
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .reading-container {
+                padding: 20px;
+                margin: 80px auto 30px;
+            }
+
+            .poem-title {
+                font-size: 2rem;
+            }
+
+            .verse-line {
+                font-size: 1.4rem;
+            }
+
+            .nav-arrow {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            .nav-arrow.left {
+                left: 10px;
+            }
+
+            .nav-arrow.right {
+                right: 10px;
+            }
+
+            .font-size-control input[type="range"] {
+                width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Controls -->
+    <div class="top-controls" id="topControls">
+        <div class="controls-group">
+            <button class="control-btn" id="exitBtn" title="الخروج">
+                <i class="fas fa-times"></i>
+            </button>
+            <button class="control-btn" id="themeBtn" title="تبديل المظهر">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+
+        <div class="controls-group">
+            <div class="font-size-control">
+                <i class="fas fa-font" style="font-size: 14px; color: var(--text-color);"></i>
+                <input type="range" id="fontSizeSlider" min="1.2" max="2.5" step="0.1" value="1.8">
+                <i class="fas fa-font" style="font-size: 20px; color: var(--text-color);"></i>
+            </div>
+        </div>
+
+        <div class="controls-group">
+            <button class="control-btn" id="prevPoemBtn" title="القصيدة السابقة">
+                <i class="fas fa-backward"></i>
+            </button>
+            <button class="control-btn" id="nextPoemBtn" title="القصيدة التالية">
+                <i class="fas fa-forward"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Reading Container -->
+    <div class="reading-container" id="readingContainer">
+        <div class="poem-header">
+            <h1 class="poem-title" id="poemTitle">جارٍ التحميل...</h1>
+            <p class="poem-category" id="poemCategory"></p>
+        </div>
+
+        <div class="verses-container" id="versesContainer">
+            <!-- Verses will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <div class="nav-arrow left" id="leftArrow">
+        <i class="fas fa-chevron-right"></i>
+    </div>
+    <div class="nav-arrow right" id="rightArrow">
+        <i class="fas fa-chevron-left"></i>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Keyboard Hints -->
+    <div class="keyboard-hints" id="keyboardHints">
+        ← → للتنقل بين القصائد • ESC للخروج • T لتغيير المظهر
+    </div>
+
+    <script>
+        // Global variables
+        let poems = [];
+        let currentPoemIndex = 0;
+        let currentTheme = 'light';
+        let controlsTimeout;
+
+        // Load poems
+        async function loadPoems() {
+            try {
+                const response = await fetch('poems.txt');
+                const text = await response.text();
+                poems = parsePoems(text);
+                
+                // Get poem index from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                currentPoemIndex = parseInt(urlParams.get('poem')) || 0;
+                
+                displayPoem();
+            } catch (error) {
+                console.error('Error loading poems:', error);
+                document.getElementById('poemTitle').textContent = 'خطأ في تحميل القصائد';
+            }
+        }
+
+        // Parse poems
+        function parsePoems(text) {
+            const poemBlocks = text.split('===').filter(block => block.trim());
+            const poemsArray = [];
+            
+            for (let block of poemBlocks) {
+                const lines = block.trim().split('\n').filter(line => line.trim());
+                
+                if (lines.length === 0) continue;
+                
+                const title = lines[0].trim();
+                let category = 'غير مصنف';
+                let startIndex = 1;
+                
+                if (lines.length > 1 && lines[1].trim().startsWith('@')) {
+                    category = lines[1].trim().substring(1);
+                    startIndex = 2;
+                }
+                
+                const verses = [];
+                let currentVerse = [];
+                
+                for (let i = startIndex; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (line) {
+                        currentVerse.push(line);
+                        
+                        if (currentVerse.length === 2) {
+                            verses.push(currentVerse.join('\n'));
+                            currentVerse = [];
+                        }
+                    }
+                }
+                
+                if (currentVerse.length > 0) {
+                    verses.push(currentVerse.join('\n'));
+                }
+                
+                if (verses.length > 0) {
+                    poemsArray.push({ title, category, verses });
+                }
+            }
+            
+            return poemsArray;
+        }
+
+        // Display poem
+        function displayPoem() {
+            if (poems.length === 0 || currentPoemIndex < 0 || currentPoemIndex >= poems.length) {
+                return;
+            }
+
+            const poem = poems[currentPoemIndex];
+            
+            document.getElementById('poemTitle').textContent = poem.title;
+            document.getElementById('poemCategory').textContent = poem.category;
+            
+            const versesContainer = document.getElementById('versesContainer');
+            versesContainer.innerHTML = '';
+            
+            poem.verses.forEach((verse, index) => {
+                const verseDiv = document.createElement('div');
+                verseDiv.className = 'verse';
+                verseDiv.innerHTML = `<div class="verse-line">${verse}</div>`;
+                versesContainer.appendChild(verseDiv);
+            });
+
+            // Update URL
+            const newUrl = `${window.location.pathname}?poem=${currentPoemIndex}`;
+            window.history.pushState({}, '', newUrl);
+            
+            // Update progress
+            updateProgress();
+        }
+
+        // Navigate poems
+        function nextPoem() {
+            if (currentPoemIndex < poems.length - 1) {
+                currentPoemIndex++;
+                displayPoem();
+            }
+        }
+
+        function previousPoem() {
+            if (currentPoemIndex > 0) {
+                currentPoemIndex--;
+                displayPoem();
+            }
+        }
+
+        // Theme management
+        function toggleTheme() {
+            const themes = ['light', 'dark', 'sepia'];
+            const currentIndex = themes.indexOf(currentTheme);
+            const nextIndex = (currentIndex + 1) % themes.length;
+            currentTheme = themes[nextIndex];
+            
+            document.body.className = currentTheme === 'light' ? '' : 
+                                     currentTheme === 'dark' ? 'dark-theme' : 'sepia-theme';
+            
+            const themeIcon = document.querySelector('#themeBtn i');
+            themeIcon.className = currentTheme === 'dark' ? 'fas fa-sun' : 
+                                 currentTheme === 'sepia' ? 'fas fa-book' : 'fas fa-moon';
+            
+            localStorage.setItem('focusTheme', currentTheme);
+        }
+
+        // Font size control
+        function updateFontSize(size) {
+            document.querySelectorAll('.verse-line').forEach(el => {
+                el.style.fontSize = `${size}rem`;
+            });
+            localStorage.setItem('focusFontSize', size);
+        }
+
+        // Progress bar
+        function updateProgress() {
+            const progress = ((currentPoemIndex + 1) / poems.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+
+        // Show/hide controls
+        function showControls() {
+            document.getElementById('topControls').classList.add('visible');
+            document.getElementById('keyboardHints').classList.add('visible');
+            
+            clearTimeout(controlsTimeout);
+            controlsTimeout = setTimeout(() => {
+                document.getElementById('topControls').classList.remove('visible');
+                document.getElementById('keyboardHints').classList.remove('visible');
+            }, 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPoems();
+            
+            // Load saved preferences
+            const savedTheme = localStorage.getItem('focusTheme') || 'light';
+            currentTheme = savedTheme;
+            if (savedTheme !== 'light') {
+                document.body.className = savedTheme === 'dark' ? 'dark-theme' : 'sepia-theme';
+            }
+            
+            const savedFontSize = localStorage.getItem('focusFontSize') || '1.8';
+            document.getElementById('fontSizeSlider').value = savedFontSize;
+            
+            // Event listeners
+            document.getElementById('exitBtn').addEventListener('click', () => {
+                window.location.href = 'viewer.html?poem=' + currentPoemIndex;
+            });
+            
+            document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+            document.getElementById('prevPoemBtn').addEventListener('click', previousPoem);
+            document.getElementById('nextPoemBtn').addEventListener('click', nextPoem);
+            document.getElementById('leftArrow').addEventListener('click', nextPoem);
+            document.getElementById('rightArrow').addEventListener('click', previousPoem);
+            
+            document.getElementById('fontSizeSlider').addEventListener('input', (e) => {
+                updateFontSize(e.target.value);
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        nextPoem();
+                        break;
+                    case 'ArrowRight':
+                        previousPoem();
+                        break;
+                    case 'Escape':
+                        window.location.href = 'viewer.html?poem=' + currentPoemIndex;
+                        break;
+                    case 't':
+                    case 'T':
+                        toggleTheme();
+                        break;
+                }
+            });
+            
+            // Show controls on mouse move
+            document.addEventListener('mousemove', showControls);
+            document.addEventListener('touchstart', showControls);
+            
+            // Initial show
+            showControls();
+        });
+    </script>
+</body>
+</html>
