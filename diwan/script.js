@@ -104,31 +104,45 @@ async function loadPoems() {
 }
 
 function parsePoems(text) {
-    const lines = text.split('\n');
+    // Split poems by === separator
+    const poemBlocks = text.split('===').filter(block => block.trim());
     const poemsArray = [];
-    let currentPoem = null;
     
-    for (let line of lines) {
-        line = line.trim();
+    for (let block of poemBlocks) {
+        const lines = block.trim().split('\n').filter(line => line.trim());
         
-        if (line.startsWith('###')) {
-            // New poem title
-            if (currentPoem) {
-                poemsArray.push(currentPoem);
+        if (lines.length === 0) continue;
+        
+        // First line is the title
+        const title = lines[0].trim();
+        
+        // Remaining lines are verses (combine pairs of lines into verses)
+        const verses = [];
+        let currentVerse = [];
+        
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (line) {
+                currentVerse.push(line);
+                
+                // Every 2 lines form one verse (shatr1 + shatr2)
+                if (currentVerse.length === 2) {
+                    verses.push(currentVerse.join('\n'));
+                    currentVerse = [];
+                }
             }
-            currentPoem = {
-                title: line.replace('###', '').trim(),
-                verses: [],
-                category: 'غير مصنف'
-            };
-        } else if (line && currentPoem) {
-            // Verse line
-            currentPoem.verses.push(line);
         }
-    }
-    
-    if (currentPoem) {
-        poemsArray.push(currentPoem);
+        
+        // If there's an odd line left, add it as a single-line verse
+        if (currentVerse.length > 0) {
+            verses.push(currentVerse.join('\n'));
+        }
+        
+        poemsArray.push({
+            title: title,
+            verses: verses,
+            category: 'غير مصنف'
+        });
     }
     
     return poemsArray;
