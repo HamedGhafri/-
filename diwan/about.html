@@ -75,59 +75,6 @@
                         </div>
                     </section>
 
-                    <section class="achievements-section">
-                        <h2><i class="fas fa-trophy"></i> الإنجازات والجوائز</h2>
-                        <div class="achievements-grid">
-                            <div class="achievement-card">
-                                <i class="fas fa-award"></i>
-                                <h3>جوائز أدبية</h3>
-                                <p>حاصل على عدة جوائز محلية وعربية في الشعر</p>
-                            </div>
-                            <div class="achievement-card">
-                                <i class="fas fa-book"></i>
-                                <h3>إصدارات شعرية</h3>
-                                <p>نشر العديد من الدواوين والمجموعات الشعرية</p>
-                            </div>
-                            <div class="achievement-card">
-                                <i class="fas fa-microphone"></i>
-                                <h3>أمسيات شعرية</h3>
-                                <p>شارك في العديد من الأمسيات والمهرجانات الشعرية</p>
-                            </div>
-                            <div class="achievement-card">
-                                <i class="fas fa-graduation-cap"></i>
-                                <h3>نشاط ثقافي</h3>
-                                <p>مساهمات فاعلة في الحركة الثقافية والأدبية</p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="works-section">
-                        <h2><i class="fas fa-book-open"></i> من أعماله</h2>
-                        <div class="works-list">
-                            <div class="work-item">
-                                <i class="fas fa-feather-alt"></i>
-                                <div class="work-info">
-                                    <h3>ديوان شعري أول</h3>
-                                    <p>مجموعة شعرية تضم قصائد متنوعة في الغزل والحكمة</p>
-                                </div>
-                            </div>
-                            <div class="work-item">
-                                <i class="fas fa-feather-alt"></i>
-                                <div class="work-info">
-                                    <h3>ديوان شعري ثاني</h3>
-                                    <p>قصائد وجدانية واجتماعية معاصرة</p>
-                                </div>
-                            </div>
-                            <div class="work-item">
-                                <i class="fas fa-feather-alt"></i>
-                                <div class="work-info">
-                                    <h3>مجموعة قصائد منشورة</h3>
-                                    <p>قصائد نُشرت في الصحف والمجلات الأدبية</p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
                     <section class="quote-section">
                         <div class="quote-card">
                             <i class="fas fa-quote-right quote-icon"></i>
@@ -254,15 +201,11 @@
         }
 
         .bio-section,
-        .achievements-section,
-        .works-section,
         .contact-section {
             margin-bottom: var(--spacing-xl);
         }
 
         .bio-section h2,
-        .achievements-section h2,
-        .works-section h2,
         .contact-section h2 {
             color: var(--primary-color);
             display: flex;
@@ -275,68 +218,6 @@
             line-height: 2;
             margin-bottom: var(--spacing-md);
             text-align: justify;
-        }
-
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--spacing-md);
-        }
-
-        .achievement-card {
-            text-align: center;
-            padding: var(--spacing-lg);
-            background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
-            color: white;
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .achievement-card i {
-            font-size: 3rem;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .achievement-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .achievement-card p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .works-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-        }
-
-        .work-item {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--spacing-md);
-            padding: var(--spacing-md);
-            background: var(--bg-color);
-            border-radius: var(--radius-md);
-            border-right: 4px solid var(--primary-color);
-        }
-
-        .work-item i {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-top: 0.5rem;
-        }
-
-        .work-info h3 {
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .work-info p {
-            color: var(--text-secondary);
-            margin: 0;
         }
 
         .quote-section {
@@ -414,10 +295,6 @@
 
             .profile-social {
                 justify-content: center;
-            }
-
-            .achievements-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
