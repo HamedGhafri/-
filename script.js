@@ -1,20 +1,27 @@
 function updateDarkModeIcon() {
   const iconEl = document.getElementById("dark-mode-icon");
   if (!iconEl) return;
-  iconEl.textContent = document.documentElement.classList.contains("dark") ? '☀️' : '🌙';
+  iconEl.textContent = document.documentElement.classList.contains("dark") ? "☀️" : "🌙";
+}
+
+function initDarkModeToggle() {
+  const btn = document.getElementById("toggle-dark-mode");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    document.documentElement.classList.toggle("dark");
+    const isDark = document.documentElement.classList.contains("dark");
+    localStorage.setItem("darkMode", isDark ? "on" : "off");
+    updateDarkModeIcon();
+  });
+  updateDarkModeIcon();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const toggleBtn = document.getElementById("toggle-dark-mode");
-  if (toggleBtn) {
-    toggleBtn.addEventListener("click", () => {
-      document.documentElement.classList.toggle("dark");
-      localStorage.setItem('darkMode', document.documentElement.classList.contains('dark') ? 'on' : 'off');
-      updateDarkModeIcon();
-    });
+  initDarkModeToggle();
+  const listEl = document.getElementById("list");
+  if (listEl) {
+    loadPoems();
   }
-  updateDarkModeIcon();
-  loadPoems();
 });
 
 let poemList = [];
@@ -27,10 +34,8 @@ async function loadPoems() {
 
     poemList = poems.map((p, idx) => {
       const linesAll = p.split("\n");
-      const title = linesAll[0].trim();
-      const category = linesAll[1] && linesAll[1].startsWith("@")
-        ? linesAll[1].substring(1).trim()
-        : "";
+      const title = (linesAll[0] || "").trim();
+      const category = (linesAll[1] || "").startsWith("@") ? linesAll[1].substring(1).trim() : "";
       const contentLines = linesAll.slice(2).filter(l => l.trim() !== "");
       return { id: idx, title, category, lines: contentLines };
     });
@@ -44,18 +49,17 @@ async function loadPoems() {
 
 function allLinesFromPoems(plist) {
   const arr = [];
-  plist.forEach(p => {
-    arr.push(...p.lines);
-  });
+  plist.forEach(p => arr.push(...p.lines));
   return arr;
 }
 
 function displayPoemList(arr) {
   const listEl = document.getElementById("list");
+  if (!listEl) return;
   listEl.innerHTML = "";
   arr.forEach(p => {
     const a = document.createElement("a");
-    a.className = "poem-card fade";
+    a.className = "poem-card fade-up";
     a.href = `viewer.html?id=${p.id}`;
     a.textContent = p.title || "بدون عنوان";
     listEl.appendChild(a);
@@ -69,9 +73,9 @@ function runSearch() {
     return;
   }
   const filtered = poemList.filter(p => {
-    if (p.title.toLowerCase().includes(term)) return true;
-    if (p.category.toLowerCase().includes(term)) return true;
-    return p.lines.some(l => l.toLowerCase().includes(term));
+    if ((p.title || "").toLowerCase().includes(term)) return true;
+    if ((p.category || "").toLowerCase().includes(term)) return true;
+    return p.lines.some(l => (l || "").toLowerCase().includes(term));
   });
   displayPoemList(filtered);
 }
@@ -89,5 +93,6 @@ function extractBayt(linesArr) {
   const idx = today % allLines.length;
   const l1 = allLines[idx] || "";
   const l2 = allLines[(idx + 1) % allLines.length] || "";
-  document.getElementById("todayContent").innerHTML = `${l1}<br>${l2}`;
+  const el = document.getElementById("todayContent");
+  if (el) el.innerHTML = `${l1}<br>${l2}`;
 }
