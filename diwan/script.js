@@ -2,7 +2,6 @@
    Global Variables & Configuration
    ==================================== */
 let poems = [];
-let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 let currentTheme = localStorage.getItem('theme') || 'light';
 
 /* ====================================
@@ -23,9 +22,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // Load verse of the day
     loadVerseOfTheDay();
-    
-    // Update statistics
-    updateStatistics();
     
     // Load recent poems
     loadRecentPoems();
@@ -278,27 +274,6 @@ function shareVerse(verse, poemTitle) {
     }
 }
 
-function toggleFavoriteVerse(verse, poemTitle) {
-    const favorite = {
-        verse: verse,
-        poemTitle: poemTitle,
-        timestamp: Date.now()
-    };
-    
-    const index = favorites.findIndex(f => f.verse === verse);
-    
-    if (index > -1) {
-        favorites.splice(index, 1);
-        showToast('تم إزالة البيت من المفضلة');
-    } else {
-        favorites.push(favorite);
-        showToast('تم إضافة البيت للمفضلة ✓');
-    }
-    
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    updateStatistics();
-}
-
 /* ====================================
    Random Poem
    ==================================== */
@@ -313,51 +288,6 @@ function showRandomPoem() {
     
     // Redirect to viewer with poem index
     window.location.href = `viewer.html?poem=${poemIndex}`;
-}
-
-/* ====================================
-   Statistics
-   ==================================== */
-function updateStatistics() {
-    const totalPoemsEl = document.getElementById('totalPoems');
-    const totalVersesEl = document.getElementById('totalVerses');
-    const totalCategoriesEl = document.getElementById('totalCategories');
-    const totalFavoritesEl = document.getElementById('totalFavorites');
-    
-    if (totalPoemsEl) {
-        animateCounter(totalPoemsEl, poems.length);
-    }
-    
-    if (totalVersesEl) {
-        const totalVerses = poems.reduce((sum, poem) => sum + poem.verses.length, 0);
-        animateCounter(totalVersesEl, totalVerses);
-    }
-    
-    if (totalCategoriesEl) {
-        const categories = new Set(poems.map(p => p.category));
-        animateCounter(totalCategoriesEl, categories.size);
-    }
-    
-    if (totalFavoritesEl) {
-        animateCounter(totalFavoritesEl, favorites.length);
-    }
-}
-
-function animateCounter(element, target) {
-    let current = 0;
-    const increment = target / 50;
-    const duration = 1000; // 1 second
-    const stepTime = duration / 50;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target;
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(current);
-        }
-    }, stepTime);
 }
 
 /* ====================================
@@ -685,7 +615,6 @@ window.addEventListener('beforeinstallprompt', (e) => {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         poems,
-        favorites,
         searchPoems,
         getCategories,
         getPoemsByCategory,

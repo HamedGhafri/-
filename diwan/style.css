@@ -2,31 +2,36 @@
    Root Variables & Reset
    ==================================== */
 :root {
-    /* Colors */
-    --primary-color: #8b6914;
-    --primary-dark: #6b4f0a;
-    --primary-light: #b8941f;
+    /* Light Theme - Warm & Elegant */
+    --primary-color: #996515;
+    --primary-dark: #7a4f11;
+    --primary-light: #c08a1f;
     --secondary-color: #d4af37;
     --accent-color: #c9a961;
     
-    --bg-color: #faf8f3;
+    --bg-color: #fdfbf7;
     --surface-color: #ffffff;
+    --card-bg: #ffffff;
     --text-primary: #2c2416;
     --text-secondary: #5a4f3c;
     --text-muted: #8b7e6a;
+    --text-color: #2c2416;
     
-    --border-color: #e8e3d9;
-    --shadow-sm: 0 2px 8px rgba(139, 105, 20, 0.1);
-    --shadow-md: 0 4px 16px rgba(139, 105, 20, 0.15);
-    --shadow-lg: 0 8px 32px rgba(139, 105, 20, 0.2);
+    --border-color: #efe9df;
+    --hover-bg: #f9f5ed;
+    --shadow-sm: 0 2px 8px rgba(153, 101, 21, 0.08);
+    --shadow-md: 0 4px 16px rgba(153, 101, 21, 0.12);
+    --shadow-lg: 0 8px 32px rgba(153, 101, 21, 0.16);
     
-    /* Dark Mode Colors */
-    --dark-bg: #1a1410;
-    --dark-surface: #2a2218;
+    /* Dark Mode - Deep & Comfortable */
+    --dark-bg: #0f0d0b;
+    --dark-surface: #1a1714;
+    --dark-card-bg: #1f1d1a;
     --dark-text-primary: #f5f1e8;
     --dark-text-secondary: #d4cbb8;
-    --dark-text-muted: #a39682;
-    --dark-border: #3a3228;
+    --dark-text-muted: #9d9279;
+    --dark-border: #2d2a26;
+    --dark-hover-bg: #252220;
     
     /* Typography */
     --font-primary: 'Amiri', serif;
@@ -52,14 +57,20 @@
     --radius-xl: 24px;
 }
 
-/* Dark Mode */
+/* Dark Mode - Enhanced */
 body.dark-mode {
     --bg-color: var(--dark-bg);
     --surface-color: var(--dark-surface);
+    --card-bg: var(--dark-card-bg);
     --text-primary: var(--dark-text-primary);
     --text-secondary: var(--dark-text-secondary);
+    --text-color: var(--dark-text-primary);
     --text-muted: var(--dark-text-muted);
     --border-color: var(--dark-border);
+    --hover-bg: var(--dark-hover-bg);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -176,7 +187,7 @@ a:hover {
    Navigation Bar
    ==================================== */
 .navbar {
-    background: var(--surface-color);
+    background: var(--card-bg);
     box-shadow: var(--shadow-sm);
     position: sticky;
     top: 0;
@@ -360,7 +371,7 @@ a:hover {
 }
 
 .verse-card {
-    background: var(--surface-color);
+    background: var(--card-bg);
     border-radius: var(--radius-lg);
     padding: var(--spacing-xl);
     box-shadow: var(--shadow-md);
@@ -460,7 +471,7 @@ a:hover {
 }
 
 .action-card {
-    background: var(--surface-color);
+    background: var(--card-bg);
     border-radius: var(--radius-md);
     padding: var(--spacing-lg);
     text-align: center;
@@ -552,7 +563,7 @@ a:hover {
 }
 
 .poem-card {
-    background: var(--surface-color);
+    background: var(--card-bg);
     border-radius: var(--radius-md);
     padding: var(--spacing-lg);
     box-shadow: var(--shadow-sm);
@@ -625,7 +636,7 @@ a:hover {
    Footer
    ==================================== */
 .footer {
-    background: var(--surface-color);
+    background: var(--card-bg);
     border-top: 2px solid var(--border-color);
     margin-top: var(--spacing-xl);
     padding: var(--spacing-xl) 0 var(--spacing-md);
@@ -800,7 +811,7 @@ a:hover {
         right: -100%;
         width: 70%;
         height: calc(100vh - 70px);
-        background: var(--surface-color);
+        background: var(--card-bg);
         flex-direction: column;
         padding: var(--spacing-lg);
         box-shadow: var(--shadow-lg);
@@ -1079,7 +1090,7 @@ a:hover {
 }
 
 .icon-btn {
-    background: var(--surface-color);
+    background: var(--card-bg);
     border: 2px solid var(--primary-color);
     color: var(--primary-color);
     width: 40px;
@@ -1313,7 +1324,7 @@ a:hover {
     max-width: 800px;
     font-family: var(--font-decorative);
     border-right: 3px solid var(--secondary-color);
-    background: var(--surface-color);
+    background: var(--card-bg);
     border-radius: var(--radius-sm);
     transition: all var(--transition-normal);
 }
