@@ -1,17 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
 
 :root {
-  --bg: #f8f4ef;
-  --text: #332b2b;
+  --bg: #faf7f2;
+  --text: #2c2626;
   --card: #ffffff;
-  --border: #e4d7c7;
+  --border: #e7dbcc;
   --accent: #8b6e53;
+  --accent-contrast: #ffffff; /* لون النص فوق الأزرار */
   --accent-light: #c7b199;
 
-  --dark-bg: #1a1616;
-  --dark-text: #f2e9df;
-  --dark-card: #2b2525;
-  --dark-border: #5a4a4a;
+  /* وضع ليلي محسّن (تباين أوضح) */
+  --dark-bg: #141111;
+  --dark-text: #f5efe6;
+  --dark-card: #231f1f;
+  --dark-border: #5f504e;
+  --dark-accent: #b38a64; /* لون الأزرار في الداكن */
 }
 
 html, body {
@@ -20,63 +23,38 @@ html, body {
   background: var(--bg);
   color: var(--text);
   font-family: "Amiri", serif;
-  transition: background-color .3s, color .3s;
+  transition: background-color .25s ease, color .25s ease;
   text-align: center;
   overflow-x: hidden;
 }
 
-html.dark, body.dark {
+html.dark {
   background: var(--dark-bg);
   color: var(--dark-text);
 }
 
+/* زر الأيقونة */
 .toggle-btn {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 16px;
+  left: 16px;
   background: var(--accent);
-  color: var(--text);
+  color: var(--accent-contrast);
   border: none;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 6px;
-  display: flex;
+  padding: 8px 10px;
+  border-radius: 8px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
 }
-
 .toggle-btn #dark-mode-icon {
   font-size: 20px;
+  line-height: 1;
 }
-
 html.dark .toggle-btn {
-  background: var(--accent);
-  color: var(--dark-text);
-}
-
-html.dark .decor, body.dark .decor {
-  color: var(--accent-light);
-}
-html.dark .poem-card, body.dark .poem-card {
-  background: var(--dark-card);
-  border-color: var(--dark-border);
-  color: var(--dark-text);
-}
-html.dark .today-box, body.dark .today-box,
-html.dark .poem-box, body.dark .poem-box {
-  background: var(--dark-card);
-  border-color: var(--dark-border);
-}
-html.dark .btn, body.dark .btn,
-html.dark .back-btn, body.dark .back-btn {
-  background: var(--accent);
-  color: var(--dark-text);
-}
-html.dark .category, body.dark .category {
-  color: var(--accent-light);
-}
-html.dark .stamp, body.dark .stamp,
-html.dark h1, body.dark h1 {
+  background: var(--dark-accent);
   color: var(--dark-text);
 }
 
@@ -89,135 +67,162 @@ html.dark h1, body.dark h1 {
 .decor {
   font-size: 32px;
   opacity: .7;
-  margin: 10px 0 20px;
+  margin: 10px 0 16px;
   color: var(--accent);
 }
+html.dark .decor { color: var(--accent-light); }
 
 h1 {
   font-size: 42px;
-  margin-bottom: 10px;
-  animation: fadeDown 1s ease;
+  margin-bottom: 8px;
+  animation: fadeDown .8s ease;
 }
+html.dark h1 { color: var(--dark-text); }
 
 .fade-up {
   opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp .8s forwards;
+  transform: translateY(16px);
+  animation: fadeUp .6s forwards;
 }
 
 @keyframes fadeUp {
   to { opacity:1; transform: translateY(0); }
 }
-
 @keyframes fadeDown {
-  from { opacity:0; transform: translateY(-15px); }
+  from { opacity:0; transform: translateY(-10px); }
   to { opacity:1; transform: translateY(0); }
 }
 
+/* أزرار عامة */
 .btn, .back-btn {
   padding: 10px 22px;
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast);
   border-radius: 10px;
   font-size: 18px;
   text-decoration: none;
   margin: 6px;
   display: inline-block;
   cursor: pointer;
-  transition: .25s;
+  transition: transform .2s ease, background-color .2s ease;
 }
-
-.btn:hover, .back-btn:hover {
-  transform: scale(1.07);
+.btn:hover, .back-btn:hover { transform: translateY(-2px); }
+html.dark .btn, html.dark .back-btn {
+  background: var(--dark-accent);
+  color: var(--dark-text);
 }
+.btn-group a { margin: 0 8px; }
 
-.btn-group a {
-  margin: 0 10px;
-}
-
+/* بحث */
 #search {
   width: 100%;
   padding: 14px;
   border: 1px solid var(--border);
   border-radius: 12px;
   font-size: 18px;
-  margin: 18px 0;
+  margin: 16px 0;
+  background: var(--card);
+  color: inherit;
+}
+html.dark #search {
+  background: var(--dark-card);
+  border-color: var(--dark-border);
 }
 
+/* قائمة القصائد */
 #list {
-  margin-top: 25px;
+  margin-top: 20px;
   display: grid;
-  gap: 18px;
+  gap: 16px;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 }
-
 .poem-card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 18px;
+  padding: 16px;
   font-size: 20px;
   text-decoration: none;
   color: var(--text);
   box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-  transition: .3s;
+  transition: box-shadow .2s ease, transform .2s ease;
 }
-
 .poem-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   box-shadow: 0 12px 24px rgba(0,0,0,0.18);
 }
+html.dark .poem-card {
+  background: var(--dark-card);
+  border-color: var(--dark-border);
+  color: var(--dark-text);
+}
 
+/* بيت اليوم */
 .today-box {
-  padding: 22px;
+  padding: 20px;
   background: #efe6dd;
   border-radius: 14px;
   border: 1px solid #dacbbd;
-  margin: 25px auto;
+  margin: 20px auto;
   width: 80%;
 }
-
 .today-title {
   font-size: 22px;
   margin-bottom: 6px;
 }
+html.dark .today-box {
+  background: var(--dark-card);
+  border-color: var(--dark-border);
+}
 
+/* صندوق القصيدة */
 .poem-box {
   background: var(--card);
-  padding: 28px;
-  margin: 28px auto;
+  padding: 24px;
+  margin: 24px auto;
   border-radius: 14px;
   border: 1px solid var(--border);
   box-shadow: 0 6px 18px rgba(0,0,0,0.1);
   text-align: center;
 }
+html.dark .poem-box {
+  background: var(--dark-card);
+  border-color: var(--dark-border);
+}
 
+/* التصنيف */
 .category {
-  font-size: 20px;
-  margin-bottom: 15px;
+  font-size: 18px;
+  margin-bottom: 10px;
   color: var(--accent);
 }
+html.dark .category { color: var(--accent-light); }
 
+/* تنسيق الأبيات وفق طلبك:
+   - الشطران داخل البيت متقاربان (مسافة بسيطة)
+   - بين البيوت مسافة أكبر واضحة */
 .bayt {
-  margin-bottom: 0px;
-  padding-bottom: 0;
-  /* الفواصل أُزيلت */
+  margin-bottom: 28px;       /* مسافة واضحة بين الأبيات */
 }
-
-.bayt div {
+.bayt:last-child {
+  margin-bottom: 0;
+}
+.hemistich {
   font-size: 26px;
-  line-height: 2.9;
-  margin: 0px 0;
+  line-height: 2.4;
+  margin: 6px 0;             /* مسافة بسيطة بين الشطرين */
   color: inherit;
 }
 
+/* ختم */
 .stamp {
-  font-size: 18px;
+  font-size: 16px;
   opacity: .7;
-  margin-top: 25px;
+  margin-top: 18px;
 }
 
+/* استجابة */
 @media (max-width:600px) {
   .today-box, .poem-box {
     width: 95%;
@@ -227,82 +232,8 @@ h1 {
     font-size: 18px;
     padding: 14px;
   }
-}
-:focus {
-  outline: 3px solid #ffcc00; /* لون متباين */
-  outline-offset: 2px;
-}
-.skip-link {
-  position: absolute;
-  left: -999px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-.skip-link:focus {
-  left: 1rem;
-  top: 1rem;
-  width: auto;
-  height: auto;
-}
-/* إضافات / تحسينات على الـ CSS الحالي */
-:root {
-  --focus-color: #ffcc00;
-  --modal-backdrop: rgba(0,0,0,0.6);
-}
-
-/* Skip link */
-.skip-link {
-  position: absolute;
-  left: -999px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-.skip-link:focus {
-  left: 1rem;
-  top: 1rem;
-  width: auto;
-  height: auto;
-  padding: .5rem .75rem;
-  background: #000;
-  color: #fff;
-  z-index: 9999;
-}
-
-/* Focus styles */
-:focus {
-  outline: 3px solid var(--focus-color);
-  outline-offset: 2px;
-}
-
-/* Minor UI for poem cards and loading */
-.loading { padding: 1rem; color: #666; }
-.poem-card { margin: .6rem 0; padding: .6rem; border-radius: 6px; background: rgba(0,0,0,0.03); }
-.poem-card:focus { box-shadow: 0 0 0 3px rgba(255,204,0,0.15); }
-
-/* Modal styles */
-.poem-modal .modal-backdrop {
-  position: fixed; inset: 0; background: var(--modal-backdrop); z-index: 9998;
-}
-.poem-modal .modal-dialog {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  background: #fff; max-width: 90vw; max-height: 80vh;
-  overflow: auto; padding: 1rem 1rem 1.5rem;
-  border-radius: 8px; z-index: 9999;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-  direction: rtl;
-}
-.poem-modal .modal-body pre { white-space: pre-wrap; word-wrap: break-word; font-family: inherit; }
-.poem-modal .modal-close {
-  position: absolute; top: .4rem; left: .4rem; background: transparent; border: 0; font-size: 1.4rem; cursor: pointer;
-}
-
-/* Respect prefers-reduced-motion */
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
+  .hemistich {
+    font-size: 23px;
+    line-height: 2.2;
+  }
 }
