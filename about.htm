@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عن الشاعر</title>
+
+  <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="expires" content="0">
+
+  <link rel="stylesheet" href="style.css?v=3">
+  <script>
+    const saved = localStorage.getItem("darkMode");
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (saved === "on" || (!saved && prefersDark)) {
+      document.documentElement.classList.add("dark");
+    }
+  </script>
+</head>
+<body>
+  <div class="container fade-up">
+    <button id="toggle-dark-mode" class="btn toggle-btn" aria-label="تبديل الوضع">
+      <span id="dark-mode-icon">🌙</span>
+    </button>
+
+    <div class="decor">ـــ༻❁༺ـــ</div>
+    <h1>عن الشاعر</h1>
+    <div class="decor">ـــ༻❁༺ـــ</div>
+
+    <div class="poem-box" style="text-align: start;">
+      <h2 style="margin-top:0;">حمد الغافري</h2>
+      <p>
+        نبذة موجزة عن الشاعر، يمكن أن تضع هنا تعريفًا مختصرًا، نشأة الشاعر ومراحل حياته الأدبية،
+        وأهم موضوعات شعره. يمكنك تعديل هذا النص لاحقًا بما يناسبك.
+      </p>
+      <p>
+        سيرة قصيرة، إنجازات، دواوين، مشاركات، الجوائز — كل ذلك يمكن ترتيبه في فقرات بسيطة
+        وقوائم نقطية حسب الحاجة.
+      </p>
+
+      <h3>تواصل</h3>
+      <ul>
+        <li>الموقع: hamedghafri.github.io</li>
+        <li>البريد: example@example.com</li>
+      </ul>
+    </div>
+
+    <div class="btn-group">
+      <a href="index.html" class="back-btn">عودة للفهرس</a>
+      <a href="viewer.html?id=0" class="btn">اذهب لأول قصيدة</a>
+    </div>
+  </div>
+
+  <script src="script.js?v=3"></script>
+</body>
+</html>
