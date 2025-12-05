@@ -1,57 +1,527 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>عن الشاعر</title>
-
-  <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="pragma" content="no-cache">
-  <meta http-equiv="expires" content="0">
-
-  <link rel="stylesheet" href="style.css?v=3">
-  <script>
-    const saved = localStorage.getItem("darkMode");
-    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    if (saved === "on" || (!saved && prefersDark)) {
-      document.documentElement.classList.add("dark");
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="نبذة عن الشاعر حمد الغافري - سيرة ذاتية ومسيرة شعرية">
+    <meta name="keywords" content="حمد الغافري, شاعر عماني, سيرة ذاتية">
+    <title>عن الشاعر | ديوان حمد الغافري</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
-  <div class="container fade-up">
-    <button id="toggle-dark-mode" class="btn toggle-btn" aria-label="تبديل الوضع">
-      <span id="dark-mode-icon">🌙</span>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="تبديل الوضع الليلي">
+        <i class="fas fa-moon"></i>
     </button>
 
-    <div class="decor">ـــ༻❁༺ـــ</div>
-    <h1>عن الشاعر</h1>
-    <div class="decor">ـــ༻❁༺ـــ</div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-book-open"></i>
+                <span>ديوان حمد الغافري</span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="categories.html"><i class="fas fa-layer-group"></i> التصنيفات</a></li>
+                <li><a href="search.html"><i class="fas fa-search"></i> البحث</a></li>
+                <li><a href="favorites.html"><i class="fas fa-heart"></i> المفضلة</a></li>
+                <li><a href="about.html" class="active"><i class="fas fa-user"></i> عن الشاعر</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="قائمة التنقل">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
 
-    <div class="poem-box" style="text-align: start;">
-      <h2 style="margin-top:0;">حمد الغافري</h2>
-      <p>
-        نبذة موجزة عن الشاعر، يمكن أن تضع هنا تعريفًا مختصرًا، نشأة الشاعر ومراحل حياته الأدبية،
-        وأهم موضوعات شعره. يمكنك تعديل هذا النص لاحقًا بما يناسبك.
-      </p>
-      <p>
-        سيرة قصيرة، إنجازات، دواوين، مشاركات، الجوائز — كل ذلك يمكن ترتيبه في فقرات بسيطة
-        وقوائم نقطية حسب الحاجة.
-      </p>
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-user-circle"></i> عن الشاعر</h1>
+            <p>التعرف على الشاعر حمد الغافري ومسيرته الشعرية</p>
+        </div>
+    </section>
 
-      <h3>تواصل</h3>
-      <ul>
-        <li>الموقع: hamedghafri.github.io</li>
-        <li>البريد: example@example.com</li>
-      </ul>
+    <!-- Main Content -->
+    <main class="container main-content">
+        
+        <!-- Poet Profile Section -->
+        <section class="section poet-profile">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h2>حمد الغافري</h2>
+                        <p class="profile-title">شاعر عماني</p>
+                        <div class="decorative-line">ـــ༻❁༺ـــ</div>
+                    </div>
+                </div>
+                
+                <div class="profile-content">
+                    <div class="bio-section">
+                        <h3><i class="fas fa-book-reader"></i> نبذة عن الشاعر</h3>
+                        <p class="bio-text">
+                            حمد الغافري شاعر عماني معاصر، يتميز بأسلوبه الشعري الأصيل الذي يجمع بين عراقة التراث وروح العصر. 
+                            تمتاز قصائده بعمق المعاني وجمال الصياغة، حيث يتناول في شعره مختلف المواضيع من الغزل والحكمة 
+                            إلى الوطنيات والوجدانيات.
+                        </p>
+                        <p class="bio-text">
+                            يسعى الشاعر من خلال ديوانه الإلكتروني هذا إلى نشر الشعر العربي الأصيل ومشاركة إبداعاته 
+                            مع محبي الشعر والأدب في كل مكان. يؤمن بأن الشعر هو لغة الروح وجسر التواصل بين القلوب.
+                        </p>
+                    </div>
+
+                    <div class="highlights-section">
+                        <h3><i class="fas fa-star"></i> ملامح مميزة</h3>
+                        <div class="highlights-grid">
+                            <div class="highlight-card">
+                                <i class="fas fa-pen-fancy"></i>
+                                <h4>أسلوب مميز</h4>
+                                <p>يجمع بين الأصالة والمعاصرة</p>
+                            </div>
+                            <div class="highlight-card">
+                                <i class="fas fa-heart"></i>
+                                <h4>عمق المشاعر</h4>
+                                <p>قصائد تلامس القلب والوجدان</p>
+                            </div>
+                            <div class="highlight-card">
+                                <i class="fas fa-language"></i>
+                                <h4>لغة راقية</h4>
+                                <p>صياغة جميلة وألفاظ منتقاة</p>
+                            </div>
+                            <div class="highlight-card">
+                                <i class="fas fa-palette"></i>
+                                <h4>تنوع المواضيع</h4>
+                                <p>من الغزل إلى الحكمة والوطنيات</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="themes-section">
+                        <h3><i class="fas fa-list-ul"></i> المحاور الشعرية</h3>
+                        <ul class="themes-list">
+                            <li><i class="fas fa-heart"></i> <strong>الغزل:</strong> قصائد في الحب والعشق والجمال</li>
+                            <li><i class="fas fa-lightbulb"></i> <strong>الحكمة:</strong> أبيات محملة بالحكم والعبر</li>
+                            <li><i class="fas fa-flag"></i> <strong>الوطنيات:</strong> شعر في حب الوطن والانتماء</li>
+                            <li><i class="fas fa-comments"></i> <strong>الوجدانيات:</strong> تعبير عن المشاعر والأحاسيس</li>
+                            <li><i class="fas fa-mountain"></i> <strong>الوصف:</strong> رسم لوحات شعرية للطبيعة والحياة</li>
+                            <li><i class="fas fa-hand-holding-heart"></i> <strong>المناسبات:</strong> قصائد للأفراح والأحزان</li>
+                        </ul>
+                    </div>
+
+                    <div class="contact-section">
+                        <h3><i class="fas fa-envelope"></i> التواصل مع الشاعر</h3>
+                        <p class="contact-intro">يسعد الشاعر بالتواصل مع محبي الشعر والأدب:</p>
+                        <div class="contact-methods">
+                            <a href="mailto:poet@example.com" class="contact-btn">
+                                <i class="fas fa-envelope"></i>
+                                <span>البريد الإلكتروني</span>
+                            </a>
+                            <a href="https://twitter.com/" target="_blank" class="contact-btn">
+                                <i class="fab fa-twitter"></i>
+                                <span>تويتر</span>
+                            </a>
+                            <a href="https://instagram.com/" target="_blank" class="contact-btn">
+                                <i class="fab fa-instagram"></i>
+                                <span>إنستغرام</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quote Section -->
+        <section class="section quote-section">
+            <div class="quote-card">
+                <i class="fas fa-quote-right quote-icon"></i>
+                <p class="quote-text">
+                    "الشعر هو نبض الروح وترجمان القلب، وما الديوان إلا مرآة تعكس مشاعر الإنسان وتجاربه في هذه الحياة"
+                </p>
+                <p class="quote-author">- حمد الغافري</p>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section cta-section">
+            <div class="cta-card">
+                <h2><i class="fas fa-book-open"></i> استكشف الديوان</h2>
+                <p>اكتشف المزيد من القصائد والأبيات الشعرية</p>
+                <div class="cta-buttons">
+                    <a href="index.html" class="cta-btn primary">
+                        <i class="fas fa-home"></i> العودة للرئيسية
+                    </a>
+                    <a href="viewer.html" class="cta-btn secondary">
+                        <i class="fas fa-book"></i> تصفح القصائد
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-book-open"></i> ديوان حمد الغافري</h3>
+                    <p>منصة إلكترونية لعرض الأعمال الشعرية للشاعر حمد الغافري</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="فيسبوك"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="إنستغرام"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="يوتيوب"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="categories.html">التصنيفات</a></li>
+                        <li><a href="search.html">البحث</a></li>
+                        <li><a href="about.html">عن الشاعر</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>معلومات</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">سياسة الخصوصية</a></li>
+                        <li><a href="#">شروط الاستخدام</a></li>
+                        <li><a href="#">اتصل بنا</a></li>
+                        <li><a href="sitemap.xml">خريطة الموقع</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ديوان حمد الغافري. جميع الحقوق محفوظة.</p>
+                <p class="footer-credits">تم التطوير بـ <i class="fas fa-heart"></i></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
     </div>
 
-    <div class="btn-group">
-      <a href="index.html" class="back-btn">عودة للفهرس</a>
-      <a href="viewer.html?id=0" class="btn">اذهب لأول قصيدة</a>
-    </div>
-  </div>
+    <style>
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: var(--spacing-xl) 0;
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
 
-  <script src="script.js?v=3"></script>
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .profile-card {
+            background: var(--surface-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin: 0 auto var(--spacing-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid rgba(255,255,255,0.3);
+        }
+
+        .profile-avatar i {
+            font-size: 5rem;
+        }
+
+        .profile-info h2 {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .profile-title {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-family: var(--font-secondary);
+        }
+
+        .profile-content {
+            padding: var(--spacing-xl);
+        }
+
+        .bio-section,
+        .highlights-section,
+        .themes-section,
+        .contact-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .bio-section h3,
+        .highlights-section h3,
+        .themes-section h3,
+        .contact-section h3 {
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .bio-text {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-md);
+            text-align: justify;
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .highlight-card {
+            text-align: center;
+            padding: var(--spacing-md);
+            background: var(--bg-color);
+            border-radius: var(--radius-md);
+            transition: transform var(--transition-normal);
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .highlight-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .highlight-card h4 {
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .highlight-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .themes-list {
+            list-style: none;
+        }
+
+        .themes-list li {
+            padding: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+            background: var(--bg-color);
+            border-radius: var(--radius-sm);
+            border-right: 4px solid var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .themes-list i {
+            color: var(--primary-color);
+            margin-left: var(--spacing-xs);
+        }
+
+        .contact-intro {
+            font-size: 1.1rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .contact-methods {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            background: var(--primary-color);
+            color: white;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+            font-family: var(--font-secondary);
+        }
+
+        .contact-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        .quote-section {
+            text-align: center;
+        }
+
+        .quote-card {
+            background: var(--surface-color);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quote-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            opacity: 0.2;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .quote-text {
+            font-size: 1.5rem;
+            font-family: var(--font-decorative);
+            color: var(--text-primary);
+            line-height: 2;
+            margin-bottom: var(--spacing-md);
+            position: relative;
+        }
+
+        .quote-author {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-family: var(--font-secondary);
+            font-weight: 600;
+        }
+
+        .cta-section {
+            text-align: center;
+        }
+
+        .cta-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .cta-card h2 {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .cta-card p {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-lg);
+            color: rgba(255,255,255,0.9);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-xl);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-secondary);
+            font-weight: 600;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+        }
+
+        .cta-btn.primary {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .cta-btn.primary:hover {
+            background: var(--bg-color);
+            transform: translateY(-3px);
+        }
+
+        .cta-btn.secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .cta-btn.secondary:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .profile-avatar {
+                width: 120px;
+                height: 120px;
+            }
+
+            .profile-avatar i {
+                font-size: 4rem;
+            }
+
+            .profile-info h2 {
+                font-size: 2rem;
+            }
+
+            .quote-text {
+                font-size: 1.2rem;
+            }
+
+            .contact-methods {
+                flex-direction: column;
+            }
+
+            .contact-btn {
+                justify-content: center;
+            }
+        }
+    </style>
+
+    <script src="script.js"></script>
 </body>
 </html>
