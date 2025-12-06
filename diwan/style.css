@@ -188,7 +188,7 @@ a:hover {
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 1000;
+    z-index: 950;
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     color: white;
     border: none;
@@ -225,7 +225,7 @@ a:hover {
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
-    z-index: 999;
+    z-index: 900;
     transition: all var(--transition-normal);
 }
 
@@ -386,6 +386,8 @@ body.dark-mode .navbar {
    ==================================== */
 .main-content {
     padding: var(--spacing-xl) var(--spacing-md);
+    padding-top: calc(var(--spacing-xl) + 80px);
+    min-height: 60vh;
 }
 
 /* ====================================
@@ -863,7 +865,7 @@ body.dark-mode .navbar {
     gap: var(--spacing-sm);
     font-family: var(--font-secondary);
     transition: bottom var(--transition-normal);
-    z-index: 10000;
+    z-index: 2000;
 }
 
 .toast.show {
@@ -1033,7 +1035,7 @@ body.dark-mode .navbar {
     left: 0;
     height: 4px;
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    z-index: 10000;
+    z-index: 1000;
     transition: width 0.1s ease;
     box-shadow: 0 2px 8px rgba(139, 105, 20, 0.3);
 }
@@ -2749,3 +2751,62 @@ body.dark-mode .navbar {
             -ms-user-select: none;
             user-select: none;
         }
+
+/* ========================================
+   General Spacing & Layout Fixes
+   ======================================== */
+
+/* Ensure proper spacing between sections */
+.container > section,
+.container > div {
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Prevent overlapping with fixed elements */
+body {
+    padding-top: 0;
+}
+
+/* Ensure cards don't overlap */
+.poem-card,
+.category-card {
+    margin-bottom: var(--spacing-md);
+    position: relative;
+    isolation: isolate;
+}
+
+/* Better spacing for back button */
+.back-btn {
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Fix navbar overlap */
+.navbar + .container,
+.navbar + main {
+    margin-top: 0;
+}
+
+/* Ensure proper stacking context */
+.hero {
+    position: relative;
+    z-index: 1;
+}
+
+.navbar {
+    position: sticky;
+    top: 0;
+}
+
+/* Better mobile spacing */
+@media (max-width: 768px) {
+    .main-content {
+        padding-top: calc(var(--spacing-lg) + 70px);
+    }
+    
+    .container > section,
+    .container > div {
+        margin-bottom: var(--spacing-lg);
+    }
+}
+
