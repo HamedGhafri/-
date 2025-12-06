@@ -123,7 +123,7 @@
 
     <script src="script.js"></script>
     <script>
-        let categoriesPoems = [];
+        let poems = [];
         let categories = {};
 
         document.addEventListener('DOMContentLoaded', async function() {
@@ -192,7 +192,7 @@
 
         function categorizePoems() {
             categories = {};
-            categoriesPoems.forEach((poem, index) => {
+            poems.forEach((poem, index) => {
                 const cat = poem.category || 'غير مصنف';
                 if (!categories[cat]) categories[cat] = [];
                 categories[cat].push({ ...poem, index });
@@ -202,6 +202,8 @@
         const categoryIcons = {
             'غزل': 'fa-heart',
             'حكمة': 'fa-lightbulb',
+            'روحانية': 'fa-mosque',
+            'حماسة': 'fa-fire',
             'وطنيات': 'fa-flag',
             'وجدانيات': 'fa-comments',
             'وصف': 'fa-mountain',
