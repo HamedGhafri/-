@@ -60,7 +60,6 @@
                 <li><a href="index.html" class="active"><i class="fas fa-home"></i> الرئيسية</a></li>
                 <li><a href="categories.html"><i class="fas fa-layer-group"></i> التصنيفات</a></li>
                 <li><a href="search.html"><i class="fas fa-search"></i> البحث</a></li>
-                <li><a href="verse-of-the-day.html"><i class="fas fa-star"></i> بيت اليوم</a></li>
                 <li><a href="about.html"><i class="fas fa-user"></i> عن الشاعر</a></li>
             </ul>
             <button class="nav-toggle" id="navToggle" aria-label="قائمة التنقل">
@@ -109,18 +108,18 @@
             <div class="section-header">
                 <h2><i class="fas fa-star"></i> بيت اليوم</h2>
                 <div class="verse-actions">
-                    <button class="icon-btn" id="copyVerse" aria-label="نسخ البيت" title="نسخ البيت">
-                        <i class="fas fa-copy"></i>
+                    <button class="icon-btn primary-btn" id="shareImageVerse" aria-label="مشاركة كصورة" title="مشاركة كصورة">
+                        <i class="fas fa-image"></i>
                     </button>
-                    <button class="icon-btn" id="shareVerse" aria-label="مشاركة البيت" title="مشاركة">
-                        <i class="fas fa-share-alt"></i>
+                    <button class="icon-btn" id="downloadVerse" aria-label="تحميل الصورة" title="تحميل">
+                        <i class="fas fa-download"></i>
                     </button>
-                    <button class="icon-btn" id="refreshVerse" aria-label="تحديث بيت اليوم" title="تحديث">
+                    <button class="icon-btn" id="refreshVerse" aria-label="بيت آخر" title="بيت آخر">
                         <i class="fas fa-sync-alt"></i>
                     </button>
                 </div>
             </div>
-            <div class="verse-card" id="verseCard">
+            <div class="verse-card no-select" id="verseCard">
                 <div class="verse-content loading">
                     <div class="loader"></div>
                     <p>جارٍ التحميل...</p>
@@ -131,6 +130,9 @@
                 </div>
             </div>
         </section>
+        
+        <!-- Hidden canvas for image generation -->
+        <canvas id="verseCanvas" style="display: none;"></canvas>
 
         <!-- Quick Actions -->
         <section class="section quick-actions">

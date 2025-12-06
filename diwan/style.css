@@ -432,6 +432,14 @@ body.dark-mode .navbar {
     overflow: hidden;
 }
 
+.verse-card.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+}
+
 .verse-card::before {
     content: '✦';
     position: absolute;
@@ -1224,6 +1232,21 @@ body.dark-mode .navbar {
 }
 
 .icon-btn:hover i {
+    color: white;
+}
+
+.icon-btn.primary-btn {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.icon-btn.primary-btn:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.icon-btn.primary-btn i {
     color: white;
 }
 

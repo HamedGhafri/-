@@ -163,6 +163,37 @@ function initializeEventListeners() {
         refreshBtn.addEventListener('click', loadVerseOfTheDay);
     }
     
+    // Share verse as image button
+    const shareImageBtn = document.getElementById('shareImageVerse');
+    if (shareImageBtn) {
+        shareImageBtn.addEventListener('click', shareVerseAsImage);
+    }
+    
+    // Download verse button
+    const downloadBtn = document.getElementById('downloadVerse');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', downloadVerseImage);
+    }
+    
+    // Prevent copy on verse card
+    const verseCard = document.getElementById('verseCard');
+    if (verseCard) {
+        verseCard.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            showToast('النسخ غير متاح - يمكنك المشاركة كصورة 📤');
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C')) {
+                const selection = window.getSelection().toString();
+                if (selection && window.getSelection().anchorNode.closest('.verse-card')) {
+                    e.preventDefault();
+                    showToast('النسخ غير متاح - يمكنك المشاركة كصورة 📤');
+                }
+            }
+        });
+    }
+    
     // Random poem button
     const randomPoemBtn = document.getElementById('randomPoemBtn');
     if (randomPoemBtn) {
@@ -243,6 +274,156 @@ function loadVerseOfTheDay() {
             </div>
         `;
     }, 500);
+}
+
+/* ====================================
+   Verse Actions - Share as Image
+   ==================================== */
+async function shareVerseAsImage() {
+    try {
+        const imageBlob = await generateVerseImage();
+        
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([imageBlob], 'verse.png', { type: 'image/png' })] })) {
+            const file = new File([imageBlob], 'بيت_اليوم.png', { type: 'image/png' });
+            await navigator.share({
+                title: 'بيت اليوم',
+                text: 'بيت شعري من ديوان حمد الغافري',
+                files: [file]
+            });
+            showToast('تمت المشاركة بنجاح ✓');
+        } else {
+            downloadImageFromBlob(imageBlob);
+        }
+    } catch (err) {
+        if (err.name !== 'AbortError') {
+            console.error('Share failed:', err);
+            showToast('حدث خطأ في المشاركة');
+        }
+    }
+}
+
+async function downloadVerseImage() {
+    try {
+        const imageBlob = await generateVerseImage();
+        downloadImageFromBlob(imageBlob);
+    } catch (err) {
+        console.error('Download failed:', err);
+        showToast('حدث خطأ في التحميل');
+    }
+}
+
+function downloadImageFromBlob(blob) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'بيت_اليوم_' + new Date().getTime() + '.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('تم تحميل الصورة ✓');
+}
+
+async function generateVerseImage() {
+    const canvas = document.getElementById('verseCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Get verse data from localStorage
+    const verseData = JSON.parse(localStorage.getItem('verseOfDay') || '{}');
+    if (!verseData.verse) {
+        throw new Error('No verse data');
+    }
+    
+    // Set canvas size
+    canvas.width = 1080;
+    canvas.height = 1080;
+
+    // Get current theme
+    const isDark = document.body.classList.contains('dark-mode');
+    const bgColor = isDark ? '#1a1a2e' : '#f8f9fa';
+    const textColor = isDark ? '#eee' : '#2c3e50';
+    const accentColor = '#8e44ad';
+
+    // Draw background
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, bgColor);
+    gradient.addColorStop(1, isDark ? '#16213e' : '#ffffff');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw decorative border
+    ctx.strokeStyle = accentColor;
+    ctx.lineWidth = 8;
+    ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+
+    // Draw ornament
+    ctx.fillStyle = accentColor;
+    ctx.font = 'bold 60px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('✦ ❁ ✦', canvas.width / 2, 180);
+
+    // Draw verse text
+    ctx.fillStyle = textColor;
+    ctx.font = 'bold 48px Arial';
+    ctx.textAlign = 'center';
+    
+    const verseLines = verseData.verse.split('\n');
+    let y = 400;
+    verseLines.forEach(line => {
+        const words = line.split(' ');
+        let currentLine = '';
+        
+        for (let word of words) {
+            const testLine = currentLine + word + ' ';
+            const metrics = ctx.measureText(testLine);
+            
+            if (metrics.width > canvas.width - 200) {
+                ctx.fillText(currentLine, canvas.width / 2, y);
+                currentLine = word + ' ';
+                y += 70;
+            } else {
+                currentLine = testLine;
+            }
+        }
+        ctx.fillText(currentLine, canvas.width / 2, y);
+        y += 90;
+    });
+
+    // Draw separator
+    ctx.strokeStyle = accentColor;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(200, y + 30);
+    ctx.lineTo(canvas.width - 200, y + 30);
+    ctx.stroke();
+
+    // Draw author
+    ctx.fillStyle = accentColor;
+    ctx.font = 'bold 40px Arial';
+    ctx.fillText('✒ حمد الغافري', canvas.width / 2, y + 100);
+
+    // Draw poem title
+    ctx.fillStyle = textColor;
+    ctx.font = '32px Arial';
+    ctx.fillText('من قصيدة: ' + verseData.poemTitle, canvas.width / 2, y + 160);
+
+    // Draw date
+    const today = new Date().toLocaleDateString('ar-SA', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+    ctx.fillText(today, canvas.width / 2, y + 210);
+
+    // Draw watermark
+    ctx.globalAlpha = 0.5;
+    ctx.font = 'bold 28px Arial';
+    ctx.fillText('ديوان حمد الغافري', canvas.width / 2, canvas.height - 80);
+
+    // Convert to blob
+    return new Promise(resolve => {
+        canvas.toBlob(blob => resolve(blob));
+    });
 }
 
 /* ====================================
