@@ -1,19 +1,18 @@
 // Service Worker for Diwan PWA
-const CACHE_NAME = 'diwan-v1.3';
+const CACHE_NAME = 'diwan-v1.5';
 const urlsToCache = [
     './',
     './index.html',
     './viewer.html',
     './categories.html',
     './search.html',
-    './favorites.html',
-    './playlists.html',
+    './about.html',
+    './verse-of-the-day.html',
     './focus.html',
     './share-image.html',
+    './404.html',
     './style.css',
-    './themes.css',
     './script.js',
-    './themes.js',
     './poems.txt',
     './favicon.svg',
     './manifest.json'
