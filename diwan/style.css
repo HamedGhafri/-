@@ -1369,9 +1369,11 @@ body.dark-mode .navbar {
     font-size: 1rem;
     box-shadow: 0 4px 15px rgba(142, 68, 173, 0.3);
     text-decoration: none;
-    position: fixed;
-    bottom: 30px;
-    left: 30px;
+    position: fixed !important;
+    bottom: 30px !important;
+    left: 30px !important;
+    top: auto !important;
+    right: auto !important;
     z-index: 900;
     border: none;
     backdrop-filter: blur(10px);
@@ -1484,8 +1486,10 @@ body.dark-mode .navbar {
 
 @media (max-width: 768px) {
     .back-btn {
-        bottom: 20px;
-        left: 20px;
+        bottom: 20px !important;
+        left: 20px !important;
+        top: auto !important;
+        right: auto !important;
         padding: 10px 18px;
         font-size: 0.9rem;
     }
