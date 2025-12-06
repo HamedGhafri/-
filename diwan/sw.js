@@ -1,5 +1,5 @@
 // Service Worker for Diwan PWA
-const CACHE_NAME = 'diwan-v1.5';
+const CACHE_NAME = 'diwan-v1.6';
 const urlsToCache = [
     './',
     './index.html',
@@ -28,6 +28,22 @@ self.addEventListener('install', (event) => {
             })
     );
     self.skipWaiting();
+});
+
+// Activate event - Clean up old caches
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cacheName) => {
+                    if (cacheName !== CACHE_NAME) {
+                        console.log('Deleting old cache:', cacheName);
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        }).then(() => self.clients.claim())
+    );
 });
 
 // Fetch event
