@@ -1320,6 +1320,10 @@ body.dark-mode .navbar {
     font-size: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     text-decoration: none;
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    z-index: 999;
 }
 
 .back-btn i {
@@ -1338,6 +1342,15 @@ body.dark-mode .navbar {
 
 .back-btn:active {
     transform: translateX(-3px) translateY(0);
+}
+
+@media (max-width: 768px) {
+    .back-btn {
+        top: 70px;
+        right: 15px;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
 }
 
 /* Action Buttons */
