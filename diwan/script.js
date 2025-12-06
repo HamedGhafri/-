@@ -287,7 +287,7 @@ async function shareVerseAsImage() {
             const file = new File([imageBlob], 'بيت_اليوم.png', { type: 'image/png' });
             await navigator.share({
                 title: 'بيت اليوم',
-                text: 'بيت شعري من ديوان حمد الغافري',
+                text: 'بيت شعري من مقتطفات ابن حمدان',
                 files: [file]
             });
             showToast('تمت المشاركة بنجاح ✓');
@@ -400,7 +400,7 @@ async function generateVerseImage() {
     // Draw author
     ctx.fillStyle = accentColor;
     ctx.font = 'bold 40px Arial';
-    ctx.fillText('✒ حمد الغافري', canvas.width / 2, y + 100);
+    ctx.fillText('✒ ابن حمدان', canvas.width / 2, y + 100);
 
     // Draw poem title
     ctx.fillStyle = textColor;
@@ -418,7 +418,7 @@ async function generateVerseImage() {
     // Draw watermark
     ctx.globalAlpha = 0.5;
     ctx.font = 'bold 28px Arial';
-    ctx.fillText('ديوان حمد الغافري', canvas.width / 2, canvas.height - 80);
+    ctx.fillText('مقتطفات ابن حمدان', canvas.width / 2, canvas.height - 80);
 
     // Convert to blob
     return new Promise(resolve => {
@@ -440,7 +440,7 @@ function copyVerse(verse) {
 function shareVerse(verse, poemTitle) {
     if (navigator.share) {
         navigator.share({
-            title: 'بيت من ديوان حمد الغافري',
+            title: 'بيت من مقتطفات ابن حمدان',
             text: `${verse}\n\nمن قصيدة: ${poemTitle}`,
             url: window.location.href
         }).then(() => {
@@ -686,7 +686,7 @@ function initShareVerseButton() {
         
         const text = verseText.textContent;
         const shareData = {
-            title: 'بيت من ديوان حمد الغافري',
+            title: 'بيت من مقتطفات ابن حمدان',
             text: text,
             url: window.location.href
         };
@@ -951,7 +951,7 @@ async function generateAndDownloadVerseImage() {
     // Draw source/author
     ctx.fillStyle = accentColor;
     ctx.font = 'bold 42px "Amiri", "Arial"';
-    const sourceText = currentVerseData.source || 'من قصائد حمد الغافري';
+    const sourceText = currentVerseData.source || 'من قصائد ابن حمدان';
     ctx.fillText('✒ ' + sourceText, canvas.width / 2, y + 80);
     
     // Draw date
@@ -975,7 +975,7 @@ async function generateAndDownloadVerseImage() {
     ctx.fillStyle = textColor;
     ctx.globalAlpha = 0.6;
     ctx.font = 'bold 36px "Cairo", "Arial"';
-    ctx.fillText('ديوان حمد الغافري', canvas.width / 2, canvas.height - 100);
+    ctx.fillText('مقتطفات ابن حمدان', canvas.width / 2, canvas.height - 100);
     ctx.globalAlpha = 1;
     
     // Convert to blob and download

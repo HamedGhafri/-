@@ -117,7 +117,7 @@ self.addEventListener('push', (event) => {
     };
 
     event.waitUntil(
-        self.registration.showNotification('ديوان حمد الغافري', options)
+        self.registration.showNotification('مقتطفات ابن حمدان', options)
     );
 });
 
