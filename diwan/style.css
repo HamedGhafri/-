@@ -642,10 +642,11 @@ body.dark-mode .navbar {
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-color);
     border-right: 4px solid var(--primary-color);
-    transition: all var(--transition-normal);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(5px);
 }
 
 .poem-card::before {
@@ -655,19 +656,41 @@ body.dark-mode .navbar {
     right: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, transparent 0%, rgba(44, 95, 125, 0.03) 100%);
+    background: linear-gradient(135deg, 
+        transparent 0%, 
+        rgba(142, 68, 173, 0.05) 50%,
+        rgba(142, 68, 173, 0.1) 100%
+    );
     opacity: 0;
-    transition: opacity var(--transition-normal);
+    transition: opacity 0.4s ease;
+}
+
+.poem-card::after {
+    content: '✦';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 2rem;
+    color: var(--primary-color);
+    opacity: 0;
+    transform: rotate(-15deg) scale(0);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .poem-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(142, 68, 173, 0.2);
+    border-right-width: 6px;
     border-color: var(--primary-light);
 }
 
 .poem-card:hover::before {
     opacity: 1;
+}
+
+.poem-card:hover::after {
+    opacity: 0.3;
+    transform: rotate(0deg) scale(1);
 }
 
 .poem-title {
@@ -1197,7 +1220,7 @@ body.dark-mode .navbar {
    Unified Button Styles
    ==================================== */
 
-/* Icon Buttons */
+/* Icon Buttons - Enhanced */
 .icon-btn {
     background: var(--card-bg);
     border: 2px solid var(--primary-color);
@@ -1213,6 +1236,20 @@ body.dark-mode .navbar {
     position: relative;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+.icon-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s ease-out;
 }
 
 .icon-btn::before {
@@ -1241,9 +1278,21 @@ body.dark-mode .navbar {
 }
 
 .icon-btn:hover {
-    transform: translateY(-3px) scale(1.05);
+    transform: translateY(-3px) scale(1.05) rotate(5deg);
     border-color: var(--primary-dark);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    animation: wiggle 0.5s ease;
+}
+
+@keyframes wiggle {
+    0%, 100% { transform: translateY(-3px) scale(1.05) rotate(0deg); }
+    25% { transform: translateY(-3px) scale(1.05) rotate(5deg); }
+    75% { transform: translateY(-3px) scale(1.05) rotate(-5deg); }
+}
+
+.icon-btn:hover::after {
+    transform: translate(-50%, -50%) scale(20);
+    opacity: 0;
 }
 
 .icon-btn:hover i {
@@ -1311,37 +1360,114 @@ body.dark-mode .navbar {
     left: 100%;
 }
 
-/* Back Button */
+/* Back Button - Enhanced with Beautiful Effects */
 .back-btn {
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     color: white;
     padding: 12px 24px;
     border-radius: 30px;
     font-size: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 15px rgba(142, 68, 173, 0.3);
     text-decoration: none;
     position: fixed;
     top: 90px;
     right: 20px;
     z-index: 999;
+    border: none;
+    backdrop-filter: blur(10px);
+    animation: slideInRight 0.5s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.back-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+}
+
+.back-btn:hover::before {
+    transform: translateX(100%);
+}
+
+.back-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s, height 0.4s;
+}
+
+.back-btn:hover::after {
+    width: 300px;
+    height: 300px;
 }
 
 .back-btn i {
     font-size: 1.1rem;
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.back-btn span,
+.back-btn:not(:has(span)) {
+    position: relative;
+    z-index: 1;
 }
 
 .back-btn:hover {
-    transform: translateX(-5px) translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    transform: translateX(-5px) translateY(-3px) scale(1.03);
+    box-shadow: 0 8px 25px rgba(142, 68, 173, 0.4);
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
 }
 
 .back-btn:hover i {
-    transform: translateX(5px);
+    transform: translateX(5px) rotate(-5deg);
 }
 
 .back-btn:active {
-    transform: translateX(-3px) translateY(0);
+    transform: translateX(-3px) translateY(-1px) scale(0.98);
+    box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+}
+
+/* Pulse animation for attention */
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(142, 68, 173, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(142, 68, 173, 0.5);
+    }
+}
+
+.back-btn {
+    animation: slideInRight 0.5s ease-out, pulse 2s ease-in-out 1s infinite;
 }
 
 @media (max-width: 768px) {
@@ -1350,6 +1476,10 @@ body.dark-mode .navbar {
         right: 15px;
         padding: 10px 20px;
         font-size: 0.9rem;
+    }
+    
+    .back-btn i {
+        font-size: 1rem;
     }
 }
 
