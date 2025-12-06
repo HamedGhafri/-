@@ -826,6 +826,15 @@ async function generateAndDownloadVerseImage() {
         };
     }
     
+    // Preload fonts
+    try {
+        await document.fonts.load('bold 60px "Amiri"');
+        await document.fonts.load('42px "Amiri"');
+        await document.fonts.load('36px "Cairo"');
+    } catch (e) {
+        console.log('Font loading warning:', e);
+    }
+    
     const canvas = document.getElementById('verseCanvas');
     if (!canvas) return;
     
@@ -870,7 +879,7 @@ async function generateAndDownloadVerseImage() {
     
     // Draw top ornament
     ctx.fillStyle = accentColor;
-    ctx.font = 'bold 50px Arial';
+    ctx.font = 'bold 55px "Amiri", "Arial"';
     ctx.textAlign = 'center';
     ctx.fillText('✦ ❁ ✦', canvas.width / 2, 260);
     
@@ -888,14 +897,14 @@ async function generateAndDownloadVerseImage() {
     
     // Draw verse text with better Arabic font
     ctx.fillStyle = textColor;
-    ctx.font = 'bold 54px Arial';
+    ctx.font = 'bold 60px "Amiri", "Arial"';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     
     // Split verse into lines
     const verseLines = currentVerseData.text.split('\n');
     let y = 450;
-    const lineHeight = 90;
+    const lineHeight = 95;
     
     verseLines.forEach(line => {
         const words = line.trim().split(' ');
@@ -941,7 +950,7 @@ async function generateAndDownloadVerseImage() {
     
     // Draw source/author
     ctx.fillStyle = accentColor;
-    ctx.font = 'bold 38px Arial';
+    ctx.font = 'bold 42px "Amiri", "Arial"';
     const sourceText = currentVerseData.source || 'من قصائد حمد الغافري';
     ctx.fillText('✒ ' + sourceText, canvas.width / 2, y + 80);
     
@@ -953,19 +962,19 @@ async function generateAndDownloadVerseImage() {
     });
     ctx.fillStyle = textColor;
     ctx.globalAlpha = 0.7;
-    ctx.font = '30px Arial';
+    ctx.font = '34px "Cairo", "Arial"';
     ctx.fillText(today, canvas.width / 2, y + 140);
     ctx.globalAlpha = 1;
     
     // Draw bottom ornament
     ctx.fillStyle = accentColor;
-    ctx.font = 'bold 50px Arial';
+    ctx.font = 'bold 55px "Amiri", "Arial"';
     ctx.fillText('✦ ❁ ✦', canvas.width / 2, canvas.height - 180);
     
     // Draw watermark
     ctx.fillStyle = textColor;
     ctx.globalAlpha = 0.6;
-    ctx.font = 'bold 32px Arial';
+    ctx.font = 'bold 36px "Cairo", "Arial"';
     ctx.fillText('ديوان حمد الغافري', canvas.width / 2, canvas.height - 100);
     ctx.globalAlpha = 1;
     
