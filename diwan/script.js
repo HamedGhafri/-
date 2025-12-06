@@ -791,6 +791,228 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 /* ====================================
+   Verse Image Generation
+   ==================================== */
+let currentVerseData = null;
+
+function setupVerseImageGeneration() {
+    const shareBtn = document.getElementById('shareImageVerse');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', generateAndDownloadVerseImage);
+    }
+    
+    // Store verse data when loaded
+    const verseText = document.querySelector('.verse-text');
+    const verseSource = document.querySelector('.verse-source');
+    if (verseText && verseSource) {
+        currentVerseData = {
+            text: verseText.textContent,
+            source: verseSource.textContent
+        };
+    }
+}
+
+async function generateAndDownloadVerseImage() {
+    if (!currentVerseData) {
+        const verseText = document.querySelector('.verse-text');
+        const verseSource = document.querySelector('.verse-source');
+        if (!verseText) {
+            showToast('لا يوجد بيت لحفظه');
+            return;
+        }
+        currentVerseData = {
+            text: verseText.textContent,
+            source: verseSource ? verseSource.textContent : ''
+        };
+    }
+    
+    const canvas = document.getElementById('verseCanvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    
+    // Set canvas size for high quality
+    canvas.width = 1200;
+    canvas.height = 1200;
+    
+    // Get current theme colors
+    const isDark = document.body.classList.contains('dark-mode');
+    
+    // Define colors
+    const bgColor = isDark ? '#1a1a2e' : '#f8f9fa';
+    const cardColor = isDark ? '#16213e' : '#ffffff';
+    const textColor = isDark ? '#eee' : '#2c3e50';
+    const accentColor = '#d4a574';
+    const accentDark = '#b8936a';
+    
+    // Draw background with gradient
+    const bgGradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    bgGradient.addColorStop(0, bgColor);
+    bgGradient.addColorStop(1, isDark ? '#0f3460' : '#e8f4f8');
+    ctx.fillStyle = bgGradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw card background
+    ctx.fillStyle = cardColor;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+    ctx.shadowBlur = 30;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 10;
+    roundRect(ctx, 80, 150, canvas.width - 160, canvas.height - 300, 30);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    
+    // Draw decorative border
+    ctx.strokeStyle = accentColor;
+    ctx.lineWidth = 4;
+    roundRect(ctx, 100, 170, canvas.width - 200, canvas.height - 340, 20);
+    ctx.stroke();
+    
+    // Draw top ornament
+    ctx.fillStyle = accentColor;
+    ctx.font = 'bold 50px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('✦ ❁ ✦', canvas.width / 2, 260);
+    
+    // Draw decorative line
+    const lineGradient = ctx.createLinearGradient(200, 300, canvas.width - 200, 300);
+    lineGradient.addColorStop(0, 'transparent');
+    lineGradient.addColorStop(0.5, accentColor);
+    lineGradient.addColorStop(1, 'transparent');
+    ctx.strokeStyle = lineGradient;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(200, 300);
+    ctx.lineTo(canvas.width - 200, 300);
+    ctx.stroke();
+    
+    // Draw verse text with better Arabic font
+    ctx.fillStyle = textColor;
+    ctx.font = 'bold 54px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    // Split verse into lines
+    const verseLines = currentVerseData.text.split('\n');
+    let y = 450;
+    const lineHeight = 90;
+    
+    verseLines.forEach(line => {
+        const words = line.trim().split(' ');
+        let currentLine = '';
+        let lines = [];
+        
+        for (let word of words) {
+            const testLine = currentLine + word + ' ';
+            const metrics = ctx.measureText(testLine);
+            
+            if (metrics.width > canvas.width - 300) {
+                lines.push(currentLine.trim());
+                currentLine = word + ' ';
+            } else {
+                currentLine = testLine;
+            }
+        }
+        if (currentLine.trim()) {
+            lines.push(currentLine.trim());
+        }
+        
+        lines.forEach(textLine => {
+            // Add text shadow for better readability
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+            ctx.shadowBlur = 4;
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            ctx.fillText(textLine, canvas.width / 2, y);
+            ctx.shadowBlur = 0;
+            y += lineHeight;
+        });
+        
+        y += 20;
+    });
+    
+    // Draw decorative line
+    ctx.strokeStyle = lineGradient;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(200, y + 20);
+    ctx.lineTo(canvas.width - 200, y + 20);
+    ctx.stroke();
+    
+    // Draw source/author
+    ctx.fillStyle = accentColor;
+    ctx.font = 'bold 38px Arial';
+    const sourceText = currentVerseData.source || 'من قصائد حمد الغافري';
+    ctx.fillText('✒ ' + sourceText, canvas.width / 2, y + 80);
+    
+    // Draw date
+    const today = new Date().toLocaleDateString('ar-SA', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    ctx.fillStyle = textColor;
+    ctx.globalAlpha = 0.7;
+    ctx.font = '30px Arial';
+    ctx.fillText(today, canvas.width / 2, y + 140);
+    ctx.globalAlpha = 1;
+    
+    // Draw bottom ornament
+    ctx.fillStyle = accentColor;
+    ctx.font = 'bold 50px Arial';
+    ctx.fillText('✦ ❁ ✦', canvas.width / 2, canvas.height - 180);
+    
+    // Draw watermark
+    ctx.fillStyle = textColor;
+    ctx.globalAlpha = 0.6;
+    ctx.font = 'bold 32px Arial';
+    ctx.fillText('ديوان حمد الغافري', canvas.width / 2, canvas.height - 100);
+    ctx.globalAlpha = 1;
+    
+    // Convert to blob and download
+    canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'بيت_اليوم_' + new Date().getTime() + '.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('تم حفظ الصورة بنجاح ✓');
+    });
+}
+
+function roundRect(ctx, x, y, width, height, radius) {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+}
+
+// Initialize when verse is loaded
+if (document.getElementById('verseCard')) {
+    const observer = new MutationObserver(() => {
+        const verseText = document.querySelector('.verse-text');
+        if (verseText && !verseText.closest('.loading')) {
+            setupVerseImageGeneration();
+        }
+    });
+    
+    observer.observe(document.getElementById('verseCard'), {
+        childList: true,
+        subtree: true
+    });
+}
+
+/* ====================================
    Export for use in other pages
    ==================================== */
 if (typeof module !== 'undefined' && module.exports) {
