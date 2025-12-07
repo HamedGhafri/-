@@ -188,7 +188,7 @@ a:hover {
     position: fixed !important;
     top: 20px !important;
     left: 20px !important;
-    z-index: 950 !important;
+    z-index: 850 !important;
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     color: white;
     border: none;
@@ -288,6 +288,8 @@ body.dark-mode .navbar {
     font-size: 1.5rem;
     color: var(--text-primary);
     cursor: pointer;
+    position: relative;
+    z-index: 910;
 }
 
 /* ====================================
@@ -945,6 +947,8 @@ body.dark-mode .navbar {
     
     .nav-toggle {
         display: block;
+        position: relative;
+        z-index: 910 !important;
     }
     
     .hero-title {
@@ -974,7 +978,7 @@ body.dark-mode .navbar {
         height: 45px !important;
         top: 15px !important;
         left: 15px !important;
-        z-index: 950 !important;
+        z-index: 850 !important;
         display: flex !important;
         opacity: 1 !important;
         visibility: visible !important;
