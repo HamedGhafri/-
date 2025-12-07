@@ -2859,6 +2859,41 @@ body {
     .poems-section {
         padding-top: 20px;
     }
+    
+    /* Fix poem-header back button */
+    .poem-header {
+        margin-bottom: 40px !important;
+        padding-bottom: 20px !important;
+    }
+    
+    .poem-header .back-btn {
+        margin-bottom: 30px !important;
+    }
+    
+    /* Add spacing for poem navigation */
+    .poem-navigation {
+        margin-top: 50px !important;
+        padding-top: 30px !important;
+        clear: both !important;
+    }
+    
+    /* Ensure nav buttons don't overlap */
+    .nav-poem-btn {
+        margin-top: 15px !important;
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    /* Add spacing to poem content */
+    .poem-content-wrapper {
+        padding-top: 30px !important;
+        margin-top: 20px !important;
+    }
+    
+    /* Ensure verses container has spacing */
+    .poem-verses-container {
+        margin-bottom: 40px !important;
+    }
 }
 
 
