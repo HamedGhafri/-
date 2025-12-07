@@ -189,31 +189,28 @@ a:hover {
     top: 20px !important;
     left: 20px !important;
     z-index: 999 !important;
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    color: white;
+    background: none;
+    color: var(--primary-color);
     border: none;
-    border-radius: 50%;
-    width: 56px;
-    height: 56px;
+    width: 40px;
+    height: 40px;
     cursor: pointer;
-    box-shadow: var(--shadow-lg);
     transition: all var(--transition-normal);
     display: flex !important;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
-    backdrop-filter: blur(10px);
+    font-size: 1.8rem;
     opacity: 1 !important;
     visibility: visible !important;
 }
 
 .theme-toggle:hover {
-    transform: rotate(15deg) scale(1.1);
-    box-shadow: 0 8px 20px rgba(44, 95, 125, 0.3);
+    color: var(--primary-dark);
+    transform: scale(1.15);
 }
 
 .theme-toggle:active {
-    transform: rotate(15deg) scale(0.95);
+    transform: scale(0.9);
 }
 
 /* ====================================
@@ -974,10 +971,11 @@ body.dark-mode .navbar {
     }
     
     .theme-toggle {
-        width: 45px !important;
-        height: 45px !important;
+        width: 35px !important;
+        height: 35px !important;
         top: 15px !important;
         left: 70px !important;
+        font-size: 1.5rem !important;
         z-index: 999 !important;
         display: flex !important;
         opacity: 1 !important;
