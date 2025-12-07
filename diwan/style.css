@@ -1467,10 +1467,15 @@ body.dark-mode .navbar {
     .back-btn {
         padding: 10px 18px;
         font-size: 0.9rem;
-        margin-top: var(--spacing-xl) !important;
-        margin-bottom: var(--spacing-xl) !important;
-        width: fit-content;
+        margin-top: 30px !important;
+        margin-bottom: 40px !important;
+        width: 100%;
+        max-width: fit-content;
         display: block !important;
+        position: relative !important;
+        z-index: 100 !important;
+        isolation: isolate;
+        clear: both !important;
     }
     
     .back-btn i {
@@ -2817,16 +2822,42 @@ body {
     
     /* Ensure back-btn doesn't overlap with other elements */
     .back-btn {
-        margin-top: var(--spacing-xl) !important;
-        margin-bottom: var(--spacing-xl) !important;
+        margin-top: 30px !important;
+        margin-bottom: 40px !important;
         position: relative !important;
-        z-index: 1 !important;
+        z-index: 100 !important;
         clear: both !important;
+        isolation: isolate;
     }
     
     /* Add spacing after back button */
     .back-btn + * {
-        margin-top: var(--spacing-lg) !important;
+        margin-top: 30px !important;
+        clear: both !important;
+    }
+    
+    /* Specific fix for categories and other cards */
+    .back-btn ~ .section-header,
+    .back-btn ~ .categories-grid,
+    .back-btn ~ .poems-grid {
+        margin-top: 30px !important;
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Prevent cards from overlapping with back button */
+    .category-card,
+    .poem-card,
+    .verse-card {
+        position: relative;
+        z-index: 1 !important;
+        isolation: isolate;
+    }
+    
+    /* Add extra padding to sections */
+    .categories-section,
+    .poems-section {
+        padding-top: 20px;
     }
 }
 
