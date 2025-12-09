@@ -302,9 +302,23 @@ function updateStatistics(reviews) {
         ratingCounts[starIndex]++;
     });
     
-    // Update display
-    document.querySelector('.stat-number').textContent = avgRating.toFixed(1);
-    document.querySelector('.stat-detail').textContent = `من ${totalReviews} تقييم`;
+    // Update display - check if elements exist
+    const ratingNumber = document.querySelector('.rating-number');
+    const ratingCount = document.querySelector('.rating-count');
+    
+    if (ratingNumber) {
+        ratingNumber.textContent = avgRating.toFixed(1);
+    }
+    
+    if (ratingCount) {
+        ratingCount.textContent = `بناءً على ${totalReviews} تقييم`;
+    }
+    
+    // Update rating stars display
+    const ratingStarsContainer = document.querySelector('.rating-summary .rating-stars');
+    if (ratingStarsContainer) {
+        ratingStarsContainer.innerHTML = generateStars(avgRating);
+    }
     
     // Update rating bars (if exists)
     const ratingBars = document.querySelectorAll('.rating-bar-fill');
