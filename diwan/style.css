@@ -4090,3 +4090,30 @@ img[loading="lazy"] {
     }
 }
 
+
+/* ============================================
+   Review Form Additional Styles
+   ============================================ */
+
+.add-review-form input:focus,
+.add-review-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(139, 105, 20, 0.1);
+}
+
+.add-review-form .action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 105, 20, 0.3);
+}
+
+.add-review-form .action-btn:active {
+    transform: translateY(0);
+}
+
+.rating-star:hover,
+.rating-star.selected {
+    color: #ffc107 !important;
+    transform: scale(1.2);
+}
+
