@@ -104,49 +104,8 @@ function getStoredReviews() {
         return JSON.parse(stored);
     }
     
-    // Default reviews (sample data)
-    return [
-        {
-            id: 1,
-            name: 'محمد الشامسي',
-            rating: 5,
-            comment: 'قصائد رائعة ومعبرة، تلامس القلب وتحمل معاني عميقة. أسلوب الشاعر مميز وفريد.',
-            date: new Date(Date.now() - 86400000).toISOString(),
-            helpful: 12
-        },
-        {
-            id: 2,
-            name: 'فاطمة العامرية',
-            rating: 4.5,
-            comment: 'الموقع جميل والتنظيم ممتاز، يسهل الوصول للقصائد والبحث عنها.',
-            date: new Date(Date.now() - 259200000).toISOString(),
-            helpful: 8
-        },
-        {
-            id: 3,
-            name: 'أحمد الهنائي',
-            rating: 5,
-            comment: 'شعر جميل يعكس الثقافة العمانية الأصيلة. شكراً لكم على هذا المحتوى الراقي.',
-            date: new Date(Date.now() - 604800000).toISOString(),
-            helpful: 15
-        },
-        {
-            id: 4,
-            name: 'سارة المقبالية',
-            rating: 4,
-            comment: 'أعجبتني القصائد كثيراً، خاصة قصيدة "الوطن". لغة جميلة ومشاعر صادقة.',
-            date: new Date(Date.now() - 1209600000).toISOString(),
-            helpful: 6
-        },
-        {
-            id: 5,
-            name: 'يوسف البلوشي',
-            rating: 5,
-            comment: 'موقع متميز وقصائد رائعة. ننتظر المزيد من الإبداع.',
-            date: new Date(Date.now() - 1814400000).toISOString(),
-            helpful: 10
-        }
-    ];
+    // No default reviews - start with empty array
+    return [];
 }
 
 function saveReviews(reviews) {
@@ -308,10 +267,8 @@ function markHelpful(reviewId) {
 
 // Update Statistics
 function updateStatistics(reviews) {
-    if (reviews.length === 0) return;
-    
     const totalReviews = reviews.length;
-    const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews;
+    const avgRating = totalReviews > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews : 0;
     
     // Count ratings by stars
     const ratingCounts = [0, 0, 0, 0, 0];
@@ -342,8 +299,18 @@ function updateStatistics(reviews) {
     const ratingBars = document.querySelectorAll('.rating-bar-fill');
     if (ratingBars.length > 0) {
         ratingCounts.reverse().forEach((count, index) => {
-            const percentage = (count / totalReviews) * 100;
+            const percentage = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
             ratingBars[index].style.width = `${percentage}%`;
+        });
+    }
+    
+    // Update count numbers next to bars
+    const ratingBarItems = document.querySelectorAll('.rating-bar-item span:last-child');
+    if (ratingBarItems.length > 0) {
+        ratingCounts.forEach((count, index) => {
+            if (ratingBarItems[index]) {
+                ratingBarItems[index].textContent = count;
+            }
         });
     }
 }
