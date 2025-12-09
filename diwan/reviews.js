@@ -19,6 +19,12 @@ function initRatingSystem() {
     const ratingValue = document.getElementById('ratingValue');
     const ratingFeedback = document.getElementById('ratingFeedback');
     
+    // Check if rating elements exist
+    if (stars.length === 0 || !ratingValue || !ratingFeedback) {
+        console.warn('Rating system elements not found');
+        return;
+    }
+    
     const feedbackText = {
         1: { text: 'ضعيف 😕', color: '#e74c3c' },
         2: { text: 'مقبول 😐', color: '#e67e22' },
@@ -53,6 +59,12 @@ function initRatingSystem() {
     
     // Reset on mouse leave
     const ratingStars = document.querySelector('.rating-stars');
+    
+    if (!ratingStars) {
+        console.warn('Rating stars container not found');
+        return;
+    }
+    
     ratingStars.addEventListener('mouseleave', () => {
         const currentRating = parseInt(ratingValue.value) || 0;
         highlightStars(currentRating);
@@ -212,6 +224,12 @@ function formatDate(dateString) {
 // Handle Form Submission
 function handleFormSubmission() {
     const form = document.getElementById('reviewForm');
+    
+    // Check if form exists before adding event listener
+    if (!form) {
+        console.warn('Review form not found');
+        return;
+    }
     
     form.addEventListener('submit', function(e) {
         e.preventDefault();
