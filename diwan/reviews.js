@@ -333,7 +333,8 @@ function updateStatistics(reviews) {
 // Sort and Filter
 function initSortFilter() {
     const sortSelect = document.getElementById('sortReviews');
-    if (sortSelect) {
+    // Only add event listener if element exists
+    if (sortSelect && sortSelect !== null) {
         sortSelect.addEventListener('change', function() {
             const reviews = getStoredReviews();
             const sortedReviews = sortReviews(reviews, this.value);

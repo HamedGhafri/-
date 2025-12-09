@@ -127,6 +127,20 @@
                 </button>
             </div>
 
+            <!-- Sort Filter -->
+            <div class="reviews-filter" style="margin: 30px 0;">
+                <label for="sortReviews" style="margin-left: 10px; color: var(--text-color); font-family: 'Cairo', sans-serif;">
+                    <i class="fas fa-sort"></i> ترتيب حسب:
+                </label>
+                <select id="sortReviews" style="padding: 10px 15px; border: 1px solid var(--primary-color); border-radius: 8px; background: var(--card-bg); color: var(--text-color); font-family: 'Cairo', sans-serif; cursor: pointer;">
+                    <option value="recent">الأحدث</option>
+                    <option value="oldest">الأقدم</option>
+                    <option value="highest">الأعلى تقييماً</option>
+                    <option value="lowest">الأقل تقييماً</option>
+                    <option value="helpful">الأكثر إفادة</option>
+                </select>
+            </div>
+
             <!-- Reviews List -->
             <div class="reviews-list" id="reviewsList">
                 <!-- Reviews will be loaded dynamically by JavaScript -->
