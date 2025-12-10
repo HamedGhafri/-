@@ -255,92 +255,289 @@
             const canvas = document.getElementById('verseCanvas');
             const ctx = canvas.getContext('2d');
             
-            // Set canvas size
+            // Polyfill for roundRect (for older browsers)
+            if (!ctx.roundRect) {
+                ctx.roundRect = function(x, y, w, h, r) {
+                    if (w < 2 * r) r = w / 2;
+                    if (h < 2 * r) r = h / 2;
+                    this.beginPath();
+                    this.moveTo(x + r, y);
+                    this.arcTo(x + w, y, x + w, y + h, r);
+                    this.arcTo(x + w, y + h, x, y + h, r);
+                    this.arcTo(x, y + h, x, y, r);
+                    this.arcTo(x, y, x + w, y, r);
+                    this.closePath();
+                    return this;
+                };
+            }
+            
+            // Set canvas size (optimized for Instagram/Social Media)
             canvas.width = 1080;
-            canvas.height = 1080;
+            canvas.height = 1350;
 
             // Get current theme
             const isDark = document.body.classList.contains('dark-mode');
-            const bgColor = isDark ? '#1a1a2e' : '#f8f9fa';
-            const textColor = isDark ? '#eee' : '#2c3e50';
-            const accentColor = '#8e44ad';
+            
+            // Premium color palette
+            const colors = {
+                bg1: isDark ? '#0f0c29' : '#ffffff',
+                bg2: isDark ? '#302b63' : '#fef8f3',
+                bg3: isDark ? '#24243e' : '#fff9f0',
+                primary: '#8b6914',      // Gold
+                secondary: '#c8941e',    // Light Gold
+                text: isDark ? '#f5f5f5' : '#1a1a1a',
+                textLight: isDark ? '#d0d0d0' : '#4a4a4a',
+                accent: '#d4af37',       // Golden
+                shadow: isDark ? 'rgba(0,0,0,0.6)' : 'rgba(0,0,0,0.15)'
+            };
 
-            // Draw background
-            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            gradient.addColorStop(0, bgColor);
-            gradient.addColorStop(1, isDark ? '#16213e' : '#ffffff');
-            ctx.fillStyle = gradient;
+            // Draw sophisticated background with gradient
+            const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            bgGradient.addColorStop(0, colors.bg1);
+            bgGradient.addColorStop(0.5, colors.bg2);
+            bgGradient.addColorStop(1, colors.bg3);
+            ctx.fillStyle = bgGradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw decorative border
-            ctx.strokeStyle = accentColor;
-            ctx.lineWidth = 8;
-            ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+            // Draw elegant pattern overlay
+            ctx.globalAlpha = 0.03;
+            for (let i = 0; i < 20; i++) {
+                for (let j = 0; j < 20; j++) {
+                    ctx.fillStyle = colors.primary;
+                    ctx.fillRect(i * 54, j * 67, 30, 30);
+                }
+            }
+            ctx.globalAlpha = 1;
 
-            // Draw ornament
-            ctx.fillStyle = accentColor;
-            ctx.font = 'bold 60px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('✦ ❁ ✦', canvas.width / 2, 180);
+            // Draw main content card with shadow
+            const cardMargin = 60;
+            const cardX = cardMargin;
+            const cardY = cardMargin;
+            const cardW = canvas.width - (cardMargin * 2);
+            const cardH = canvas.height - (cardMargin * 2);
+            const cardRadius = 30;
 
-            // Draw verse text
-            ctx.fillStyle = textColor;
-            ctx.font = 'bold 48px Arial';
+            // Card shadow
+            ctx.shadowColor = colors.shadow;
+            ctx.shadowBlur = 40;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 10;
+
+            // Card background
+            ctx.fillStyle = isDark ? 'rgba(26, 26, 46, 0.95)' : 'rgba(255, 255, 255, 0.98)';
+            ctx.beginPath();
+            ctx.roundRect(cardX, cardY, cardW, cardH, cardRadius);
+            ctx.fill();
+
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+
+            // Draw elegant border
+            const borderGradient = ctx.createLinearGradient(cardX, cardY, cardX + cardW, cardY + cardH);
+            borderGradient.addColorStop(0, colors.primary);
+            borderGradient.addColorStop(0.5, colors.accent);
+            borderGradient.addColorStop(1, colors.secondary);
+            ctx.strokeStyle = borderGradient;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.roundRect(cardX + 20, cardY + 20, cardW - 40, cardH - 40, cardRadius - 10);
+            ctx.stroke();
+
+            // Draw decorative corners
+            const cornerSize = 80;
+            ctx.strokeStyle = colors.accent;
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+            
+            // Top-left corner
+            ctx.beginPath();
+            ctx.moveTo(cardX + 50, cardY + 50 + cornerSize);
+            ctx.lineTo(cardX + 50, cardY + 50);
+            ctx.lineTo(cardX + 50 + cornerSize, cardY + 50);
+            ctx.stroke();
+            
+            // Top-right corner
+            ctx.beginPath();
+            ctx.moveTo(cardX + cardW - 50 - cornerSize, cardY + 50);
+            ctx.lineTo(cardX + cardW - 50, cardY + 50);
+            ctx.lineTo(cardX + cardW - 50, cardY + 50 + cornerSize);
+            ctx.stroke();
+            
+            // Bottom-left corner
+            ctx.beginPath();
+            ctx.moveTo(cardX + 50, cardY + cardH - 50 - cornerSize);
+            ctx.lineTo(cardX + 50, cardY + cardH - 50);
+            ctx.lineTo(cardX + 50 + cornerSize, cardY + cardH - 50);
+            ctx.stroke();
+            
+            // Bottom-right corner
+            ctx.beginPath();
+            ctx.moveTo(cardX + cardW - 50 - cornerSize, cardY + cardH - 50);
+            ctx.lineTo(cardX + cardW - 50, cardY + cardH - 50);
+            ctx.lineTo(cardX + cardW - 50, cardY + cardH - 50 - cornerSize);
+            ctx.stroke();
+
+            // Draw title banner
+            ctx.fillStyle = colors.primary;
+            ctx.beginPath();
+            ctx.roundRect(cardX + 80, cardY + 80, cardW - 160, 100, 15);
+            ctx.fill();
+
+            // Title text
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 48px Arial, sans-serif';
             ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('بيت اليوم', canvas.width / 2, cardY + 130);
+
+            // Draw ornamental divider
+            ctx.fillStyle = colors.accent;
+            ctx.font = 'bold 50px Arial';
+            ctx.fillText('✦ ❁ ✦', canvas.width / 2, cardY + 230);
+
+            // Draw verse text with beautiful typography
+            ctx.fillStyle = colors.text;
+            ctx.font = 'bold 52px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
             
             const verseLines = currentVerse.text.split('\n');
-            let y = 400;
-            verseLines.forEach(line => {
-                // Handle long lines
+            let y = cardY + 350;
+            const lineHeight = 90;
+            const maxWidth = cardW - 200;
+            
+            verseLines.forEach((line, index) => {
+                // Add subtle shadow to text for depth
+                ctx.shadowColor = colors.shadow;
+                ctx.shadowBlur = 3;
+                ctx.shadowOffsetY = 2;
+                
+                // Handle long lines with word wrapping
                 const words = line.split(' ');
                 let currentLine = '';
-                let lineCount = 0;
+                const lines = [];
                 
                 for (let word of words) {
                     const testLine = currentLine + word + ' ';
                     const metrics = ctx.measureText(testLine);
                     
-                    if (metrics.width > canvas.width - 200) {
-                        ctx.fillText(currentLine, canvas.width / 2, y);
+                    if (metrics.width > maxWidth && currentLine !== '') {
+                        lines.push(currentLine.trim());
                         currentLine = word + ' ';
-                        y += 70;
-                        lineCount++;
                     } else {
                         currentLine = testLine;
                     }
                 }
-                ctx.fillText(currentLine, canvas.width / 2, y);
-                y += 90;
+                if (currentLine) {
+                    lines.push(currentLine.trim());
+                }
+                
+                // Draw each line
+                lines.forEach(textLine => {
+                    ctx.fillText(textLine, canvas.width / 2, y);
+                    y += lineHeight;
+                });
+                
+                // Add space between verse hemistichs
+                if (index < verseLines.length - 1) {
+                    y += 30;
+                }
             });
+            
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
 
-            // Draw separator
-            ctx.strokeStyle = accentColor;
-            ctx.lineWidth = 3;
+            // Draw elegant separator
+            y += 60;
+            const separatorY = y;
+            
+            // Decorative line with gradient
+            const lineGradient = ctx.createLinearGradient(200, separatorY, canvas.width - 200, separatorY);
+            lineGradient.addColorStop(0, 'transparent');
+            lineGradient.addColorStop(0.2, colors.primary);
+            lineGradient.addColorStop(0.5, colors.accent);
+            lineGradient.addColorStop(0.8, colors.primary);
+            lineGradient.addColorStop(1, 'transparent');
+            
+            ctx.strokeStyle = lineGradient;
+            ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(200, y + 30);
-            ctx.lineTo(canvas.width - 200, y + 30);
+            ctx.moveTo(180, separatorY);
+            ctx.lineTo(canvas.width - 180, separatorY);
             ctx.stroke();
-
-            // Draw author
-            ctx.fillStyle = accentColor;
+            
+            // Center ornament on separator
+            ctx.fillStyle = colors.accent;
             ctx.font = 'bold 40px Arial';
-            ctx.fillText('✒ ' + currentVerse.author, canvas.width / 2, y + 100);
+            ctx.fillText('✦', canvas.width / 2, separatorY);
 
-            // Draw date
+            // Draw author section with icon
+            y += 80;
+            
+            // Author background
+            ctx.fillStyle = colors.primary;
+            ctx.globalAlpha = 0.1;
+            ctx.beginPath();
+            ctx.roundRect(canvas.width / 2 - 250, y - 40, 500, 70, 35);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+            
+            // Author text with gradient
+            const authorGradient = ctx.createLinearGradient(0, y - 20, 0, y + 20);
+            authorGradient.addColorStop(0, colors.primary);
+            authorGradient.addColorStop(1, colors.secondary);
+            ctx.fillStyle = authorGradient;
+            ctx.font = 'bold 44px Arial, sans-serif';
+            ctx.fillText('✒ ' + currentVerse.author, canvas.width / 2, y);
+
+            // Draw date with elegant styling
+            y += 100;
             const today = new Date().toLocaleDateString('ar-SA', { 
+                weekday: 'long',
                 year: 'numeric', 
                 month: 'long', 
                 day: 'numeric' 
             });
-            ctx.fillStyle = textColor;
-            ctx.font = '32px Arial';
-            ctx.fillText(today, canvas.width / 2, y + 160);
+            
+            ctx.fillStyle = colors.textLight;
+            ctx.font = '34px Arial, sans-serif';
+            ctx.fillText(today, canvas.width / 2, y);
 
-            // Draw watermark
-            ctx.fillStyle = textColor;
-            ctx.globalAlpha = 0.5;
-            ctx.font = 'bold 28px Arial';
-            ctx.fillText('مقتطفات ابن حمدان', canvas.width / 2, canvas.height - 80);
+            // Draw poem title if available
+            if (currentVerse.poemTitle) {
+                y += 70;
+                ctx.fillStyle = colors.textLight;
+                ctx.font = 'italic 30px Arial, sans-serif';
+                ctx.fillText('من قصيدة: ' + currentVerse.poemTitle, canvas.width / 2, y);
+            }
+
+            // Draw footer section
+            const footerY = cardY + cardH - 100;
+            
+            // Footer divider
+            ctx.strokeStyle = colors.primary;
+            ctx.globalAlpha = 0.3;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(cardX + 100, footerY - 30);
+            ctx.lineTo(cardX + cardW - 100, footerY - 30);
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+
+            // Draw watermark with icon
+            ctx.fillStyle = colors.primary;
+            ctx.font = 'bold 36px Arial, sans-serif';
+            ctx.fillText('📖 مقتطفات ابن حمدان', canvas.width / 2, footerY);
+            
+            // Website/handle
+            ctx.fillStyle = colors.textLight;
+            ctx.font = '26px Arial, sans-serif';
+            ctx.fillText('hamedghafri.github.io/-/diwan', canvas.width / 2, footerY + 45);
 
             // Convert to blob
             return new Promise(resolve => {
