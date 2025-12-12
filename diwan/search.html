@@ -223,11 +223,18 @@
             `).join('');
         }
 
+        // Function to remove Arabic diacritics (tashkeel)
+        function removeDiacritics(text) {
+            return text.replace(/[\u064B-\u0652\u0670]/g, ''); // Remove Arabic diacritics
+        }
+
         function performSearchQuery(query) {
             const categoryFilter = document.getElementById('categoryFilter').value;
             const sortFilter = document.getElementById('sortFilter').value;
             let results = [];
-            const lowerQuery = query.toLowerCase();
+            
+            // Normalize query: lowercase and remove diacritics
+            const normalizedQuery = removeDiacritics(query.toLowerCase());
 
             poemsData.forEach((poem, index) => {
                 // Apply category filter
@@ -235,7 +242,10 @@
                     return;
                 }
 
-                if (poem.title.toLowerCase().includes(lowerQuery)) {
+                // Normalize title for comparison
+                const normalizedTitle = removeDiacritics(poem.title.toLowerCase());
+                
+                if (normalizedTitle.includes(normalizedQuery)) {
                     results.push({
                         poem: poem,
                         index: index,
@@ -244,7 +254,10 @@
                     });
                 } else {
                     poem.verses.forEach(verse => {
-                        if (verse.toLowerCase().includes(lowerQuery)) {
+                        // Normalize verse for comparison
+                        const normalizedVerse = removeDiacritics(verse.toLowerCase());
+                        
+                        if (normalizedVerse.includes(normalizedQuery)) {
                             results.push({
                                 poem: poem,
                                 index: index,
@@ -268,8 +281,26 @@
         }
 
         function highlightText(text, query) {
-            const regex = new RegExp(`(${query})`, 'gi');
-            return text.replace(regex, '<span class="highlight">$1</span>');
+            // Remove diacritics from query for matching
+            const normalizedQuery = removeDiacritics(query);
+            
+            // Create a flexible regex that matches the text with or without diacritics
+            // Split query into characters and allow optional diacritics between them
+            const chars = normalizedQuery.split('');
+            const flexiblePattern = chars.map(char => {
+                // Escape special regex characters
+                const escapedChar = char.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                // Allow optional diacritics after each character
+                return escapedChar + '[\u064B-\u0652\u0670]*';
+            }).join('');
+            
+            try {
+                const regex = new RegExp(`(${flexiblePattern})`, 'gi');
+                return text.replace(regex, '<span class="highlight">$1</span>');
+            } catch (e) {
+                // Fallback to simple highlighting if regex fails
+                return text;
+            }
         }
     </script>
     
